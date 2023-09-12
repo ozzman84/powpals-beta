@@ -1,0 +1,32 @@
+{
+  "RSpec": {
+    "coverage": {
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/views/home/index.html.tailwindcss_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/app/controllers/home_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/app/controllers/application_controller.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null
+        ]
+      }
+    },
+    "timestamp": 1694546387
+  }
+}

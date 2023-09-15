@@ -30,8 +30,8 @@ gem 'stimulus-rails'
 gem 'tailwindcss-rails'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem 'jbuilder'
 gem 'devise'
+gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
@@ -65,7 +65,7 @@ group :development, :test do
   gem 'pry'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
-  gem 'simplecov' 
+  gem 'simplecov'
 
   # Security
   gem 'brakeman'
@@ -76,13 +76,13 @@ group :development, :test do
   # gem 'pg'
 
   # Linting
+  gem 'erb_lint', require: false
   gem 'rubocop'
-  gem 'rubocop-rails'
   gem 'rubocop-capybara'
   gem 'rubocop-factory_bot'
+  gem 'rubocop-rails'
   gem 'rubocop-rspec'
-  gem 'erb_lint', require: false
-  end
+end
 
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
-    email { "jane.doe@hey.com" }
-    password { "SecretPassword123" }
+    email { 'jane.doe@hey.com' }
+    password { 'SecretPassword123' }
   end
 end

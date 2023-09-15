@@ -1,6 +1,22 @@
 {
   "RSpec": {
     "coverage": {
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/requests/home_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          null
+        ]
+      },
       "/Users/ozzieosmonson/projects/powpals-beta/spec/views/home/index.html.tailwindcss_spec.rb": {
         "lines": [
           null,
@@ -34,6 +50,6 @@
         ]
       }
     },
-    "timestamp": 1694654282
+    "timestamp": 1694798946
   }
 }

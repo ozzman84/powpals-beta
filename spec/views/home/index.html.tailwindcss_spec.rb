@@ -6,6 +6,6 @@ RSpec.describe 'home/index.html.tailwindcss', type: :view do
   it "does something" do
     visit root_path
 
-    expect(page).to match(/Home/)
+    expect(page).to have_content("Home")
   end
 end

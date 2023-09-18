@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Capybara.register_driver :selenium_chrome do |app|
   # Set chrome download dir and auto confirm all "are you sure you want to download" to test downloading docs and pdfs.
   chrome_prefs = {
@@ -19,9 +21,7 @@ Capybara.register_driver :selenium_chrome do |app|
   # Set headless with docker friendly args.
   chrome_args = %w[window-size=1024,768 disable-gpu no-sandbox disable-translate no-default-browser-check disable-popup-blocking]
   # To run full browser instead of headless mode, run this command: HEADLESS=false rspec spec
-  unless ENV.fetch('HEADLESS', 'true') == 'false'
-    chrome_args += %w[headless]
-  end
+  chrome_args += %w[headless] unless ENV.fetch('HEADLESS', 'true') == 'false'
 
   # Initialize chromedriver.
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
@@ -32,16 +32,13 @@ Capybara.register_driver :selenium_chrome do |app|
   )
   driver = Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
 
-  driver
-
   # Allow file downloads to work in chromedriver headless mode.
   bridge = driver.browser.send(:bridge)
   path = '/session/:session_id/chromium/send_command'
   path[':session_id'] = bridge.session_id
   bridge.http.call(:post, path, cmd: 'Page.setDownloadBehavior',
-    params: {
-      behavior: 'allow',
-      downloadPath: DownloadHelpers::PATH.to_s
-    }
-  )
+                                params: {
+                                  behavior: 'allow',
+                                  downloadPath: DownloadHelpers::PATH.to_s
+                                })
 end

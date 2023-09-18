@@ -77,7 +77,7 @@ group :development, :test do
   # Linting
   gem 'erb_lint', require: false
   gem 'rubocop'
-  gem 'rubocop-capybara'
+  gem 'rubocop-capybara', require: false
   gem 'rubocop-factory_bot'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'

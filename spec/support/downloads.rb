@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 module DownloadHelpers
   TIMEOUT = 10
   PATH    = Rails.root.join('tmp/downloads')
 
-  extend self
+  module_function
 
   def downloads
     Dir[PATH.join('*')]
@@ -34,6 +36,4 @@ module DownloadHelpers
   def clear_downloads
     FileUtils.rm_f(downloads)
   end
-
 end
-

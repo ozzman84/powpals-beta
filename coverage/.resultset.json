@@ -1,6 +1,110 @@
 {
   "RSpec": {
     "coverage": {
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/support/chrome_setup.rb": {
+        "lines": [
+          1,
+          null,
+          null,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0,
+          null,
+          0,
+          0,
+          null,
+          null,
+          null,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0,
+          null,
+          null,
+          null,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/support/downloads.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/models/user_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          null
+        ]
+      },
       "/Users/ozzieosmonson/projects/powpals-beta/spec/requests/home_spec.rb": {
         "lines": [
           null,
@@ -50,6 +154,6 @@
         ]
       }
     },
-    "timestamp": 1694798946
+    "timestamp": 1695063299
   }
 }

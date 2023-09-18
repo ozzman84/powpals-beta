@@ -57,6 +57,7 @@ gem 'bootsnap', require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'capybara'
+  gem 'capybara-email'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'faker'
@@ -66,14 +67,12 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov'
+  gem 'webdrivers'
 
   # Security
   gem 'brakeman'
   gem 'bundler-audit'
   gem 'ruby_audit'
-
-  # Database
-  # gem 'pg'
 
   # Linting
   gem 'erb_lint', require: false

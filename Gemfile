@@ -5,6 +5,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.2.2'
 
+gem 'dotenv-rails', require: 'dotenv/rails-now', groups: [:development, :test]
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.6'
 
@@ -30,8 +32,13 @@ gem 'stimulus-rails'
 gem 'tailwindcss-rails'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem 'devise'
 gem 'jbuilder'
+
+# Authentication
+gem 'devise'
+gem 'omniauth-google-oauth2'
+gem "omniauth"
+gem "omniauth-rails_csrf_protection"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"

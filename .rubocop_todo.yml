@@ -61,4 +61,6 @@ AllCops:
   Exclude:
     - db/**
     - db/migrate/**
-    - vendor/**/*.rb
+    # "Unable to find gem panolint; is the gem installed? Gem::MissingSpecError" in all ruby versions
+    - vendor/bundle/**/*
+    - pnpm/**/*

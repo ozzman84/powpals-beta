@@ -58,6 +58,6 @@ Style/Documentation:
   Enabled: false
 
 AllCops:
-  Excludes:
+  Exclude:
     - db/**
     - db/migrate/**

@@ -31,3 +31,7 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+  ```
+    bundle exec rubocop --parallel -A
+  ```

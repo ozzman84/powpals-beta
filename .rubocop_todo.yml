@@ -24,6 +24,7 @@ Metrics/PerceivedComplexity:
 Metrics/BlockLength:
   Exclude:
     - "spec/support/chrome_setup.rb"
+    - config/environments/**
 
 # Offense count: 4
 # Configuration parameters: AllowedConstants.

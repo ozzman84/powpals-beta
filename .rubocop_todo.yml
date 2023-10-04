@@ -56,3 +56,8 @@ Layout/LineLength:
 
 Style/Documentation:
   Enabled: false
+
+AllCops:
+  Excludes:
+    - db/**
+    - db/migrate/**

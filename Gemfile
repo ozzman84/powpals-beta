@@ -76,6 +76,8 @@ group :development, :test do
 
   # Linting
   gem 'erb_lint', require: false
+  gem 'panolint-rails', git: 'https://github.com/panorama-ed/panolint-rails.git', branch: 'main'
+  gem 'panolint-ruby', git: 'https://github.com/panorama-ed/panolint-ruby.git', branch: 'main'
   gem 'rubocop'
   gem 'rubocop-capybara', require: false
   gem 'rubocop-factory_bot'

@@ -1,3 +1,22 @@
+GIT
+  remote: https://github.com/panorama-ed/panolint-rails.git
+  revision: 890ecaa7fd23e095f1a4caccbfc422fbfd4ce8e7
+  branch: main
+  specs:
+    panolint-rails (0)
+      brakeman (= 6.0.1)
+      rubocop-rails (= 2.21.2)
+
+GIT
+  remote: https://github.com/panorama-ed/panolint-ruby.git
+  revision: 488b6c74e1b09b8a7fd54b63a8b89e47088abf6b
+  branch: main
+  specs:
+    panolint-ruby (0)
+      rubocop (= 1.56.4)
+      rubocop-performance (= 1.19.1)
+      rubocop-rspec (= 2.24.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -255,7 +274,7 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     rspec-support (3.12.1)
-    rubocop (1.56.3)
+    rubocop (1.56.4)
       base64 (~> 0.1.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
@@ -273,11 +292,14 @@ GEM
       rubocop (~> 1.41)
     rubocop-factory_bot (2.23.1)
       rubocop (~> 1.33)
-    rubocop-rails (2.21.0)
+    rubocop-performance (1.19.1)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
+    rubocop-rails (2.21.2)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
-    rubocop-rspec (2.24.0)
+    rubocop-rspec (2.24.1)
       rubocop (~> 1.33)
       rubocop-capybara (~> 2.17)
       rubocop-factory_bot (~> 2.22)
@@ -359,6 +381,8 @@ DEPENDENCIES
   jbuilder
   launchy
   orderly
+  panolint-rails!
+  panolint-ruby!
   pg (~> 1.1)
   pry
   puma (~> 5.0)

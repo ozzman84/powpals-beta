@@ -61,3 +61,4 @@ AllCops:
   Exclude:
     - db/**
     - db/migrate/**
+    - vendor/**/*.rb

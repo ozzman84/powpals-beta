@@ -7,15 +7,11 @@ class User < ApplicationRecord
          :trackable, :omniauthable
 
   def self.from_omniauth(auth)
-    puts auth.info
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
       user.full_name = auth.info.name # assuming the user model has a name
-      user.first_name = auth.info.given_name # assuming the user model has a name
-      user.last_name = auth.info.family_name # assuming the user model has a name
       user.avatar_url = auth.info.image # assuming the user model has an image
-
       user.skip_confirmation! # User is already verified with Google.
     end
   end

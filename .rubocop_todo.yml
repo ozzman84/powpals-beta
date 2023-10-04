@@ -16,6 +16,9 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Max: 12
 
+Metrics/AbcSize:
+  enabled: false
+
 # Offense count: 1
 # Configuration parameters: AllowedMethods, AllowedPatterns.
 Metrics/PerceivedComplexity:

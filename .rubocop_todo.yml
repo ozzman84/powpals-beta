@@ -56,3 +56,11 @@ Layout/LineLength:
 
 Style/Documentation:
   Enabled: false
+
+AllCops:
+  Exclude:
+    - db/**
+    - db/migrate/**
+    # "Unable to find gem panolint; is the gem installed? Gem::MissingSpecError" in all ruby versions
+    - vendor/bundle/**/*
+    - pnpm/**/*

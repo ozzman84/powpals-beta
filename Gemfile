@@ -31,6 +31,7 @@ gem 'tailwindcss-rails'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'devise'
+gem 'dotenv-rails'
 gem 'jbuilder'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
@@ -67,6 +68,7 @@ group :development, :test do
   gem 'launchy'
   gem 'orderly'
   gem 'pry'
+  gem 'pry-rails', '~> 0.3.9'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'simplecov'

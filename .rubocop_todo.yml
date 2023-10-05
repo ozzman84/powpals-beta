@@ -28,6 +28,7 @@ Metrics/BlockLength:
   Exclude:
     - "spec/support/chrome_setup.rb"
     - config/environments/**
+    - 'spec/**/*'
 
 # Offense count: 4
 # Configuration parameters: AllowedConstants.
@@ -39,11 +40,7 @@ Style/Documentation:
     - 'app/mailers/application_mailer.rb'
     - 'app/models/application_record.rb'
     - 'config/application.rb'
-  Require:
-    - robocop-capybara
-    - rubocop-factory_bot
-    - rubocop-rails
-    - rubocop-rspec
+  Enabled: false
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
@@ -58,9 +55,6 @@ Style/IfUnlessModifier:
 Layout/LineLength:
   Max: 198
 
-Style/Documentation:
-  Enabled: false
-
 AllCops:
   Exclude:
     - db/**
@@ -68,3 +62,8 @@ AllCops:
     # "Unable to find gem panolint; is the gem installed? Gem::MissingSpecError" in all ruby versions
     - vendor/bundle/**/*
     - pnpm/**/*
+  Require:
+    - robocop-capybara
+    - rubocop-factory_bot
+    - rubocop-rails
+    - rubocop-rspec

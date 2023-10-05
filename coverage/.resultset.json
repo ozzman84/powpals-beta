@@ -92,6 +92,20 @@
           null
         ]
       },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/models/lodging_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          2,
+          2,
+          null,
+          null
+        ]
+      },
       "/Users/ozzieosmonson/projects/powpals-beta/app/models/lodging.rb": {
         "lines": [
           null,
@@ -156,8 +170,155 @@
           null,
           null
         ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/requests/home_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/requests/users/lodgings_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/views/home/index.html.tailwindcss_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/views/users/lodgings/create.html.tailwindcss_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/views/users/lodgings/destroy.html.tailwindcss_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/views/users/lodgings/index.html.tailwindcss_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/views/users/lodgings/show.html.tailwindcss_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/spec/views/users/lodgings/update.html.tailwindcss_spec.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/app/controllers/home_controller.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/app/controllers/application_controller.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          null
+        ]
       }
     },
-    "timestamp": 1696529306
+    "timestamp": 1696549001
   }
 }

@@ -118,6 +118,7 @@ GEM
       capybara (>= 2.4, < 4.0)
       mail
     coderay (1.1.3)
+    colorize (1.1.0)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
     date (3.3.3)
@@ -144,6 +145,11 @@ GEM
       rubocop
       smart_properties
     erubi (1.12.0)
+    eslint-rails (1.3.0)
+      colorize
+      execjs
+      railties (>= 3.2)
+    execjs (2.9.1)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -421,6 +427,7 @@ DEPENDENCIES
   devise
   dotenv-rails
   erb_lint
+  eslint-rails
   factory_bot_rails
   faker
   importmap-rails

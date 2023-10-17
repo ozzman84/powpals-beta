@@ -14,7 +14,12 @@
     <label for="max_guests">What is the maximum capacity?</label>
     <input type="number" id="max_guests" name="lodging[max_guests]" value="<%= @lodging.max_guests %>" min="1" max="100" step="1">
     
-
+    <label for="status">Status</label>
+    <select name="lodging[status]">
+        <% Lodging.statuses.keys.each do |status| %>
+            <option <%= 'selected' if @lodging.status == status %>><%= status %></option>
+        <% end %>
+    </select>
     
     <input type="submit" value="Update Lodging">
 </form>

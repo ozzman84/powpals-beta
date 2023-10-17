@@ -51,11 +51,11 @@ module Users
     private
 
     def create_lodging_params
-      params.require(:lodging).permit(:title, :description, :max_guests, :street, :city, :state, :zip_code, :country)
+      params.require(:lodging).permit(:title, :description, :max_guests, :street, :city, :state, :zip_code, :country, :status)
     end
 
     def update_lodging_params
-      params.require(:lodging).permit(:title, :description, :max_guests)
+      params.require(:lodging).permit(:title, :description, :max_guests, :status)
     end
 
     def create_lodging_roommate

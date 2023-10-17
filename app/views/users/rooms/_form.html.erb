@@ -1,0 +1,46 @@
+<div data-controller="room">
+
+  <template data-room-target="bedFields">
+    <label class="block text-sm font-medium leading-6 text-gray-900">Bed Size</label>
+      <select name="room[beds_attributes][][size]" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+
+        <% Bed.sizes.each do |size, _|%>
+          <option><%= size %></option>
+        <% end%>
+
+      </select>
+
+    <label class="block text-sm font-medium leading-6 text-gray-900">Bed Style</label>
+      <select name="room[beds_attributes][][style]" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+
+        <% Bed.styles.each do |size, _|%>
+          <option><%= size %></option>
+        <% end%>
+
+      </select>
+  </template>
+  
+  <form action="<%= users_lodging_rooms_path(lodging) %>" method="post">
+      <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+      <label for="name">Name</label>
+      <input type="text" name="room[name]" id="name" value="">
+
+      <label for="room_type" class="block text-sm font-medium leading-6 text-gray-900">Room Type</label>
+      <select id="room_type" name="room[room_type]" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+
+         <% Room.room_types.each do |rt, _|%>
+          <option><%= rt %></option>
+         <% end%>
+
+       </select>
+
+       <fieldset data-room-target="beds">
+        <legend>Beds</legend>
+       </fieldset>
+
+       <a href="#" data-action="room#addBed">Add Bed</a>
+
+      <input type="submit" value="Add Room">
+  </form>
+</div>

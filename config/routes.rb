@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     resources :lodgings do
+      resources :photos, only: [:index, :create, :destroy]
       resources :rooms, only: %i[index create destroy]
     end
   end

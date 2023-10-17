@@ -6,5 +6,6 @@ RSpec.describe Lodging, type: :model do
   describe 'relationships' do
     it { should have_many(:roommates) }
     it { should have_many(:users).through(:roommates) }
+    it { should have_many(:rooms) }
   end
 end

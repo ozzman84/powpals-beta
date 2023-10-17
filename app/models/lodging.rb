@@ -4,6 +4,7 @@ class Lodging < ApplicationRecord
   has_many :roommates
   has_many :users, through: :roommates
   has_many :rooms
+  has_many :photos
 
   #   validates :max_capacity, numericality: { greater_than: 0, less_than: 101 }, if: { status: :published}
 

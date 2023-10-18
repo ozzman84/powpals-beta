@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_17_005550) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_18_185217) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_005550) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["room_id"], name: "index_beds_on_room_id"
+  end
+
+  create_table "lodging_calendars", force: :cascade do |t|
+    t.string "status"
+    t.date "start_date"
+    t.date "end_date"
+    t.bigint "user_id", null: false
+    t.bigint "lodging_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lodging_id"], name: "index_lodging_calendars_on_lodging_id"
+    t.index ["user_id"], name: "index_lodging_calendars_on_user_id"
   end
 
   create_table "lodgings", force: :cascade do |t|
@@ -94,6 +106,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_17_005550) do
   end
 
   add_foreign_key "beds", "rooms"
+  add_foreign_key "lodging_calendars", "lodgings"
+  add_foreign_key "lodging_calendars", "users"
   add_foreign_key "roommates", "lodgings"
   add_foreign_key "roommates", "users"
   add_foreign_key "rooms", "lodgings"

@@ -11,6 +11,24 @@
     <label for="description">Description</label>
     <textarea id="description" name="lodging[description]"><%= @lodging.description %></textarea>
 
+    <label for="street">Street</label>
+    <input type="text" name="lodging[street]" id="street" value="<%= @lodging.street %>">
+
+    <label for="address2">Street2</label>
+    <input type="text" name="lodging[address2]" id="address2" value="<%= @lodging.address2 %>">
+
+    <label for="city">City</label>
+    <input type="text" name="lodging[city]" id="city" value="<%= @lodging.city %>">
+
+    <label for="state">State</label>
+    <input type="text" name="lodging[state]" id="state" value="<%= @lodging.state %>">
+    
+    <label for="zip_code">Zip Code</label>
+    <input type="text" name="lodging[zip_code]" id="zip_code" value="<%= @lodging.zip_code %>">
+    
+    <label for="country">Country</label>
+    <input type="text" name="lodging[country]" id="country" value="<%= @lodging.country %>">
+
     <label for="max_guests">What is the maximum capacity?</label>
     <input type="number" name="lodging[max_guests]" value="<%= @lodging.max_guests %>" min="1" max="100" step="1">
     

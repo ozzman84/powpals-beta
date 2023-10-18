@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   namespace :users do
     resources :lodgings do
       resources :rooms, only: %i[index create destroy]
-      resources :lodging_calendar, only: %i[index show create update destroy]
+      resources :lodging_calendars, only: %i[index show create update destroy]
     end
   end
 

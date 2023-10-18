@@ -1,9 +1,10 @@
 <div>
-  <h1 class="font-bold text-4xl"><%= @lodging.name %> Calendar</h1>
+  <h1 class="font-bold text-4xl"><%= @lodging.title %> Calendar</h1>
 </div>
-
-<% @calendars.each do |calendar| %>
-  <%= calendar.name %>
-  <%= "Duration #{calendar.start_date} #{calendar.end_date}" %>
-  <%= "Status #{calendar.status}" %>
-<% end %>
+<ul>
+  <% @calendars.each do |calendar| %>
+    <li><%= link_to calendar.user.first_name, users_lodging_lodging_calendar_path(calendar) %></li>
+    <li><%= "Duration: #{calendar.start_date} #{calendar.end_date}" %></li>
+    <li><%= "Status: #{calendar.status}" %></li>
+  <% end %>
+</ul>

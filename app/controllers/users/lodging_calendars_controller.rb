@@ -8,7 +8,7 @@ module Users
     end
 
     def show
-      @calendar = current_user.lodging_calendars
+      @user_calendars = current_user.lodging_calendars
     end
 
     def create

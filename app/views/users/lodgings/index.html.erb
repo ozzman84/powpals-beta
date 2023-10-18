@@ -3,8 +3,8 @@
 </div>
 
 <% @lodgings.each do |lodging| %>
-<%= link_to lodging.title, users_lodging_path(lodging) %>
-<%= lodging.status %>
-<%= button_to 'edit', edit_users_lodging_path(lodging), method: :get %>
-<%= button_to 'delete', users_lodging_path(lodging), method: :delete %>
+  <%= link_to lodging.title, users_lodging_path(lodging) %>
+  <%= lodging.status %>
+  <%= button_to 'edit', edit_users_lodging_path(lodging), method: :get %>
+  <%= button_to 'delete', users_lodging_path(lodging), method: :delete %>
 <% end %>

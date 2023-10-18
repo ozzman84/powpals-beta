@@ -2,8 +2,7 @@
 
 FactoryBot.define do
   factory :bed do
-    room { nil }
-    style { 'MyString' }
-    size { 'MyString' }
+    style { Bed.style.keys.sample }
+    size { Bed.size.keys.sample }
   end
 end

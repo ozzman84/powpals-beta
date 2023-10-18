@@ -1,4 +1,7 @@
 <div>
-  <h1 class="font-bold text-4xl">Users::LodgingCalendars#show</h1>
-  <p>Find me in app/views/users/lodging_calendars/show.html.erb</p>
+  <h1 class="font-bold text-4xl"><%= current_user.first_name %> Calendars</h1>
 </div>
+
+  <% @user_calendars.each do |calendar| %>
+    <%= JSON.pretty_generate(calendar.as_json) %>
+  <% end %>

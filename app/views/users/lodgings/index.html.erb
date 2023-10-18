@@ -1,10 +1,19 @@
-<div>
-  <h1 class="font-bold text-4xl">All your Lodgings</h1>
+<div class="font-bold text-4xl relative flex items-center">
+  <h1>All your Lodgings</h1>
 </div>
 
-<% @lodgings.each do |lodging| %>
-<%= link_to lodging.title, users_lodging_path(lodging) %>
-<%= lodging.status %>
-<%= button_to 'edit', edit_users_lodging_path(lodging), method: :get %>
-<%= button_to 'delete', users_lodging_path(lodging), method: :delete %>
-<% end %>
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <% @lodgings.each do |lodging| %>
+    <div class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400">
+      <div class="min-w-0 flex-1">
+        <a href="<%= users_lodging_path(lodging) %>" class="focus:outline-none">
+          <span class="absolute inset-0" aria-hidden="true"></span>
+          <%= lodging.title %>
+          <%= lodging.status %>
+          <p class="text-sm font-medium text-gray-900"><%= button_to 'edit', edit_users_lodging_path(lodging), method: :get %></p>
+          <p class="truncate text-sm text-gray-500"><%= button_to 'delete', users_lodging_path(lodging), method: :delete %></p>
+        </a>
+      </div>
+    </div>
+  <% end %>
+</div>

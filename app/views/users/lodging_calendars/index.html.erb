@@ -3,7 +3,7 @@
 </div>
 <ul>
   <% @calendars.each do |calendar| %>
-    <li><%= link_to calendar.user.first_name, users_lodging_lodging_calendar_path(calendar) %></li>
+    <li><%= link_to calendar.user.first_name, users_lodging_lodging_calendars_path(calendar) %></li>
     <li><%= "Duration: #{calendar.start_date} #{calendar.end_date}" %></li>
     <li><%= "Status: #{calendar.status}" %></li>
   <% end %>

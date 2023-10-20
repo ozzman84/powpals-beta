@@ -1,29 +1,48 @@
-<h1 class="font-bold text-4xl">Rooms</h1>
-
-<ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-  <% @rooms.each do |room| %>
-    <li class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
-      <div class="flex w-full items-center justify-between space-x-6 p-6">
-        <div class="flex-1 truncate">
-          <div class="flex items-center space-x-3">
-            <h3 class="truncate text-sm font-medium text-gray-900">
-              <%= "#{room.name} #{room.room_type}" %>
-            </h3>
-            <span class="inline-flex flex-shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-              <% room.beds.count %>
-            </span>
-          </div>
+<head>
+    <title>Rooms and Beds</title>
+    <%= render partial: 'form', locals: { lodging: @lodging } %>
+    <style>
+        .roomsContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .room {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid black;
+            padding: 10px;
+            margin: 10px;
+        }
+        .bed {
+            border: 1px solid black;
+            margin: 5px;
+            width: 100px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rooms</h1>
+    <div class="roomsContainer">
+      <% @rooms.each do |room| %>
+        <div class="room" style="width: 200px;">
+            <h2><%= room.name %></h2>
+            <p>Type: <%= room.room_type %></p>
             <% room.beds.each do |bed| %>
-              <p class="mt-1 truncate text-sm text-gray-500">
-                <%= "#{bed.size} #{bed.style}" %>
-              </p>
+              <div class="bed"><%= "#{bed.size} #{bed.style}" %></div>
             <% end %>
-            <%= button_to "Delete", users_lodging_room_path(@lodging, room), method: :delete %>
         </div>
-        <%# <img class="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src="" alt=""> %>
-      </div>
-    </li>
-  <% end %>
-</ul>
+      <% end %>
+    </div>
 
-<%= render partial: 'form', locals: { lodging: @lodging } %>
+    <script>
+        // Add your JavaScript here
+    </script>
+</body>
+
+
+
+
+
+

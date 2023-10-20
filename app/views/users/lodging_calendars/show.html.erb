@@ -1,7 +1,94 @@
-<div>
-  <h1 class="font-bold text-4xl"><%= current_user.first_name %> Calendars</h1>
-</div>
+  <head>
+  <title>User Calendar</title>
+  <!-- Include any necessary stylesheets -->
+  <style>
+    .away {
+      background-color: red;
+      border-radius: 50%;
+    }
 
-  <% @user_calendars.each do |calendar| %>
-    <%= JSON.pretty_generate(calendar.as_json) %>
-  <% end %>
+    .overnight {
+      background-color: green;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="currentMonth">Current Month Name</h1>
+  <div>
+    <button onclick="previousMonth()">Previous</button>
+    <button onclick="currentMonth()">Today</button>
+    <button onclick="nextMonth()">Next</button>
+  </div>
+
+  <div id="calendar" class="calendar">
+    <% @user_calendar.each do |calendar| %>
+      <% if calendar.away? %>
+        <button class="away" onclick="toggleStatus(<%= calendar.id %>, '<%= calendar.date %>')"><%= calendar.date.day %></button>
+      <% elsif calendar.overnight? %>
+        <button class="overnight" onclick="toggleStatus(<%= calendar.id %>, '<%= calendar.date %>')"><%= calendar.date.day %></button>
+      <% else %>
+        <button onclick="toggleStatus(<%= calendar.id %>, '<%= calendar.date %>')"><%= calendar.date.day %></button>
+      <% end %>
+    <% end %>
+  </div>
+
+  <script>
+    function toggleStatus(calendarId, date) {
+      let button = document.querySelector(`[onclick="toggleStatus(${calendarId}, '${date}')"]`);
+      let status = '';
+
+      if (button.classList.contains('away')) {
+        button.classList.remove('away');
+        button.classList.add('overnight');
+        status = 'overnight';
+      } else if (button.classList.contains('overnight')) {
+        button.classList.remove('overnight');
+        status = '';
+      } else {
+        button.classList.add('away');
+        status = 'away';
+      }
+
+      updateCalendar(calendarId, status, date);
+    }
+
+    function updateCalendar(calendarId, status, date) {
+      fetch(`/lodging_calendars/${calendarId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          lodging_calendar: {
+            status: status
+          }
+        })
+      })
+      .then(response => response.json())
+      .then(data => console.log(data)) // Handle the response accordingly
+      .catch(error => console.error('Error:', error));
+    }
+
+    function previousMonth() {
+      const currentMonth = new Date().getMonth(); // Getting the current month index
+      const previousMonthIndex = currentMonth - 1 < 0 ? 11 : currentMonth - 1; // Handling the case when current month is January
+      const previousMonthName = new Date(0, previousMonthIndex).toLocaleString('default', { month: 'long' }); // Getting the name of the previous month
+      // Logic for viewing the previous month
+    }
+
+    function currentMonth() {
+      const currentMonthName = new Date().toLocaleString('default', { month: 'long' }); // Getting the name of the current month
+      // Logic for viewing the current month
+    }
+
+    function nextMonth() {
+      const currentMonth = new Date().getMonth(); // Getting the current month index
+      const nextMonthIndex = (currentMonth + 1) % 12; // Handling the case when current month is December
+      const nextMonthName = new Date(0, nextMonthIndex).toLocaleString('default', { month: 'long' }); // Getting the name of the next month
+      // Logic for viewing the next month
+    }
+  </script>
+</body>
+

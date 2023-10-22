@@ -3,13 +3,14 @@
 module Users
   class LodgingCalendarsController < ApplicationController
     before_action :authenticate_user!
-    
+
     def index
       @lodging = current_user.lodgings.find(params[:lodging_id])
       @calendars = @lodging.lodging_calendars
     end
 
     def show
+      @lodging = current_user.lodgings.find(params[:lodging_id])
       @user_calendars = current_user.lodging_calendars
     end
 

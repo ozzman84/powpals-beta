@@ -20,19 +20,35 @@
     <button onclick="currentMonth()">Today</button>
     <button onclick="nextMonth()">Next</button>
   </div>
+  <table>
+    <thread>
+      <tr>
+        <th>S</th>
+        <th>M</th>
+        <th>T</th>
+        <th>W</th>
+        <th>T</th>
+        <th>F</th>
+        <th>S</th>
+      </tr>
+    </thread>
+      <tr>
+        <div id="calendar" class="calendar">
+          <td>
+          <% @lodging.combined_month.each do |calendar| %>
 
-  <div id="calendar" class="calendar">
-    <% @user_calendar.each do |calendar| %>
-      <% if calendar.away? %>
-        <button class="away" onclick="toggleStatus(<%= calendar.id %>, '<%= calendar.date %>')"><%= calendar.date.day %></button>
-      <% elsif calendar.overnight? %>
-        <button class="overnight" onclick="toggleStatus(<%= calendar.id %>, '<%= calendar.date %>')"><%= calendar.date.day %></button>
-      <% else %>
-        <button onclick="toggleStatus(<%= calendar.id %>, '<%= calendar.date %>')"><%= calendar.date.day %></button>
-      <% end %>
-    <% end %>
-  </div>
-
+            <% if calendar.is_a?(LodgingCalendar) && calendar %>
+              <button class="away" onclick="toggleStatus(<%= calendar.id %>, '<%= calendar.start_date %>')"><%= calendar.start_date.day %></button>
+            <% elsif calendar.is_a?(LodgingCalendar) && calendar.overnight? %>
+              <button class="overnight" onclick="toggleStatus(<%= calendar.id %>, '<%= calendar.start_date %>')"><%= calendar.start_date.day %></button>
+            <% else %>
+              <button onclick="toggleStatus(<%= nil %>, '<%= calendar %>')"><%= calendar.day %></button>
+            <% end %>
+          <% end %>
+          </td>
+        </div>
+      </tr>
+  </table>
   <script>
     function toggleStatus(calendarId, date) {
       let button = document.querySelector(`[onclick="toggleStatus(${calendarId}, '${date}')"]`);

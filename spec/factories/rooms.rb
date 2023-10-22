@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :room do
-    name { ["master", "guest", "den"].sample }
+    name { %w[master guest den].sample }
   end
 end

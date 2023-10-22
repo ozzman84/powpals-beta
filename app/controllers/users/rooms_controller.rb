@@ -3,7 +3,7 @@
 module Users
   class RoomsController < ApplicationController
     before_action :authenticate_user!
-    
+
     def index
       @lodging = current_user.lodgings.find(params[:lodging_id])
       @rooms = @lodging.rooms.all

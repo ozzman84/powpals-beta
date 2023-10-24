@@ -15,11 +15,18 @@ module Users
     end
 
     def create
-      @calendar = current_user.lodging_calendars.new(lodging_params)
+      puts params
+      @calendar = current_user.lodging_calendars.new(create_lodging_params)
 
       flash[:errors] = @room.errors.full_messages unless @calendar.save
 
-      redirect_to users_lodging_lodging_calendar(@calendar)
+      redirect_to users_lodging_lodging_calendar_path(id: params[:id])
+    end
+
+    private
+
+    def create_lodging_params
+      params.permit(:lodging_id, :user_id, :start_date, :end_date, :status)
     end
   end
 end

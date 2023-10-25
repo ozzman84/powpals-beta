@@ -2,7 +2,6 @@
 
 FactoryBot.define do
   factory :room do
-    lodging { nil }
-    name { 'MyString' }
+    name { %w[master guest den].sample }
   end
 end

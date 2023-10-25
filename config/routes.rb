@@ -6,6 +6,11 @@ Rails.application.routes.draw do
   namespace :users do
     resources :lodgings do
       resources :rooms, only: %i[index create destroy]
+      resources :lodging_calendars, except: %i[new edit] do
+        collection do
+          get :my_calendar
+        end
+      end
     end
   end
 

@@ -1,29 +1,41 @@
-<h1 class="font-bold text-4xl">Rooms</h1>
-
-<ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-  <% @rooms.each do |room| %>
-    <li class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
-      <div class="flex w-full items-center justify-between space-x-6 p-6">
-        <div class="flex-1 truncate">
-          <div class="flex items-center space-x-3">
-            <h3 class="truncate text-sm font-medium text-gray-900">
-              <%= "#{room.name} #{room.room_type}" %>
-            </h3>
-            <span class="inline-flex flex-shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-              <% room.beds.count %>
-            </span>
-          </div>
-            <% room.beds.each do |bed| %>
-              <p class="mt-1 truncate text-sm text-gray-500">
-                <%= "#{bed.size} #{bed.style}" %>
-              </p>
-            <% end %>
-            <%= button_to "Delete", users_lodging_room_path(@lodging, room), method: :delete %>
-        </div>
-        <%# <img class="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" src="" alt=""> %>
-      </div>
-    </li>
-  <% end %>
-</ul>
-
+<%= render partial: 'shared/errors' %>
 <%= render partial: 'form', locals: { lodging: @lodging } %>
+
+<ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  <% @rooms.each do |room| %>
+  <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+    <div class="flex flex-1 flex-col p-8">
+      <%# <img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60" alt=""> %>
+      <h3 class="mt-6 text-sm font-medium text-gray-900"><%= "#{room.name} #{room.room_type}" %><% room.beds.count %></h3>
+      <% room.beds.each do |bed| %>
+        <dl class="mt-1 flex flex-grow flex-col justify-between">
+          <dt class="sr-only">Bed</dt>
+          <dd class="text-sm text-gray-500"><%= "#{bed.size} #{bed.style}" %></dd>
+          <dt class="sr-only">Role</dt>
+          <dd class="mt-3">
+            <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Available</span>
+          </dd>
+        </dl>
+      <% end %>
+    </div>
+    <div>
+      <div class="-mt-px flex divide-x divide-gray-200">
+        <div class="flex w-0 flex-1">
+          <a href="mailto:janecooper@example.com" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
+            <%# <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"> %>
+              <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+              <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+            </svg>
+            Edit
+          </a>
+        </div>
+        <div class="-ml-px flex w-0 flex-1">
+          <%= link_to "Delete", users_lodging_room_path(@lodging, room), method: :delete, class: "relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900" %>
+        </div>
+      </div>
+    </div>
+  </li>
+  <% end %>
+
+  <!-- More people... -->
+</ul>

@@ -26,15 +26,14 @@ class Lodging < ApplicationRecord
   end
 
   def combined_month
-    Struct.new("Date", :start_date, :end_date, :method, :next_status, :color_by_status, :path, :status, :id) do
-
+    Struct.new('Date', :start_date, :end_date, :next_status, :color_by_status, :path, :status, :id) do
       def path(_id)
         users_lodging_lodging_calendars_path
       end
     end
 
     month.map do |day|
-      LodgingCalendar.find_by(start_date: day) || Struct::Date.new(day, day, :post, 'overnight', day.today? ? " text-indigo-600 font-semibold" : "text-gray-400")
+      LodgingCalendar.find_by(start_date: day) || Struct::Date.new(day, day, 'overnight', day.today? ? ' text-indigo-600 font-semibold' : 'text-gray-400')
     end
   end
 end

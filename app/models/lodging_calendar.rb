@@ -4,7 +4,7 @@ class LodgingCalendar < ApplicationRecord
   belongs_to :user
   belongs_to :lodging
 
-  validates :start_date,  uniqueness: { scope: [:lodging_id, :user_id], message: 'A user cannot have a duplicate start_date for a lodging' }
+  validates :start_date, uniqueness: { scope: %i[lodging_id user_id], message: 'A user cannot have a duplicate start_date for a lodging' }
 
   enum status: {
     away: 'away',
@@ -14,12 +14,12 @@ class LodgingCalendar < ApplicationRecord
 
   def color_by_status
     case status
-    when "overnight"
-      "text-white bg-green-900"
-    when "away"
-      "text-white bg-red-500"
+    when 'overnight'
+      'text-white bg-green-900'
+    when 'away'
+      'text-white bg-red-500'
     else
-      "text-gray-400"
+      'text-gray-400'
     end
   end
 
@@ -30,9 +30,5 @@ class LodgingCalendar < ApplicationRecord
     when 'overnight'
       'away'
     end
-  end
-
-  def method
-    :patch
   end
 end

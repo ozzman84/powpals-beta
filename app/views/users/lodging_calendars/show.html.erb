@@ -1,3 +1,7 @@
+<div>
+  <%= render partial: "shared/errors" %>
+</div>
+
 <div class="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200 justify-center">
   <div class="md:pr-14">
     <div class="flex items-center">
@@ -32,7 +36,7 @@
                 method: :patch, 
                 remote: true, 
                 form: { "data-type" => "json" },
-                class: "mx-auto flex h-10 w-10 items-center justify-center rounded-full #{date.color_by_status} hover:bg-gray-200",
+                class: "mx-auto flex h-10 w-10 items-center justify-center rounded-full text-white bg-green-900 hover:bg-gray-200",
                 params: {
                   status: date.next_status, 
                   id: date.id,
@@ -41,12 +45,11 @@
                   <%= date.start_date.day %>
               <% end %>
             <% elsif is_a?(LodgingCalendar) && date.away? %>
-              <%= button_to users_lodging_lodging_calendar_path(id: params[:id]), 
-                method: :delete, 
-                action: :destroy, 
+              <%= link_to users_lodging_lodging_calendar_path(id: params[:id]), 
+                method: :delete,
                 remote: true, 
                 form: { "data-type" => "json" },
-                class: "mx-auto flex h-10 w-10 items-center justify-center rounded-full #{date.color_by_status} hover:bg-gray-200",
+                class: "mx-auto flex h-10 w-10 items-center justify-center rounded-full text-white bg-red-500 hover:bg-gray-200",
                 params: {
                   id: date.id,
                   originating_id: params[:id]

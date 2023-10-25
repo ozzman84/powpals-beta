@@ -19,15 +19,19 @@ module Users
 
       flash[:errors] = @calendar.errors.full_messages unless @calendar.save
 
-      redirect_to users_lodging_lodging_calendar_path(id: params[:originating_id])
+      redirect_to users_lodging_lodging_calendars_path(id: params[:originating_id])
     end
 
     def update
       @calendar = current_user.lodging_calendars.find(params[:id])
-      
-      @calendar.update(status: params[:status]) unless params[:status] == @calendar.status
 
-      redirect_to users_lodging_lodging_calendar_path(id: params[:originating_id])
+      if params[:status] != @calendar.status
+        flash[:alert] = 'Values are the same. Update not processed.'
+      end
+
+      flash[:errors] = @calendar.errors.full_messages unless @calendar.update(status: params[:status])
+
+      redirect_to users_lodging_lodging_calendars_path
     end
 
     def destroy

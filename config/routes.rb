@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         collection do
           get :my_calendar
         end
+      end
     end
   end
 

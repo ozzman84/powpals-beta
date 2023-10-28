@@ -2,6 +2,7 @@
 
 module Users
   class LodgingsController < ApplicationController
+    before_action :authenticate_user!
     # before_action :find_lodging, only: [:show, :destroy, :update, :edit]
 
     def index

@@ -1,10 +1,33 @@
 <div>
-  <h1 class="font-bold text-4xl">All your Lodgings</h1>
+  <h1 class="font-bold text-4xl">Lodgings</h1>
 </div>
 
-<% @lodgings.each do |lodging| %>
-<%= link_to lodging.title, users_lodging_path(lodging) %>
-<%= lodging.status %>
-<%= button_to 'edit', edit_users_lodging_path(lodging), method: :get %>
-<%= button_to 'delete', users_lodging_path(lodging), method: :delete %>
-<% end %>
+<ul role="list" class="divide-y divide-gray-100">
+  <% @lodgings.each do |lodging| %>
+    <li class="relative flex justify-between gap-x-6 py-5">
+      <div class="flex min-w-0 gap-x-4">
+        <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+        <div class="min-w-0 flex-auto">
+          <p class="text-sm font-semibold leading-6 text-gray-900">
+            <a href="#">
+              <span class="absolute inset-x-0 -top-px bottom-0"></span>
+              <%= link_to lodging.title, users_lodging_path(lodging) %>
+            </a>
+          </p>
+          <p class="mt-1 flex text-xs leading-5 text-gray-500">
+            <a href="mailto:leslie.alexander@example.com" class="relative truncate hover:underline"><%= "#{lodging.street} #{lodging.address2} #{lodging.city} #{lodging.state}" %></a>
+          </p>
+        </div>
+      </div>
+      <div class="flex shrink-0 items-center gap-x-4">
+        <div class="hidden sm:flex sm:flex-col sm:items-end">
+          <p class="text-sm leading-6 text-gray-900"><%= lodging.status %></p>
+          <p class="mt-1 text-xs leading-5 text-gray-500">Created at: <%= lodging.created_at %></time></p>
+        </div>
+      </div>
+    </li>
+    <%= button_to 'Edit', edit_users_lodging_path(lodging), method: :get %>
+    <%= button_to 'Delete', users_lodging_path(lodging), method: :delete %>
+  <% end %>  
+</ul>
+

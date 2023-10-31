@@ -1,5 +1,6 @@
 {
   "dependencies": {
     "el-transition": "^0.0.7"
-  }
+  },
+  "packageManager": "yarn@1.22.19"
 }

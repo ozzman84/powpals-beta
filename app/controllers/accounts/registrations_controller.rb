@@ -6,7 +6,7 @@ module Accounts
     # before_action :configure_account_update_params, only: [:update]
 
     def update_resource(resource, params)
-      if resource.provider == 'google_oauth2'
+      if resource.provider == 'google'
         params.delete('current_password')
         resource.password = params['password']
         resource.update_without_password(params)

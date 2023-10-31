@@ -4,8 +4,4 @@ class User < ApplicationRecord
   has_many :roommates
   has_many :lodgings, through: :roommates
   belongs_to :account
-
-  devise :database_authenticatable, :registerable, :recoverable,
-         :rememberable, :validatable, :confirmable, :lockable, :timeoutable,
-         :trackable, :omniauthable
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Account < ApplicationRecord
   has_one :user
 
@@ -7,12 +9,12 @@ class Account < ApplicationRecord
 
   def self.from_omniauth(auth)
     account = get_account(auth)
-    user = User.create!(
+    User.create!(
       first_name: auth.info.first_name,
       last_name: auth.info.last_name,
       full_name: auth.info.name,
       avatar_url: auth.info.image,
-      account: account
+      account:
     )
     account
   end

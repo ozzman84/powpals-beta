@@ -104,14 +104,18 @@
           1,
           null,
           null,
+          null
+        ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/app/models/roommate.rb": {
+        "lines": [
           null,
           null,
+          1,
+          1,
+          1,
           null,
-          null,
-          null,
-          null,
-          null,
-          null,
+          1,
           null,
           null,
           null,
@@ -121,8 +125,27 @@
           null,
           null
         ]
+      },
+      "/Users/ozzieosmonson/projects/powpals-beta/app/models/lodging.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
       }
     },
-    "timestamp": 1698715468
+    "timestamp": 1698724083
   }
 }

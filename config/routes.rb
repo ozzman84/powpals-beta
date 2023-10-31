@@ -9,9 +9,9 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks',
-    sessions: 'users/sessions',
-    registrations: 'users/registrations'
+  devise_for :accounts, controllers: {
+    omniauth_callbacks: 'accounts/omniauth_callbacks',
+    sessions: 'accounts/sessions',
+    registrations: 'accounts/registrations'
   }
 end

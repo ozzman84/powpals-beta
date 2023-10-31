@@ -1,10 +1,10 @@
 <h1 class="font-bold text-4xl">Welcome to PowPals Beta</h1>
 <div>
   <h1 class="font-bold text-4xl">Home#index</h1>
-  <% if user_signed_in? %> 
- <div> Welcome <%= current_user.email %> </div> 
-  <%= button_to "Sign out", destroy_user_session_path, method: :delete %> 
+  <% if account_signed_in? %> 
+ <div> Welcome <%= current_account.email %> </div> 
+  <%= button_to "Sign out", destroy_account_session_path, method: :delete %> 
 <% else %>
-  <%= button_to "Sign in", new_user_session_path %> 
+  <%= button_to "Sign in", new_account_session_path %> 
 <% end %>
 </div>

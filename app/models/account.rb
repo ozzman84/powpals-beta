@@ -14,8 +14,7 @@ class Account < ApplicationRecord
       full_name: auth.info.name,
       avatar_url: auth.info.image,
       account: get_account(auth)
-    )
-    account
+    ).account
   end
 
   def self.get_account(auth)

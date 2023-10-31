@@ -102,10 +102,10 @@ group :development do
   # gem "spring"
 end
 
-gem "dockerfile-rails", ">= 1.5", :group => :development
+gem 'dockerfile-rails', '>= 1.5', group: :development
 
-gem "redis", "~> 5.0"
+gem 'redis', '~> 5.0'
 
-gem "sentry-ruby", "~> 5.12"
+gem 'sentry-ruby', '~> 5.12'
 
-gem "sentry-rails", "~> 5.12"
+gem 'sentry-rails', '~> 5.12'

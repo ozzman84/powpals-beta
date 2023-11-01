@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Lodging < ApplicationRecord
-  has_many :roommates
+  has_many :roommates, dependent: :destroy
   has_many :users, through: :roommates
   has_many :rooms
 

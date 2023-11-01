@@ -51,7 +51,7 @@ module Users
     private
 
     def create_lodging_params
-      params.require(:lodging).permit(:title, :description, :max_guests, :street, :city, :state, :zip_code, :country, :status)
+      params.require(:lodging).permit(:title, :description, :max_guests, :street, :address2, :city, :state, :zip_code, :country, :status)
     end
 
     def update_lodging_params

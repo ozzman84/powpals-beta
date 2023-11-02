@@ -51,18 +51,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_171635) do
     t.index ["room_id"], name: "index_beds_on_room_id"
   end
 
-  create_table "lodging_calendars", force: :cascade do |t|
-    t.string "status"
-    t.date "start_date"
-    t.date "end_date"
-    t.bigint "user_id", null: false
-    t.bigint "lodging_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["lodging_id"], name: "index_lodging_calendars_on_lodging_id"
-    t.index ["user_id"], name: "index_lodging_calendars_on_user_id"
-  end
-
   create_table "lodgings", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -112,8 +100,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_171635) do
   end
 
   add_foreign_key "beds", "rooms"
-  add_foreign_key "lodging_calendars", "lodgings"
-  add_foreign_key "lodging_calendars", "users"
   add_foreign_key "roommates", "lodgings"
   add_foreign_key "roommates", "users"
   add_foreign_key "rooms", "lodgings"

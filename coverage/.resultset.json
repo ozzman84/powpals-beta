@@ -92,6 +92,22 @@
           null
         ]
       },
+      "/Users/ozzieosmonson/projects/powpals-beta/app/models/calendar.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
       "/Users/ozzieosmonson/projects/powpals-beta/app/models/user.rb": {
         "lines": [
           null,
@@ -100,29 +116,6 @@
           1,
           1,
           1,
-          null,
-          1,
-          null,
-          null,
-          null
-        ]
-      },
-      "/Users/ozzieosmonson/projects/powpals-beta/app/models/roommate.rb": {
-        "lines": [
-          null,
-          null,
-          1,
-          1,
-          1,
-          null,
-          1,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
           null
         ]
       },
@@ -146,6 +139,6 @@
         ]
       }
     },
-    "timestamp": 1698772647
+    "timestamp": 1698965436
   }
 }

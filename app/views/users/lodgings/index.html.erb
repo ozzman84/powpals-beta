@@ -26,13 +26,13 @@
           <img class="h-12 w-12 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
           <div class="min-w-0 flex-auto">
             <p class="text-sm font-semibold leading-6 text-gray-900">
-              <a href="#">
+              <a href="<%= users_lodging_path(lodging) %>">
                 <span class="absolute inset-x-0 -top-px bottom-0"></span>
-                <%= link_to lodging.title, users_lodging_path(lodging) %>
+                <%= lodging.title %>
               </a>
             </p>
             <p class="mt-1 flex text-xs leading-5 text-gray-500">
-              <a href="mailto:leslie.alexander@example.com" class="relative truncate hover:underline"><%= "#{lodging.street} #{lodging.address2} #{lodging.city} #{lodging.state}" %></a>
+              <a href="#" class="relative truncate hover:underline"><%= "#{lodging.street} #{lodging.address2} #{lodging.city} #{lodging.state}" %></a>
             </p>
           </div>
         </div>

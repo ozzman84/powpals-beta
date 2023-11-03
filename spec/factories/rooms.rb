@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :room do
-    lodging { nil }
-    name { 'MyString' }
+    name { ['Master', 'Spare Room', 'Main Room'].sample }
+    room_type { Room.room_type.keys.sample }
   end
 end

@@ -24,7 +24,7 @@ class Calendar < ApplicationRecord
     month = build_dates(start_date)
     records_within_range = where(date: month)
     existing_records = records_within_range.to_a.index_by(&:date)
-    Struct.new('Date', :date)
+    Struct.new('Date', :date, :status)
 
     month.map { |date| existing_records[date] || Struct::Date.new(date) }
   end

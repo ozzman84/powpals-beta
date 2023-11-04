@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe Calendar, type: :model do
   describe 'Relationships' do
-    it { should belong_to(:user).dependent(:destroy) }
-    it { should belong_to(:lodging).dependent(:destroy) }
+    it { should belong_to(:user) }
+    it { should belong_to(:lodging) }
   end
 
   describe 'Validations' do

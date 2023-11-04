@@ -8,7 +8,7 @@ module Users
 
     def my_calendar
       @lodging = current_account.user.lodgings.find(params[:lodging_id])
-      @calendar = current_account.user.calendars.where(lodging_id: params[:lodging_id])
+      @calendars = current_account.user.calendars.where(lodging_id: params[:lodging_id])
     end
 
     def create

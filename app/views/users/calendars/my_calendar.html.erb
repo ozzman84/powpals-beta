@@ -5,23 +5,23 @@
     <%= link_to "Full Calendar", users_lodging_calendars_path(@lodging), class: "ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
   </div>
 </header>
-<div>
-  <%= render partial: 'shared/errors' %>
-  <% @current_date = Date.today %>
-  <% @current_month = @current_date.month %>
-</div>
 
-<div class="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
+<div data-controller="myCalendar" class="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
   <div class="md:pr-14">
     <div class="flex items-center">
+      <div data-my_calendar-target="currentDate">
+        <%= render partial: 'shared/errors' %>
+        <% @current_date = Date.today %>
+        <% @current_month = @current_date.month %>
+      </div>
       <h2 class="flex-auto text-sm font-semibold text-gray-900"><%= Date::MONTHNAMES[@current_month] %></h2>
-      <button type="button" class="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
+      <button data-action="click->calendars#previousMonth" id="previousMonthButton" type="button" href="<% my_calendar_users_lodging_calendars_path(@lodging) %>" class="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
         <span class="sr-only">Previous month</span>
         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
         </svg>
       </button>
-      <button type="button" class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
+      <button data-action="click->calendars#nextMonth" id="nextMonthButton" type="button" class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
         <span class="sr-only">Next month</span>
         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
@@ -49,15 +49,17 @@
             Is selected and is not today, include: "bg-gray-900"
             Is not selected, include: "hover:bg-gray-200"
             Is selected or is today, include: "font-semibold"
-            Classes
 
-            Not this month - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200"
-            This Month - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:bg-gray-200"
-            Today & not selected - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full font-semibold text-indigo-600 hover:bg-gray-200"
-            Selected staying - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-green-900 font-semibold text-white"
-            Selected away - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-red-900 font-semibold text-white"
+            Classes
+              Not this month - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200"
+              This Month - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:bg-gray-200"
+              Today & not selected - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full font-semibold text-indigo-600 hover:bg-gray-200"
+              Selected staying - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-green-900 font-semibold text-white"
+              Selected away - class="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-red-900 font-semibold text-white"
           -->
+
         <% if calendar.status == "staying" %>
+
           <div class="py-2">
             <%= button_to calendar.date.day,
               users_lodging_calendars_path(id: calendar.id), 
@@ -68,7 +70,9 @@
               }
             %>
           </div>
+
         <% elsif calendar.status == "away" %>
+
           <div class="py-2">
             <%= button_to calendar.date.day, 
               users_lodging_calendars_path(lodging_id: params[:lodging_id], id: calendar.id),
@@ -76,7 +80,9 @@
               method: :delete 
             %>
           </div>
+
         <% elsif calendar.date.month == @current_month %>
+
           <div class="py-2">
             <%= button_to calendar.date.day, 
               users_lodging_calendars_path,
@@ -90,7 +96,9 @@
               } 
             %>
           </div>
+
         <% else %>
+
           <div class="py-2">
             <%= button_to calendar.date.day, 
               users_lodging_calendars_path,
@@ -104,8 +112,10 @@
               } 
             %>
           </div>
+
         <% end %>
       <% end %>
+
     </div>
   </div>
   <section class="mt-12 md:mt-0 md:pl-14">
@@ -151,3 +161,17 @@
     </ol>
   </section>
 </div>
+
+<script>
+  // document.getElementById('nextMonthButton').addEventListener('click', function() {
+  //   <% @current_date = @current_date + 1.month %>;
+  //   console.log('New current date:', '<%= @current_date %>');
+  //   window.location.href = "<%= request.original_url %>";
+  // });
+
+  // document.getElementById('previousMonthButton').addEventListener('click', function() {
+  //   <% @current_date = @current_date - 1.month %>;
+  //   console.log('New current date:', '<%= @current_date %>');
+  //   window.location.href = "<%= request.original_url %>";
+  // });
+</script>

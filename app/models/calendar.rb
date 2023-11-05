@@ -28,16 +28,4 @@ class Calendar < ApplicationRecord
 
     month.map { |date| existing_records[date] || Struct::Date.new(date) }
   end
-
-  # def self.month_with_calendar(start_date)
-  #   Struct.new('Date', :date, :next_status, :color_by_status, :path, :status, :id) do
-  #     def path(_id)
-  #       users_lodging_calendars_path
-  #     end
-  #   end
-
-  #   month_with_full_weeks(start_date).map do |day|
-  #     Calendar.find_by(date: day) || Struct::Date.new(day, 'staying', day.today? ? ' text-indigo-600 font-semibold' : 'text-gray-400')
-  #   end
-  # end
 end

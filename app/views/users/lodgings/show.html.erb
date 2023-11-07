@@ -1,5 +1,7 @@
 <div>
   <h1 class="font-bold text-4xl"><%= @lodging.title %></h1>
 </div>
+<%= link_to "View My Calendar", my_calendar_users_lodging_calendars_path(@lodging) %>
+<%= link_to "Rooms", users_lodging_rooms_path(@lodging) %>
 
 <pre><%= JSON.pretty_generate(@lodging.as_json) %></pre>

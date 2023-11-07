@@ -14,10 +14,10 @@ class Calendar < ApplicationRecord
   }
 
   def self.build_dates(start_date)
-    first_day = start_date.beginning_of_month.beginning_of_week(:monday)
-    last_day = start_date.end_of_month.end_of_week(:monday)
+    first_date = start_date.beginning_of_month.beginning_of_week(:monday)
+    last_date = start_date.end_of_month.end_of_week(:monday)
 
-    (first_day..last_day).to_a
+    (first_date..last_date).to_a
   end
 
   def self.fetch_records_and_dates(start_date)

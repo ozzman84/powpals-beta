@@ -11,22 +11,32 @@
     <div class="flex items-center">
       <div data-my_calendar-target="currentDate">
         <%= render partial: 'shared/errors' %>
-        <% @current_date = Date.today %>
+        <% @current_date = params[:start_date]&.to_date || Date.today %>
         <% @current_month = @current_date.month %>
       </div>
       <h2 class="flex-auto text-sm font-semibold text-gray-900"><%= Date::MONTHNAMES[@current_month] %></h2>
-      <button data-action="click->calendars#previousMonth" id="previousMonthButton" type="button" href="<% my_calendar_users_lodging_calendars_path(@lodging) %>" class="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
-        <span class="sr-only">Previous month</span>
+
+      <%= link_to url_for(my_calendar_users_lodging_calendars_path(@lodging, start_date: @current_date - 1.month)), 
+        params: { start_date: (@current_date - 1.month) },
+        class: "-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500",
+        id: "previousMonthButton" do %>
+
         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
         </svg>
-      </button>
-      <button data-action="click->calendars#nextMonth" id="nextMonthButton" type="button" class="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
-        <span class="sr-only">Next month</span>
+
+      <% end %>
+
+      <%= link_to url_for(my_calendar_users_lodging_calendars_path(@lodging, start_date: @current_date + 1.month)), 
+        params: { start_date: (@current_date - 1.month) },
+        class: "-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500",
+        id: "nextMonthButton" do %>
+
         <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
         </svg>
-      </button>
+
+      <% end %>
     </div>
     <div class="mt-10 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
       <div>M</div>
@@ -66,7 +76,10 @@
               method: :patch,
               class: "mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-green-900 font-semibold text-white",
               params: { 
-                calendar: { status: "away" }
+                calendar: { 
+                  status: "away",
+                  start_date: params[:start_date]
+                }
               }
             %>
           </div>
@@ -75,7 +88,7 @@
 
           <div class="py-2">
             <%= button_to calendar.date.day, 
-              users_lodging_calendars_path(lodging_id: params[:lodging_id], id: calendar.id),
+              users_lodging_calendars_path(lodging_id: params[:lodging_id], id: calendar.id, start_date: params[:start_date]),
               class: "mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-red-700 font-semibold text-white",
               method: :delete 
             %>
@@ -91,7 +104,8 @@
                 calendar: { 
                   date: calendar.date, 
                   status: "staying", 
-                  lodging_id: params[:lodging_id] 
+                  lodging_id: params[:lodging_id],
+                  start_date: params[:start_date]
                 }
               } 
             %>

@@ -18,6 +18,7 @@ Metrics/MethodLength:
 
 Metrics/AbcSize:
   enabled: false
+  Max: 25
 
 # Offense count: 1
 # Configuration parameters: AllowedMethods, AllowedPatterns.

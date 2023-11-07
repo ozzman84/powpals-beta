@@ -12,10 +12,10 @@ module Users
     end
 
     def create
-      @calendar = current_account.user.calendars.new(create_calendar_params)
+      @calendar = current_account.user.calendars.new(create_calendar_params.except(:start_date))
 
       if @calendar.save
-        redirect_to my_calendar_users_lodging_calendars_path
+        redirect_to my_calendar_users_lodging_calendars_path(start_date: create_calendar_params[:start_date])
       else
         flash.now[:errors] = @calendar.errors.full_messages
       end
@@ -24,8 +24,8 @@ module Users
     def update
       @calendar = current_account.user.calendars.find(params[:id])
 
-      if @calendar.update(update_calendar_params)
-        redirect_to my_calendar_users_lodging_calendars_path
+      if @calendar.update(update_calendar_params.except(:start_date))
+        redirect_to my_calendar_users_lodging_calendars_path(start_date: update_calendar_params[:start_date])
       else
         flash.now[:errors] = @calendar.errors.full_messages
       end
@@ -35,7 +35,7 @@ module Users
       @calendar = current_account.user.calendars.find(params[:id])
 
       if @calendar.destroy
-        redirect_to my_calendar_users_lodging_calendars_path
+        redirect_to my_calendar_users_lodging_calendars_path(start_date: params[:start_date])
       else
         flash.now[:errors] = @calendar.errors.full_messages
       end
@@ -43,12 +43,12 @@ module Users
 
     private
 
-    def create_calendar_params
-      params.require(:calendar).permit(:date, :lodging_id, :status)
+    def calendar_params
+      params.require(:calendar).permit(:date, :lodging_id, :status, :start_date)
     end
 
     def update_calendar_params
-      params.require(:calendar).permit(:status)
+      params.require(:calendar).permit(:status, :start_date)
     end
   end
 end

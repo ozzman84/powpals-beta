@@ -4,7 +4,10 @@ module Users
   class CalendarsController < ApplicationController
     before_action :authenticate_account!
 
-    def show; end
+    def show
+      @lodging = current_account.user.lodgings.find(params[:lodging_id])
+      @lodging_calendars = @lodging.calendars.grouped_by_date_with_avatars(params[:start_date]&.to_date || Date.today)
+    end
 
     def my_calendar
       @lodging = current_account.user.lodgings.find(params[:lodging_id])

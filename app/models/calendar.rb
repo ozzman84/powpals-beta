@@ -12,12 +12,35 @@ class Calendar < ApplicationRecord
     staying: 'staying',
     undecided: 'undecided'
   }
+  CALENDAR_LENGTH = 42
+
+  # scope :grouped_by_date_with_avatars, ->(start_date) {
+  #   where(date: build_dates(start_date))
+  #     .includes(:user)
+  #     .order(:date)
+  #     .group_by(&:date)
+  #     .transform_values { |calendars| calendars.map { |calendar| calendar.user } }
+  # }
+
+  def self.grouped_by_date_with_avatars(start_date)
+    date_range = build_dates(start_date)
+    calendars = where(date: date_range, status: 'staying').includes(:user)
+
+    result_hash = {}
+    date_range.each { |date| result_hash[date] = [] }
+
+    calendars.each do |calendar|
+      result_hash[calendar.date] << calendar.user.avatar_url
+    end
+
+    result_hash
+  end
 
   def self.build_dates(start_date)
     first_date = start_date.beginning_of_month.beginning_of_week(:monday)
-    last_date = start_date.end_of_month.end_of_week(:monday)
+    last_date = first_date + CALENDAR_LENGTH.days
 
-    (first_date..last_date).to_a
+    (first_date...last_date).to_a
   end
 
   def self.fetch_records_and_dates(start_date)

@@ -1,17 +1,21 @@
 # README
 
 ![PowPals-Beta](https://github.com/ozzman84/powpals-beta/actions/workflows/ci.yml/badge.svg)
-# Project Name
-
-Brief project description or tagline.
+# PowPals Beta
 
 ## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [README](#readme)
+- [PowPals Beta](#powpals-beta)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Features](#features)
+    - [Features include:](#features-include)
+    - [Also, I would like to build features for all users even if they are not renting a ski house](#also-i-would-like-to-build-features-for-all-users-even-if-they-are-not-renting-a-ski-house)
+  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [System Dependencies](#system-dependencies)
+    - [Project Management](#project-management)
+    - [Installation Steps](#installation-steps)
 
 ## Overview
 Every year me and my friends would rent a ski house in the mountain and there were a lot of tasks and house keeping that we managed through an excel spread sheet. The sheet would continue to grow and ended up needing a lot of logic build into it. As I realized we had a good system going, I thought I could build it into an app and thats where we are today.
@@ -20,20 +24,20 @@ Every year me and my friends would rent a ski house in the mountain and there we
 Current the feature build outs are being managed through GitHub projects and stories are being written for each new feature. 
 
 At it's core, the app is being built to help manage our seasonal ski house. 
-Features include:
-Marking when a roommate will, will not be staying as well as tracking for those who are undecided.
-Add events for a user and for the house
-Make payments with splitwise, venmo, or anyone else
-Invite guests to stay at the house
-Reserve which room you will be staying in
+### Features include:
+- Marking when a roommate will, will not be staying as well as tracking for those who are undecided.
+- Add events for a user and for the house
+- Make payments with splitwise, venmo, or anyone else
+- Invite guests to stay at the house
+- Reserve which room you will be staying in
 
-Also, I would like to build features for all users even if they are not renting a ski house
-Users can select which Mountain they will ski on
-Users can select which ski pass they have
-Users can add friends and see where they're skiing
-Users can see which ski passes their friends have
-Plan ski trips together
-Make ski friends
+### Also, I would like to build features for all users even if they are not renting a ski house
+- Users can select which Mountain they will ski on
+- Users can select which ski pass they have
+- Users can add friends and see where they're skiing
+- Users can see which ski passes their friends have
+- Plan ski trips together
+- Make ski friends
 
 ## Installation
 Step-by-step guide to setting up the Rails application locally. Include the following subsections:
@@ -43,46 +47,57 @@ Step-by-step guide to setting up the Rails application locally. Include the foll
  * Rails 7.0.6
  * PostgreSQL
 
-* System Dependencies
+### System Dependencies
 Authentication was setup with Devise
 Google Oauth2
 TailwindUI
 Stimulus
 DotENV
-Fly.io Production
+Deployed on Fly.io
 
-Linting
-Rubocop
-
-Project Management
+### Project Management
 * GitHub Projects
 
 ### Installation Steps
 1. Clone the repository:
 ```
-  git@github.com:ozzman84/powpals-beta.git
+$ git clone git@github.com:ozzman84/powpals-beta.git
 ```
 
-2. Run the bundler:
+2. Install Dependencies:
 ```
   bundle install
 ```
 
 3. Create and seed the database:
 ```
-  rails db:{create,migrate,seed}
+$ rails db:{create,migrate,seed}
 ```
 
-SECRETS are kept in a .env file and once the application is setup I can send the secret information to you.
+4. Precompile assets:
+
+```
+$ rails assets:precompile
+```
+
+5. Run the rails server:
+```
+$ rails s
+```
+
+6. Navigate to `http://localhost:3000/accounts/sign_in`
+The default login is: `test@example.com` / `password1`
+
+7. SECRETS are kept in a .env file and once the application is setup I can send the secret information to you.
 
 Testing is with RSpec
 ```
-  bundle exec rspec
+$ bundle exec rspec
 ```
 
 RuboCop Linting
 ```
-  bundle exec rubocop --parallel -A
+$ bundle exec rubocop --parallel -A
 ```
 
 ERB Linting

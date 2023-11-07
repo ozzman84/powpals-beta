@@ -35,4 +35,4 @@
 .env
 
 # Ignore coverage directory
-coverage/
+/coverage

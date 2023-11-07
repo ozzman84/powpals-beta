@@ -39,11 +39,23 @@ Make ski friends
 Step-by-step guide to setting up the Rails application locally. Include the following subsections:
 
 ### Prerequisites
-Ruby 3.2.2
-Rails 7.0.6
-PostgreSQL
+ * Ruby 3.2.2
+ * Rails 7.0.6
+ * PostgreSQL
 
-* System dependencies
+* System Dependencies
+Authentication was setup with Devise
+Google Oauth2
+TailwindUI
+Stimulus
+DotENV
+Fly.io Production
+
+Linting
+Rubocop
+
+Project Management
+* GitHub Projects
 
 ### Installation Steps
 1. Clone the repository:

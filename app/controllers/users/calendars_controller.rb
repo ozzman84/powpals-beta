@@ -46,7 +46,7 @@ module Users
 
     private
 
-    def calendar_params
+    def create_calendar_params
       params.require(:calendar).permit(:date, :lodging_id, :status, :start_date)
     end
 

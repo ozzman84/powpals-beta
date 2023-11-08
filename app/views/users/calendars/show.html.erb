@@ -1,6 +1,5 @@
-<div>
-  <h1 class="font-bold text-4xl"><%= link_to @lodging.title, users_lodging_path(@lodging) %></h1>
-</div>
+<%= render 'shared/header' %>
+
 <div class="lg:flex lg:h-full lg:flex-col">
   <header class="flex items-center justify-between border-b border-gray-200 px-6 py-4 lg:flex-none">
     <% @current_date = params[:start_date]&.to_date || Date.today %>

@@ -1,6 +1,6 @@
-<h1 class="text-2xl font-bold mb-4">Room Layout</h1>
+<%= render 'shared/header' %>
 <%= render partial: 'shared/errors' %>
-<%= link_to "Back to #{@lodging.title}", users_lodging_path(@lodging) %>
+
 <div class="bg-grey shadow overflow-hidden sm:rounded-md">
   <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     <% @rooms.each do |room| %>

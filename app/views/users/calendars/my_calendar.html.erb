@@ -1,10 +1,4 @@
-<header class="border-b border-gray-200 pb-5 sm:flex sm:items-center sm:justify-between">
-  <h3 class="text-base font-semibold leading-6 text-gray-900">My Calendar</h3>
-  <div class="mt-3 flex sm:ml-4 sm:mt-0">
-    <%= link_to "Back to #{@lodging.title}", users_lodging_path(@lodging), class: "inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" %>
-    <%= link_to "Full Calendar", users_lodging_calendars_path(@lodging), class: "ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
-  </div>
-</header>
+<%= render 'shared/header' %>
 
 <div data-controller="myCalendar" class="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
   <div class="md:pr-14">

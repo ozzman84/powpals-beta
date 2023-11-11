@@ -8,5 +8,7 @@ RSpec.describe User, type: :model do
     it { should have_many(:lodgings).through(:roommates) }
     it { should belong_to(:account) }
     it { should have_many(:calendars).dependent(:destroy) }
+    it { should have_many :user_season_passes }
+    it { should have_many(:season_passes).through(:user_season_passes) }
   end
 end

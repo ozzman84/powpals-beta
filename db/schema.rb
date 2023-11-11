@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_11_150715) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_11_202706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "account_season_passes", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "season_pass_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_season_passes_on_account_id"
+    t.index ["season_pass_id"], name: "index_account_season_passes_on_season_pass_id"
+  end
 
   create_table "accounts", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -104,15 +113,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_11_150715) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_season_passes", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "season_pass_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["season_pass_id"], name: "index_user_season_passes_on_season_pass_id"
-    t.index ["user_id"], name: "index_user_season_passes_on_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "full_name"
     t.string "avatar_url"
@@ -124,13 +124,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_11_150715) do
     t.index ["account_id"], name: "index_users_on_account_id"
   end
 
+  add_foreign_key "account_season_passes", "accounts"
+  add_foreign_key "account_season_passes", "season_passes"
   add_foreign_key "beds", "rooms"
   add_foreign_key "calendars", "lodgings"
   add_foreign_key "calendars", "users"
   add_foreign_key "roommates", "lodgings"
   add_foreign_key "roommates", "users"
   add_foreign_key "rooms", "lodgings"
-  add_foreign_key "user_season_passes", "season_passes"
-  add_foreign_key "user_season_passes", "users"
   add_foreign_key "users", "accounts"
 end

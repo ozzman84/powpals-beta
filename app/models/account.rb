@@ -2,6 +2,8 @@
 
 class Account < ApplicationRecord
   has_one :user
+  has_many :account_season_passes
+  has_many :season_passes, through: :account_season_passes
 
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :validatable, :confirmable, :lockable, :timeoutable,

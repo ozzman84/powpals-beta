@@ -12,9 +12,9 @@ Rails.application.routes.draw do
     end
   end
 
-  get "/edit-profile", to: "accounts#edit", as: "edit_profile"
-  patch "/edit-profile", to: "accounts#update"
-  delete "/account_season_pass/:season_pass_id", to: "accounts#season_pass_destroy", as: "remove_season_pass"
+  get '/edit-profile', to: 'accounts#edit', as: 'edit_profile'
+  patch '/edit-profile', to: 'accounts#update'
+  delete '/account_season_pass/:season_pass_id', to: 'accounts#season_pass_destroy', as: 'remove_season_pass'
 
   devise_for :accounts, controllers: {
     omniauth_callbacks: 'accounts/omniauth_callbacks',

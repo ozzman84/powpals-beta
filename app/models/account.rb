@@ -10,7 +10,7 @@ class Account < ApplicationRecord
          :rememberable, :validatable, :confirmable, :lockable, :timeoutable,
          :trackable, :omniauthable
 
-  def has_any_season_passes?
+  def any_season_passes?
     season_passes.any?
   end
 

@@ -5,9 +5,9 @@ class AccountsController < ApplicationController
 
   def update
     if current_account.update(account_params)
-      flash[:notice] = "Updated!"
+      flash[:notice] = 'Updated!'
     else
-      flash[:alert] = "Something went wrong!"
+      flash[:alert] = 'Something went wrong!'
     end
     redirect_to edit_profile_path
   end
@@ -21,14 +21,14 @@ class AccountsController < ApplicationController
   private
 
   def account_params
-    params.
-      require(:account).
-      permit(
+    params
+      .require(:account)
+      .permit(
         :email,
-        account_season_passes_attributes: [
-          :account_id,
-          :season_pass_id,
-          :id
+        account_season_passes_attributes: %i[
+          account_id
+          season_pass_id
+          id
         ]
       )
   end

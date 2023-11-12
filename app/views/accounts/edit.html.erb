@@ -4,7 +4,7 @@
     <div class="mb-4">
       <span class="font-medium text-sm text-slate-500 mb-3 dark:text-slate-400">Your passes</span>
       <ul class="list-disc list-inside text-slate-900 dark:text-red-500">
-        <% if current_account.has_any_season_passes? %>
+        <% if current_account.any_season_passes? %>
           <% current_account.season_passes.each do |pass| %>
             <li class="flex">
               <%= button_to remove_season_pass_path(pass.id), method: :delete do %>

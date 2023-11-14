@@ -6,18 +6,18 @@ module Users
 
     def create
       @lodging = current_account.user.lodgings.find(params[:lodging_id])
-
-      if @lodging.roommates.create(roommate_params)
+      roommate = @lodging.roommates.new(roommate_params)
+      if roommate.save
         flash[:success]
       else
-        flash.now[:errors] = @lodging.errors.full_messages
+        flash.now[:errors] = roommate.errors.full_messages
       end
     end
 
     private
 
     def roommate_params
-      params.permit(:lodging_id, :role, :user_id)
+      params.require(:roommate).permit(:lodging_id, :role, :user_id)
     end
   end
 end

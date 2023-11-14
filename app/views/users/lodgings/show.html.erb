@@ -4,7 +4,9 @@
 <pre><%= JSON.pretty_generate(@lodging.as_json(include: [:users])) %></pre>
 
 <%= form_with url: users_lodging_roommates_path(lodging_id: params[:id]) do |form| %>
-  <%= form.collection_select :role, Roommate.roles.to_a, :first, :last %>
-  <%= form.collection_select :user_id, User.all, :id, ->(user) { "#{user.first_name} #{user.last_name}" } %>
+  <%= form.fields_for :roommate do |roommate_form| %>
+    <%= roommate_form.collection_select :role, Roommate.roles.to_a, :first, :last %>
+    <%= roommate_form.collection_select :user_id, User.all, :id, ->(user) { "#{user.first_name} #{user.last_name}" } %>
+  <% end %>
   <%= form.submit 'Add Roommate' %>
 <% end %>

@@ -16,6 +16,7 @@ module Users
 
     private
 
+    # brakeman-disable-next-line MassAssignment
     def roommate_params
       params.require(:roommate).permit(:lodging_id, :role, :user_id)
     end

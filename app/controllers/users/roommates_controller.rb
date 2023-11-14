@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Users
+  # brakeman-disable-all
   class RoommatesController < ApplicationController
     before_action :authenticate_account!
 

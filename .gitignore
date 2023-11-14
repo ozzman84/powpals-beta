@@ -36,3 +36,6 @@
 
 # Ignore coverage directory
 /coverage
+
+# Ignore the DS Store
+/.DS_Store

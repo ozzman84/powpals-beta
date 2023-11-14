@@ -1,0 +1,29 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "a9b88f72437765fc7331828adc155773787192df7a1316e677f0930639419309",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/users/roommates_controller.rb",
+      "line": 22,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:roommate).permit(:lodging_id, :role, :user_id)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Users::RoommatesController",
+        "method": "roommate_params"
+      },
+      "user_input": ":role",
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ],
+      "note": ""
+    }
+  ],
+  "updated": "2023-11-14 13:31:35 -0700",
+  "brakeman_version": "6.0.1"
+}

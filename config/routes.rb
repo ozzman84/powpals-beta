@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   namespace :users do
     resources :lodgings do
+      resources :roommates, only: :create
       resources :rooms, only: %i[index create destroy]
       resource :calendars, only: %i[show create destroy update] do
         get 'my_calendar', on: :member

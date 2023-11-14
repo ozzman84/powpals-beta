@@ -13,4 +13,10 @@ class Lodging < ApplicationRecord
     published: 'published',
     archived: 'archived'
   }, _default: 'draft'
+
+  def full_address
+    st = street
+    st = street + " #{address2}" if address2
+    st + " #{city}, #{state} #{zip_code}"
+  end
 end

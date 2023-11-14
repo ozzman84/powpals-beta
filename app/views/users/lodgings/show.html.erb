@@ -1,3 +1,10 @@
 <%= render 'shared/header' %>
+<%= render 'shared/errors' %>
+<%= render 'shared/notices' %>
+<pre><%= JSON.pretty_generate(@lodging.as_json(include: [:users])) %></pre>
 
-<pre><%= JSON.pretty_generate(@lodging.as_json) %></pre>
+<%= form_with url: users_lodging_roommates_path(lodging_id: params[:id]) do |form| %>
+  <%= form.collection_select :role, Roommate.roles.to_a, :first, :last %>
+  <%= form.collection_select :user_id, User.all, :id, ->(user) { "#{user.first_name} #{user.last_name}" } %>
+  <%= form.submit 'Add Roommate' %>
+<% end %>

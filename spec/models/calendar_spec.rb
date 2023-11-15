@@ -22,10 +22,10 @@ RSpec.describe Calendar, type: :model do
       let(:user2) { create(:user, account_id: create(:account).id) }
       let!(:valid_record2) { create(:calendar, user_id: user2.id, lodging_id: lodging.id, date: Date.today) }
 
-      it 'returns status and role count for each day' do
-        binding.pry
-        expect(0).to eq(1)
-      end
+      # it 'returns status and role count for each day' do
+      #   binding.pry
+      #   expect(0).to eq(1)
+      # end
     end
   end
 end

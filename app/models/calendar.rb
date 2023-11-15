@@ -51,4 +51,20 @@ class Calendar < ApplicationRecord
 
     month.map { |date| existing_records[date] || Struct::Date.new(date) }
   end
+
+  def seven_days
+    (Date.today..6.days.from_now).to_a
+  end
+
+  def self.this_week
+    (Date.today..6.days.from_now).to_a.each_with_object({}) do |day, status_counts|
+      roommates = where(date: day)
+
+      status_counts[day] = {
+        away: roommates.where(status: statuses[:away]).size,
+        staying: roommates.where(status: statuses[:staying]).size,
+        avatar_urls: User.where(id: roommates.staying.pluck(:id))&.pluck(:avatar_url)
+      }
+    end
+  end
 end

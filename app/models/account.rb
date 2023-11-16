@@ -24,7 +24,7 @@ class Account < ApplicationRecord
       last_name: auth.info.last_name,
       full_name: auth.info.name,
       avatar_url: auth.info.image,
-      account: account
+      account_id: account.id
     ).account
   end
 

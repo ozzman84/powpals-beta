@@ -6,6 +6,8 @@ class Account < ApplicationRecord
   has_many :season_passes, through: :account_season_passes
   accepts_nested_attributes_for :account_season_passes
 
+  validates_uniqueness_of :email
+
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :validatable, :confirmable, :lockable, :timeoutable,
          :trackable, :omniauthable
@@ -15,12 +17,14 @@ class Account < ApplicationRecord
   end
 
   def self.from_omniauth(auth)
-    User.create(
+    account = get_account(auth)
+
+    User.where(first_name: account.user.first_name, last_name: account.user.last_name).first_or_create(
       first_name: auth.info.first_name,
       last_name: auth.info.last_name,
       full_name: auth.info.name,
       avatar_url: auth.info.image,
-      account: get_account(auth)
+      account: account
     ).account
   end
 

@@ -5,6 +5,8 @@ class Room < ApplicationRecord
   has_many :beds
   accepts_nested_attributes_for :beds
 
+  validates :name, presence: true
+
   enum room_type: {
     bedroom: 'bedroom',
     livingroom: 'livingroom'

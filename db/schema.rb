@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_11_202706) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_17_030422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -121,6 +121,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_11_202706) do
     t.string "first_name"
     t.string "last_name"
     t.bigint "account_id", null: false
+    t.string "preferred_name"
+    t.string "about"
+    t.string "ride_type"
+    t.string "level"
+    t.string "phone_number"
+    t.string "address1"
+    t.string "address2"
+    t.string "country"
+    t.string "city"
+    t.string "state"
+    t.string "zip_code"
+    t.string "birthday"
+    t.text "allergies"
+    t.string "venmo_url"
+    t.string "instagram_url"
+    t.string "facebook_url"
     t.index ["account_id"], name: "index_users_on_account_id"
   end
 

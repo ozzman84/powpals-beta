@@ -7,6 +7,13 @@ FactoryBot.define do
     full_name { full_name }
     first_name { full_name.split(' ').first }
     last_name { full_name.split(' ').last }
+    preferred_name { Faker::Superhero.descriptor }
+    address1 { Faker::Address.street_address }
+    address2 { Faker::Address.secondary_address }
+    city { Faker::Address.city }
+    state { Faker::Address.state_abbr }
+    zip_code { Faker::Address.zip }
+    country { 'United States' }
     avatar_url do
       [
         'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
@@ -18,6 +25,11 @@ FactoryBot.define do
         'https://tecdn.b-cdn.net/img/new/avatars/2.webp'
       ].sample
     end
+    ride_type { User.ride_types.keys.sample }
+    level { User.levels.keys.sample }
+    about { Faker::Lorem.paragraphs }
+    phone_number { Faker::PhoneNumber.phone_number }
+    allergies { %w[nuts fruit shellfish eggs milk].sample }
 
     association :account
   end

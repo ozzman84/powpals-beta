@@ -5,7 +5,8 @@ FactoryBot.define do
     title { Faker::Fantasy::Tolkien.location }
     description { Faker::Fantasy::Tolkien.poem }
     max_guests { rand(1..100) }
-    street { Faker::Address.street_name }
+    street { Faker::Address.street_address }
+    address2 { Faker::Address.secondary_address }
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     zip_code { Faker::Address.zip }

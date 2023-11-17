@@ -14,6 +14,7 @@ RSpec.describe Lodging, type: :model do
     let(:nil_address2) do
       {
         street: '1234 Main St',
+        address2: nil,
         city: 'Denver',
         state: 'CO',
         zip_code: '80205'

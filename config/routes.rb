@@ -3,6 +3,9 @@
 Rails.application.routes.draw do
   root to: 'home#index'
 
+  resource :user, only: %i[show edit update]
+  resources :users, only: :index
+
   namespace :users do
     resources :lodgings do
       resources :roommates, only: :create

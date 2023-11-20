@@ -1,0 +1,164 @@
+<%= render partial: 'shared/errors' %>
+<%= render partial: 'shared/notices' %>
+
+<form action="<%= user_path(current_account.user) %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="_method" value="patch">
+  <div class="space-y-12">
+    <div class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-gray-900">Profile</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.</p>
+      </div>
+
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 lg:col-span-2">
+        <div class="col-span-full">
+          <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Photo - Under Construction</label>
+          <div class="mt-2 flex items-center gap-x-3">
+            <img class="inline-block h-14 w-14 rounded-full" src="<%= current_account.user.avatar_url %>" alt="">
+            <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button>
+          </div>
+        </div>
+
+        <div class="col-span-full">
+          <label for="about" class="block text-sm font-medium leading-6 text-gray-900">About</label>
+          <div class="mt-2">
+            <textarea id="about" name="user[about]" rows="3" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"><%= current_account.user.about %></textarea>
+          </div>
+          <p class="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label for="ride_type" class="block text-sm font-medium leading-6 text-gray-900">Ride Type</label>
+          <div class="mt-2">
+            <select id="ride_type" name="user[ride_type]" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+              <% User.ride_types.keys.each do |ride_type| %>
+                <option <%= 'selected' if current_account.user.ride_type == ride_type %>><%= ride_type %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label for="level" class="block text-sm font-medium leading-6 text-gray-900">Level</label>
+          <div class="mt-2">
+            <select id="level" name="user[level]" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+              <% User.levels.keys.each do |level| %>
+                <option <%= 'selected' if current_account.user.level == level %>><%= level %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label for="instagram_url" class="block text-sm font-medium leading-6 text-gray-900">Instagram</label>
+          <div class="mt-2">
+            <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+              <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">http://</span>
+              <input type="text" name="user[instagram_url]" id="instagram_url" value="<%= current_account.user.instagram_url %>" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="www.example.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label for="facebook_url" class="block text-sm font-medium leading-6 text-gray-900">Facebook</label>
+          <div class="mt-2">
+            <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+              <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">http://</span>
+              <input type="text" name="user[facebook_url]" id="facebook_url" value="<%= current_account.user.facebook_url %>" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="www.example.com">
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+      </div>
+
+      <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 lg:col-span-2">
+        <div class="sm:col-span-3">
+          <label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
+          <div class="mt-2">
+            <input type="text" name="user[first_name]" id="first_name" value="<%= current_account.user.first_name %>" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label for="last_name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
+          <div class="mt-2">
+            <input type="text" name="user[last_name]" id="last_name" value="<%= current_account.user.last_name %>" autocomplete="family-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="sm:col-span-4">
+          <label for="preferred_name" class="block text-sm font-medium leading-6 text-gray-900">Preferred Name</label>
+          <div class="mt-2">
+            <input id="preferred_name" name="user[preferred_name]" type="preferred_name" value="<%= current_account.user.preferred_name %>" autocomplete="nickname" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="sm:col-span-4">
+          <label for="phone_number" class="block text-sm font-medium leading-6 text-gray-900">Mobile Number</label>
+          <div class="mt-2">
+            <input id="phone_number" name="user[phone_number]" type="phone_number" value="<%= current_account.user.phone_number %>" autocomplete="nickname" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="col-span-full">
+          <label for="address1" class="block text-sm font-medium leading-6 text-gray-900">Street address</label>
+          <div class="mt-2">
+            <input type="text" name="user[address1]" id="address1" value="<%= current_account.user.address1 %>" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="col-span-full">
+          <label for="address2" class="block text-sm font-medium leading-6 text-gray-900">Street address 2 / Apt #</label>
+          <div class="mt-2">
+            <input type="text" name="user[address2]" id="street-address" value="<%= current_account.user.address2 %>" autocomplete="street-address2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="sm:col-span-2 sm:col-start-1">
+          <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
+          <div class="mt-2">
+            <input type="text" name="user[city]" id="city" value="<%= current_account.user.city %>" autocomplete="address-level2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="state" class="block text-sm font-medium leading-6 text-gray-900">State / Province</label>
+          <div class="mt-2">
+            <input type="text" name="user[state]" id="state" value="<%= current_account.user.state %>" autocomplete="address-level1" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="zip_code" class="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal code</label>
+          <div class="mt-2">
+            <input type="text" name="user[zip_code]" id="zip_code" value="<%= current_account.user.zip_code %>" autocomplete="postal-code" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="sm:col-span-3">
+          <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Country</label>
+          <div class="mt-2">
+            <select id="country" name="user[country]" value="<%= current_account.user.country %>" autocomplete="country-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+              <option>United States</option>
+              <option>Canada</option>
+              <option>Mexico</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+    <input type="submit" value="Update" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+  </div>
+</form>

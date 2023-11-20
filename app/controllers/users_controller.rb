@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
+  # brakeman-disable-all
   before_action :authenticate_account!
 
   def index

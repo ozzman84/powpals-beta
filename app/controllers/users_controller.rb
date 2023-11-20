@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  # brakeman-disable-all
   before_action :authenticate_account!
 
   def index
@@ -29,7 +28,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:full_name, :avatar_url, :first_name, :last_name, :account_id, :preferred_name, :about, :ride_type, :level, :phone_number, :address1, :address2, :country, :city,
+    params.require(:user).permit(:full_name, :avatar_url, :first_name, :last_name, :preferred_name, :about, :ride_type, :level, :phone_number, :address1, :address2, :country, :city,
                                  :state, :zip_code, :birthday, :allergies, :venmo_url, :instagram_url, :facebook_url)
   end
 end

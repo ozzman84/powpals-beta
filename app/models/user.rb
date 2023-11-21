@@ -6,7 +6,7 @@ class User < ApplicationRecord
   belongs_to :account
   has_many :calendars, dependent: :destroy
 
-  validates :first_name, :last_name, :city, :state, :ride_type, presence: true
+  validates :first_name, :last_name, :city, :state, :ride_type, presence: true, length: { minimum: 2 }
 
   enum :ride_type, {
     ski: 'ski',

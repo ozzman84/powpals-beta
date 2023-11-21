@@ -3,11 +3,9 @@
 module ApplicationHelper
   def navigation_items
     [
-      { body: 'Dashboard', href: '#' },
+      { body: 'Dashboard', href: user_path },
       { body: 'Lodgings', href: users_lodgings_path },
-      { body: 'PowPals', href: '#' },
-      { body: 'Calendar', href: '#' },
-      { body: 'Expenses', href: '#' }
+      { body: 'PowPals', href: users_path }
     ]
   end
 

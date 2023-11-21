@@ -100,7 +100,11 @@
               <time datetime="<%= date %>"><%= date.day %></time>
               <div class="isolate flex -space-x-1 overflow-hidden">
                 <% images.each do |image| %>
-                  <img class="relative z-30 inline-block h-6 w-6 rounded-full ring-2 ring-white" src="<%= image %>" alt="">
+                  <% if image.present? %>
+                    <img class="relative z-30 inline-block h-6 w-6 rounded-full ring-2 ring-white" src="<%= image %>" alt="">
+                  <% else %>
+                    <%= render 'shared/user_initials_avatar', user: @user, dimensions: 'h-6 w-6' %>
+                  <% end %>
                 <% end %>
               </div>
             </div>

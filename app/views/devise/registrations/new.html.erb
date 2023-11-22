@@ -11,6 +11,57 @@
       <form class="space-y-6" action="/accounts" method="POST">
         <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
         <div>
+          <label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">First Name</label>
+          <div class="mt-2">
+            <input id="first_name" name="account[user_attributes][first_name]" type="first_name" autocomplete="given_name" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div>
+          <label for="last_name" class="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
+          <div class="mt-2">
+            <input id="last_name" name="account[user_attributes][last_name]" type="last_name" autocomplete="family_name" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          </div>
+        </div>
+
+        <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 lg:col-span-2">
+          <div class="sm:col-span-3">
+            <label for="ride_type" class="block text-sm font-medium leading-6 text-gray-900">Ride Type</label>
+            <div class="mt-2">
+              <select id="ride_type" name="account[user_attributes][ride_type]" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <% User.ride_types.keys.each do |ride_type| %>
+                  <option><%= ride_type %></option>
+                <% end %>
+              </select>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="level" class="block text-sm font-medium leading-6 text-gray-900">Level</label>
+            <div class="mt-2">
+              <select id="level" name="account[user_attributes][level]" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                <% User.levels.keys.each do |level| %>
+                  <option><%= level %></option>
+                <% end %>
+              </select>
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
+            <div class="mt-2">
+              <input id="city" name="account[user_attributes][city]" autocomplete="address-level2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+            </div>
+          </div>
+
+          <div class="sm:col-span-3">
+            <label for="state" class="block text-sm font-medium leading-6 text-gray-900">State</label>
+            <div class="mt-2">
+              <input id="state" name="account[user_attributes][state]" autocomplete="address-level1" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">            </div>
+          </div>
+        </div>
+
+        <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
           <div class="mt-2">
             <input id="email" name="account[email]" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">

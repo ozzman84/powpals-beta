@@ -109,7 +109,7 @@
             </div>
             <div class="border-t border-gray-700 pb-3 pt-4">
               <div class="flex items-center px-5">
-                <% if account_signed_in? %>
+                <% if account_signed_in? && current_account.user %>
                   <div class="flex-shrink-0">
                       <img class="h-10 w-10 rounded-full" src="<%= current_account.user.avatar_url %>" alt="">
                   </div>

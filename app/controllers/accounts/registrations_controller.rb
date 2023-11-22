@@ -2,7 +2,7 @@
 
 module Accounts
   class RegistrationsController < Devise::RegistrationsController
-    # before_action :configure_sign_up_params, only: [:create]
+    before_action :configure_sign_up_params, only: [:create]
     # before_action :configure_account_update_params, only: [:update]
 
     def update_resource(resource, params)
@@ -21,7 +21,19 @@ module Accounts
 
     # POST /resource
     # def create
-    #   super
+    #   @account = Account.new(account_params)
+
+    #   if @account.save
+    #     @user = @account.user.build(user_params)
+
+    #     if @user.save
+    #       redirect_to root_path, notice: 'Account and user were successfully created.'
+    #     else
+    #       render :new
+    #     end
+    #   else
+    #     render :new
+    #   end
     # end
 
     # GET /resource/edit
@@ -48,26 +60,43 @@ module Accounts
     #   super
     # end
 
-    # protected
+    protected
 
     # If you have extra params to permit, append them to the sanitizer.
-    # def configure_sign_up_params
-    #   devise_parameter_sanitizer.permit(:sign_up, keys: [:attribute])
+    def configure_sign_up_params
+      puts params
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :password_confirmation,
+                                                         { user_attributes: %i[first_name last_name level ride_type city state] }])
+    end
+    # def create_account_params
+    #   params.require(:account).permit(:email, :password, :password_confirmation,
+    #                                   user_attributes: %i[first_name last_name level ride_type city state])
     # end
 
+    # private
+
+    # def account_params
+    #   params.require(:account).permit(:email, :password, :password_confirmation)
+    # end
+
+    # def user_params
+    #   params.require(:user).permit(:first_name, :last_name, :level, :ride_type, :city, :state)
+    # end
     # If you have extra params to permit, append them to the sanitizer.
     # def configure_account_update_params
     #   devise_parameter_sanitizer.permit(:account_update, keys: [:attribute])
     # end
 
     # The path used after sign up.
-    # def after_sign_up_path_for(resource)
-    #   super(resource)
-    # end
+    def after_sign_up_path_for(resource)
+      puts current_account.user
+      user_path || super(resource)
+    end
 
     # The path used after sign up for inactive accounts.
-    # def after_inactive_sign_up_path_for(resource)
-    #   super(resource)
-    # end
+    def after_inactive_sign_up_path_for(resource)
+      puts current_account.user
+      edit_user_path || super(resource)
+    end
   end
 end

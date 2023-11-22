@@ -5,6 +5,7 @@ class Account < ApplicationRecord
   has_many :account_season_passes
   has_many :season_passes, through: :account_season_passes
   accepts_nested_attributes_for :account_season_passes
+  accepts_nested_attributes_for :user
 
   validates_uniqueness_of :email
 

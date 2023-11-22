@@ -15,7 +15,15 @@
         <div class="col-span-full">
           <label for="photo" class="block text-sm font-medium leading-6 text-gray-900">Photo - Under Construction</label>
           <div class="mt-2 flex items-center gap-x-3">
-            <img class="inline-block h-14 w-14 rounded-full" src="<%= current_account.user.avatar_url %>" alt="">
+            <% if current_account&.user&.avatar_url %>
+              <img class="inline-block h-14 w-14 rounded-full" src="<%= current_account.user.avatar_url %>" alt="">
+            <% else %>
+              <span class="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
+                <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </span>
+            <% end %>
             <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button>
           </div>
         </div>

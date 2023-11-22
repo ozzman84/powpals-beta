@@ -1,9 +1,9 @@
 <div>
   <ul>
     <li><%= (@user.preferred_name || @user.first_name) + ' ' + @user.last_name %><li>
-    <li><%= 'Level: ' + @user.level %><li>
-    <li><%= 'Ride: ' + @user.ride_type %><li>
-    <li><%= @user.city + ', ' + @user.state %><li>
+    <li><%= 'Level: ' + @user.level if @user.level.present? %><li>
+    <li><%= 'Ride: ' + @user.ride_type if @user.ride_type.present? %><li>
+    <li><%= @user.city + ', ' + @user.state if @user.ride_type.present? %><li>
     <li><%= 'Instagram: ' + @user.instagram_url if @user.instagram_url.present? %><li>
     <li><%= 'About: ' + @user.city + ', ' + @user.state %><li>
     <% current_account.season_passes.each do |p| %>

@@ -20,7 +20,7 @@ class Account < ApplicationRecord
   def self.from_omniauth(auth)
     account = get_account(auth)
 
-    User.where(first_name: account.user.first_name, last_name: account.user.last_name).first_or_create(
+    User.where(first_name: auth.info.first_name, last_name: auth.info.last_name).first_or_create(
       first_name: auth.info.first_name,
       last_name: auth.info.last_name,
       full_name: auth.info.name,

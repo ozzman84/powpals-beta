@@ -1,4 +1,23 @@
 <div>
-  <h1 class="font-bold text-4xl">Users</h1>
-  <pre><%= JSON.pretty_generate(@user.to_json) %></pre>
+  <ul>
+    <li><%= (@user.preferred_name || @user.first_name) + ' ' + @user.last_name %><li>
+    <li><%= 'Level: ' + @user.level %><li>
+    <li><%= 'Ride: ' + @user.ride_type %><li>
+    <li><%= @user.city + ', ' + @user.state %><li>
+    <li><%= 'Instagram: ' + @user.instagram_url if @user.instagram_url.present? %><li>
+    <li><%= 'About: ' + @user.city + ', ' + @user.state %><li>
+    <% current_account.season_passes.each do |p| %>
+      <ul>
+        <h1>Passes:</h1>
+        <li><%= p.name %><li>
+      <ul>
+    <% end %>
+  </ul>
+
+  <ol>
+    <h1>Ski Housing</h1>
+    <% @user.lodgings.each do |l| %>
+      <li><%= link_to l.title, users_lodging_path(l) %></li>
+    <% end %>
+  </ol>
 </div>

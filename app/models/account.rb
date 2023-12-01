@@ -11,7 +11,7 @@ class Account < ApplicationRecord
 
   devise :database_authenticatable, :registerable, :recoverable,
          :rememberable, :validatable, :confirmable, :lockable, :timeoutable,
-         :trackable, :omniauthable
+         :trackable, :omniauthable, omniauth_providers: [:google]
 
   def any_season_passes?
     season_passes.any?

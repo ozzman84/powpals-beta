@@ -5,6 +5,7 @@ class User < ApplicationRecord
   has_many :lodgings, through: :roommates
   belongs_to :account
   has_many :calendars, dependent: :destroy
+  has_one_attached :avatar_url
 
   validates :first_name, :last_name, :ride_type, presence: true, length: { minimum: 2 }
 

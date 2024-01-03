@@ -1,7 +1,7 @@
 <%= render partial: 'shared/errors' %>
 <%= render partial: 'shared/notices' %>
 
-<form action="<%= user_path(current_account.user) %>" method="post">
+<form action="<%= user_path(current_account.user) %>" method="post" enctype="multipart/form-data">
   <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
   <input type="hidden" name="_method" value="patch">
   <div class="space-y-12">
@@ -24,7 +24,7 @@
                 </svg>
               </span>
             <% end %>
-            <input type="file" name="user[avatar_url]" id="user_avatar" data-direct-upload-url="<%= rails_direct_uploads_url %>" value="<%= current_account.user.first_name %>" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            <input type="file" name="user[avatar_url]" enctype="multipart/form-data" id="user_avatar" data-direct-upload-url="<%= rails_direct_uploads_url %>" value="<%= current_account.user.first_name %>" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
             <%# <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Change</button> %>
           </div>
         </div>

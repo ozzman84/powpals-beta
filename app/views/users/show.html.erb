@@ -1,6 +1,6 @@
 <div>
   <ul>
-    <li><img class="inline-block h-14 w-14 rounded-full" src="<%= current_account.user.avatar_url %>" alt=""><li>
+    <li><img class="inline-block h-14 w-14 rounded-full" src="<%= url_for(current_account.user.avatar_url) %>" alt=""><li>
     <li><%= (@user.preferred_name || @user.first_name) + ' ' + @user.last_name %><li>
     <li><%= 'Level: ' + @user.level if @user.level.present? %><li>
     <li><%= 'Ride: ' + @user.ride_type if @user.ride_type.present? %><li>

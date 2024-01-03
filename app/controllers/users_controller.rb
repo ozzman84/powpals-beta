@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    current_account.user.avatar_url.attach(user_params[:avatar_url]) if user_params[:avatar_url]
+    current_account.user.avatar_url.attach(params[:avatar_url]) if params[:avatar_url]
 
     if current_account.user.update(user_params)
       # redirect_back_or_to user_path

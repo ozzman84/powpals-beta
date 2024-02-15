@@ -4,6 +4,8 @@ class Account < ApplicationRecord
   has_one :user
   has_many :account_season_passes
   has_many :season_passes, through: :account_season_passes
+  has_many :account_ski_days
+  has_many :resorts, through: :account_ski_days
   accepts_nested_attributes_for :account_season_passes
   accepts_nested_attributes_for :user
 

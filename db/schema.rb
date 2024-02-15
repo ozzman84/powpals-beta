@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_17_030422) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_15_220436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_030422) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_account_season_passes_on_account_id"
     t.index ["season_pass_id"], name: "index_account_season_passes_on_season_pass_id"
+  end
+
+  create_table "account_ski_days", force: :cascade do |t|
+    t.string "status"
+    t.date "start_date"
+    t.bigint "account_id", null: false
+    t.bigint "resort_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_account_ski_days_on_account_id"
+    t.index ["resort_id"], name: "index_account_ski_days_on_resort_id"
   end
 
   create_table "accounts", force: :cascade do |t|
@@ -88,6 +99,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_030422) do
     t.string "address2"
   end
 
+  create_table "resorts", force: :cascade do |t|
+    t.string "name"
+    t.string "city"
+    t.string "state"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roommates", force: :cascade do |t|
     t.string "role"
     t.bigint "user_id", null: false
@@ -142,6 +161,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_17_030422) do
 
   add_foreign_key "account_season_passes", "accounts"
   add_foreign_key "account_season_passes", "season_passes"
+  add_foreign_key "account_ski_days", "accounts"
+  add_foreign_key "account_ski_days", "resorts"
   add_foreign_key "beds", "rooms"
   add_foreign_key "calendars", "lodgings"
   add_foreign_key "calendars", "users"

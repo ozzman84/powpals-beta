@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_15_220436) do
+ActiveRecord::Schema[7.0].define(version: 2024_02_16_001330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -71,6 +71,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_15_220436) do
     t.index ["room_id"], name: "index_beds_on_room_id"
   end
 
+  create_table "blackout_days", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.bigint "season_pass_id", null: false
+    t.bigint "resort_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["resort_id"], name: "index_blackout_days_on_resort_id"
+    t.index ["season_pass_id"], name: "index_blackout_days_on_season_pass_id"
+  end
+
   create_table "calendars", force: :cascade do |t|
     t.string "status"
     t.date "date"
@@ -126,6 +137,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_15_220436) do
     t.index ["lodging_id"], name: "index_rooms_on_lodging_id"
   end
 
+  create_table "season_pass_resorts", force: :cascade do |t|
+    t.bigint "season_pass_id", null: false
+    t.bigint "resort_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["resort_id"], name: "index_season_pass_resorts_on_resort_id"
+    t.index ["season_pass_id"], name: "index_season_pass_resorts_on_season_pass_id"
+  end
+
   create_table "season_passes", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -164,10 +184,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_15_220436) do
   add_foreign_key "account_ski_days", "accounts"
   add_foreign_key "account_ski_days", "resorts"
   add_foreign_key "beds", "rooms"
+  add_foreign_key "blackout_days", "resorts"
+  add_foreign_key "blackout_days", "season_passes"
   add_foreign_key "calendars", "lodgings"
   add_foreign_key "calendars", "users"
   add_foreign_key "roommates", "lodgings"
   add_foreign_key "roommates", "users"
   add_foreign_key "rooms", "lodgings"
+  add_foreign_key "season_pass_resorts", "resorts"
+  add_foreign_key "season_pass_resorts", "season_passes"
   add_foreign_key "users", "accounts"
 end

@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 
   def show
     @user = current_account.user
+    @resorts = Resort.all
   end
 
   def edit

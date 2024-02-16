@@ -20,4 +20,11 @@
       <li><%= link_to l.title, users_lodging_path(l) %></li>
     <% end %>
   </ol>
+
+  <ol>
+    <h1>Resorts</h1>
+    <% @resorts.each do |r| %>
+      <li><%= r.name %></li>
+    <% end %>
+  </ol>
 </div>

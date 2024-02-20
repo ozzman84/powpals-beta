@@ -6,12 +6,12 @@
     <li><%= @user.city + ', ' + @user.state if @user.ride_type.present? %><li>
     <li><%= 'Instagram: ' + @user.instagram_url if @user.instagram_url.present? %><li>
     <li><%= 'About: ' + @user.city + ', ' + @user.state %><li>
-    <% current_account.season_passes.each do |p| %>
       <ul>
         <h1>Passes:</h1>
-        <li><%= p.name %><li>
+        <% current_account.season_passes.each do |p| %>
+          <li><%= p.name %><li>
+        <% end %>
       <ul>
-    <% end %>
   </ul>
 
   <ol>
@@ -23,8 +23,116 @@
 
   <ol>
     <h1>Resorts</h1>
-    <% @resorts.each do |r| %>
-      <li><%= r.name %></li>
-    <% end %>
+      
   </ol>
+
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="mt-9 flow-root">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead>
+              <tr>
+                <th scope="col" class="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Resort</th>
+                <% (0..9).each do |i| %>
+                  <th scope="col" class="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"><%= (Date.today + i).strftime('%A') %></th>
+                <% end %>
+  
+                <th scope="col" class="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-0">
+                  <span class="sr-only">Edit</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+              <% @resorts.each do |r| %>
+
+                <tr>
+                  <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-0"><%= r.name %></td>
+
+                  <% r.next_10_day_skier_count.each do |date, count| %>
+                    <td class="whitespace-nowrap px-2 py-2 text-center text-sm text-gray-500">0" <%= count %></td>
+                  <% end %>
+
+                  <td class="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Copper Mountain</span></a>
+                  </td>
+                </tr>
+
+              <% end %>
+
+              <!-- More transactions... -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <%# <th scope="col" class="p-4">
+                    <div class="flex items-center">
+                        <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                    </div>
+                </th> %>
+                <th scope="col" class="px-6 py-3">
+                    Resorts
+                </th>
+                <% (0..9).each do |i| %>
+                <th scope="col" class="px-6 py-3">
+                    <%= (Date.today + i).strftime('%a %d') %>
+                </th>
+                <% end %>
+                <%# <th scope="col" class="px-6 py-3">
+                    Category
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Accessories
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Available
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Price
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Weight
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Action
+                </th> %>
+            </tr>
+        </thead>
+        <tbody>
+            <% @resorts.each do |r| %>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <%# <td class="w-4 p-4">
+                    <div class="flex items-center">
+                        <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
+                    </div>
+                </td> %>
+                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <%= r.name %>
+                  </th>
+                    <% r.next_10_day_skier_count.each do |date, count| %>
+                      <td class="px-6 py-4">
+                          0" <%= count %>
+                      </td>
+                    <% end %>
+                <td class="flex items-center px-6 py-4">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                    <%# <a href="#" class="font-medium text-red-600 dark:text-red-500 hover:underline ms-3">Remove</a> %>
+                </td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>
+

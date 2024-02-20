@@ -19,7 +19,6 @@ RSpec.describe Resort, type: :model do
 
     it 'should list users' do
       user.account.account_ski_days.create(:account_ski_day, resort_id: resort.id)
-      binding.pry
     end
   end
 end

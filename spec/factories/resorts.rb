@@ -2,8 +2,9 @@
 
 FactoryBot.define do
   factory :resort do
-    name { 'MyString' }
-    city { 'MyString' }
-    state { 'MyString' }
+    city = Faker::Address.city
+    name { "#{city} Ski Resort" }
+    city { city }
+    state { Faker::Address.state }
   end
 end

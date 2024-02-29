@@ -20,19 +20,6 @@ RSpec.describe Resort, type: :model do
     it { should validate_length_of(:state).is_at_most(50) }
   end
 
-  # describe 'Resort List with 10 day totals' do
-  #   let(:user) { create(:user) }
-  #   let(:user2) { create(:user) }
-  #   let(:account) { create(:account) }
-  #   let(:account2) { create(:account) }
-  #   let(:resort) { create_list(:resort) }
-  #   let(:resort2) { create_list(:resort) }
-
-  #   #   it 'should list users' do
-  #   #     # user.account.account_ski_days.create(:account_ski_day, resort_id: resort.id)
-  #   #   end
-  # end
-
   describe '#skier_count_for_date' do
     let(:resort) { create(:resort) }
     let(:date) { Date.today }

@@ -37,6 +37,10 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
 
+gem 'actionpack', '7.0.8'
+gem 'activestorage', '~> 7.0.8'
+gem 'rake'
+
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
@@ -71,7 +75,7 @@ group :development, :test do
   gem 'pry-rails', '~> 0.3.9'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
-  gem 'simplecov'
+  gem 'simplecov', require: false, group: :test
   gem 'webdrivers'
 
   # Security

@@ -1,16 +1,14 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'rake'
 
 RSpec.describe 'import:resorts_and_season_passes' do
   before do
     Rails.application.load_tasks
-
     @csv_file_path = Rails.root.join('spec', 'fixtures', 'test_resorts.csv')
-    binding.pry
+
     CSV.open(@csv_file_path, 'w') do |csv|
-      csv << %w[name city state season_passes]
+      csv << ['name', 'city', 'state', 'season passes']
       csv << ['Breck', 'Denver', 'CO', 'season Pass A, season Pass B']
     end
 
@@ -18,7 +16,7 @@ RSpec.describe 'import:resorts_and_season_passes' do
   end
 
   it 'imports resorts and season passes from CSV file' do
-    allow(CSV).to receive(:foreach).and_yield({ 'name' => 'Resort A', 'location' => 'Location A', 'rating' => '4', 'season_passes' => 'season Pass A, season Pass B' })
+    allow(CSV).to receive(:foreach).and_yield({ 'name' => 'Breck', 'city' => 'Denver', 'state' => 'CO', 'season_passes' => 'season Pass A, season Pass B' })
     expect { Rake::Task['import:resorts_and_season_passes'].invoke }.to change { Resort.count }.by(1)
                                                                                                .and change { SeasonPass.count }.by(2)
                                                                                                                                .and change { SeasonPassResort.count }.by(2)

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class Resort < ApplicationRecord
-  has_many :account_ski_days
+  has_many :account_ski_days, dependent: :destroy
   has_many :accounts, through: :account_ski_days
-  has_many :season_pass_resorts
+  has_many :season_pass_resorts, dependent: :destroy
   has_many :season_passes, through: :season_pass_resorts
-  has_many :blackout_days
+  has_many :blackout_days, dependent: :destroy
 
   validates :name, uniqueness: { case_sensitive: false }
   validates :name, presence: true, length: { maximum: 100, case_sensitive: false }

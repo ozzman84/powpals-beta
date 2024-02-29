@@ -13,7 +13,7 @@ namespace :import do
         r.state = row['state']
       end
 
-      season_pass_names = row['season passes'].split(',') # Assuming season_passes are provided as comma-separated values in the CSV
+      season_pass_names = row['season_passes'].split(',') # Assuming season_passes are provided as comma-separated values in the CSV
       season_passes = season_pass_names.map { |name| SeasonPass.find_or_create_by(name:) }
       resort.season_passes << season_passes
     end

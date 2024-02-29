@@ -9,6 +9,17 @@ RSpec.describe Resort, type: :model do
   it { should have_many(:season_passes).through(:season_pass_resorts) }
   it { should have_many(:blackout_days) }
 
+  describe "validations" do
+    it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:city) }
+    it { should validate_presence_of(:state) }
+
+    it { should validate_uniqueness_of(:name).case_insensitive }
+    it { should validate_length_of(:name).is_at_most(100) }
+    it { should validate_length_of(:city).is_at_most(50) }
+    it { should validate_length_of(:state).is_at_most(50) }
+  end
+
   describe 'Resort List with 10 day totals' do
     let(:user) { create(:user) }
     let(:user2) { create(:user) }

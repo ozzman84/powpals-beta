@@ -38,6 +38,8 @@ gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
 
 gem 'rake'
+gem 'actionpack', '7.0.8'
+gem 'activestorage', '~> 7.0.8'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"

@@ -42,7 +42,7 @@ RSpec.describe Resort, type: :model do
         account = create(:account)
 
         3.times do
-          AccountSkiDay.create(account: account, resort: resort, start_date: date)
+          AccountSkiDay.create(account:, resort:, start_date: date)
         end
       end
 
@@ -80,7 +80,7 @@ RSpec.describe Resort, type: :model do
         account = create(:account)
 
         5.times do
-          AccountSkiDay.create(account: account, resort: resort, start_date: date)
+          AccountSkiDay.create(account:, resort:, start_date: date)
         end
       end
 

@@ -65,8 +65,7 @@ RSpec.describe Resort, type: :model do
         today + 6 => 5,
         today + 7 => 5,
         today + 8 => 5,
-        today + 9 => 5,
-        today + 10 => 5
+        today + 9 => 5
       }
 
       # Create ski days for the next 10 days

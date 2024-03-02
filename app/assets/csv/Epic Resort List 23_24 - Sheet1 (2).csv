@@ -1,4 +1,4 @@
-name,city,state,region,zip,latitude,longitude,Epic Pass,Epic Local Pass,Number of visits,season passes
+name,city,state,region,zip,latitude,longitude,Epic Pass,Epic Local Pass,Number of visits,season_passes
 Vail Mountain Resort,Vail,CO,Rockies,81657,39.6061,-106.3545,Unlimited,Limited,10,"Epic Pass,Epic Local Pass"
 Beaver Creek Resort,Avon,CO,Rockies,81620,39.6042,-106.5165,Unlimited,Limited,10,"Epic Pass,Epic Local Pass"
 Breckenridge Ski Resort,Breckenridge,CO,Rockies,80424,39.4806,-106.0667,Unlimited,Unlimited Access,,"Epic Pass,Epic Local Pass"

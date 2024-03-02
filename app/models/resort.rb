@@ -10,6 +10,8 @@ class Resort < ApplicationRecord
   validates :name, uniqueness: { case_sensitive: false }
   validates :name, presence: true, length: { maximum: 100, case_sensitive: false }
   validates :city, :state, presence: true, length: { maximum: 50, case_sensitive: false }
+  validates :lat, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
+  validates :long, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
 
   def skier_count_for_date(date = Date.today)
     account_ski_days.where(start_date: date).count

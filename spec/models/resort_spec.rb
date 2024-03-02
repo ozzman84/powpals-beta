@@ -18,6 +18,11 @@ RSpec.describe Resort, type: :model do
     it { should validate_length_of(:name).is_at_most(100) }
     it { should validate_length_of(:city).is_at_most(50) }
     it { should validate_length_of(:state).is_at_most(50) }
+    it { should validate_numericality_of(:lat) }
+    it { should validate_numericality_of(:long) }
+
+    it { should allow_value(40.7128).for(:lat) }
+    it { should allow_value(-74.0060).for(:long) }
   end
 
   describe '#skier_count_for_date' do
@@ -49,21 +54,22 @@ RSpec.describe Resort, type: :model do
     let(:resort) { create(:resort) }
 
     it 'returns skier counts for the next 10 days' do
+      today = Date.today
       expected_counts = {
-        Date.new(2024, 2, 29) => 5,
-        Date.new(2024, 3, 1) => 5,
-        Date.new(2024, 3, 2) => 5,
-        Date.new(2024, 3, 3) => 5,
-        Date.new(2024, 3, 4) => 5,
-        Date.new(2024, 3, 5) => 5,
-        Date.new(2024, 3, 6) => 5,
-        Date.new(2024, 3, 7) => 5,
-        Date.new(2024, 3, 8) => 5,
-        Date.new(2024, 3, 9) => 5
+        today => 5,
+        today + 1 => 5,
+        today + 2 => 5,
+        today + 3 => 5,
+        today + 4 => 5,
+        today + 5 => 5,
+        today + 6 => 5,
+        today + 7 => 5,
+        today + 8 => 5,
+        today + 9 => 5
       }
 
       # Create ski days for the next 10 days
-      (Date.today..9.days.from_now).each do |date|
+      (today..today + 10).each do |date|
         account = create(:account)
 
         5.times do

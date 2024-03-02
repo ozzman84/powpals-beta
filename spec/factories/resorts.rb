@@ -6,5 +6,7 @@ FactoryBot.define do
     name { "#{city} Ski Resort" }
     city { city }
     state { Faker::Address.state }
+    lat { Faker::Address.latitude }
+    long { Faker::Address.longitude }
   end
 end

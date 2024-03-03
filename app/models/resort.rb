@@ -20,8 +20,12 @@ class Resort < ApplicationRecord
   def next_10_day_skier_count
     end_date = 9.days.from_now
 
-    (Date.today..end_date).each_with_object({}) do |date, counts|
-      counts[date] = skier_count_for_date(date)
+    ski_day_counts = account_ski_days.where(start_date: Date.today..end_date)
+                                     .group(:start_date)
+                                     .count
+
+    (Date.today..end_date).each_with_object({}) do |date, result|
+      result[date] = ski_day_counts[date] || 0
     end
   end
 end

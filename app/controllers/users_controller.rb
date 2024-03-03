@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def show
     @user = current_account.user
-    @resorts = Resort.all
+    @resorts = current_account.resort_data_for_multiple_days
   end
 
   def edit

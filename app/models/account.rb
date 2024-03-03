@@ -5,6 +5,7 @@ class Account < ApplicationRecord
   has_many :account_season_passes
   has_many :season_passes, through: :account_season_passes
   has_many :account_ski_days
+  has_many :resorts, through: :season_passes
   has_many :ski_day_resorts, through: :account_ski_days, source: :resort
   accepts_nested_attributes_for :account_season_passes
   accepts_nested_attributes_for :user
@@ -17,6 +18,31 @@ class Account < ApplicationRecord
 
   def any_season_passes?
     season_passes.any?
+  end
+
+  def all_pass_resorts
+    resorts.distinct
+  end
+
+  def pass_or_all_resorts
+    any_season_passes? ? resorts : Resort.all
+  end
+
+  def order_resorts_by_ski_days(number_of_days)
+    pass_or_all_resorts.joins(:account_ski_days)
+                       .merge(AccountSkiDay.where(start_date: Date.today..(Date.today + number_of_days.days)))
+                       .group('resorts.id')
+                       .order('COUNT(account_ski_days.id) DESC')
+  end
+
+  def resort_data_for_multiple_days(number_of_days = 10)
+    resorts = order_resorts_by_ski_days(number_of_days)
+
+    resorts.each_with_object({}) do |resort, result|
+      result[resort.name] = {
+        next_10_day_skier_count: resort.next_10_day_skier_count.values
+      }
+    end
   end
 
   def self.from_omniauth(auth)

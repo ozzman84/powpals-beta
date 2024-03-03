@@ -33,7 +33,7 @@
                 <th scope="col" class="px-6 py-3">
                     Resorts
                 </th>
-                <% (0..10).each do |i| %>
+                <% (0..9).each do |i| %>
                 <th scope="col" class="px-6 py-3 text-center">
                     <%= (Date.today + i).strftime('%a %d') %>
                 </th>
@@ -44,9 +44,9 @@
             <% @resorts.each do |r| %>
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <%= r.name %>
+                      <%= r[0] %>
                   </th>
-                    <% r.next_10_day_skier_count.each do |date, count| %>
+                    <% r[1][:next_10_day_skier_count].each do |count| %>
                       <td class="px-6 py-4 text-center">
                           0" <%= count %>
                       </td>

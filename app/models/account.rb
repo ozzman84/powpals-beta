@@ -30,7 +30,7 @@ class Account < ApplicationRecord
 
   def order_resorts_by_ski_days(number_of_days)
     pass_or_all_resorts.joins(:account_ski_days)
-                       .merge(AccountSkiDay.where(start_date: Date.today..(Date.today + number_of_days.days)))
+                       .merge(AccountSkiDay.where(start_date: Date.today..number_of_days.days.from_now))
                        .group('resorts.id')
                        .order('COUNT(account_ski_days.id) DESC')
   end

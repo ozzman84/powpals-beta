@@ -18,7 +18,7 @@ class Resort < ApplicationRecord
   end
 
   def next_10_day_skier_count
-    end_date = 9.days.from_now
+    end_date = 8.days.from_now
 
     ski_day_counts = account_ski_days.where(start_date: Date.today..end_date)
                                      .group(:start_date)

@@ -19,4 +19,8 @@ class User < ApplicationRecord
     intermediate: 'intermediate',
     advanced: 'advanced'
   }, _default: 'beginner'
+
+  def initials
+    "#{first_name&.first || ''}#{last_name&.first || ''}".upcase
+  end
 end

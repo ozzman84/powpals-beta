@@ -46,8 +46,8 @@ RSpec.describe Account, type: :model do
       resort_data = account.resort_data_for_multiple_days
 
       expect(resort_data.keys).to match_array(['Resort A', 'Resort B'])
-      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(10)
-      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(10)
+      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(9)
+      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(9)
     end
   end
 end

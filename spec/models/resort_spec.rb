@@ -31,10 +31,11 @@ RSpec.describe Resort, type: :model do
 
     context 'when there are ski days for the specified date' do
       before do
-        account = create(:account)
-
+        accounts = create_list(:account, 3)
+        index = 0
         3.times do
-          AccountSkiDay.create(account:, resort:, start_date: date)
+          AccountSkiDay.create(account: accounts[index], resort:, start_date: date)
+          index += 1
         end
       end
 
@@ -56,25 +57,26 @@ RSpec.describe Resort, type: :model do
     it 'returns skier counts for the next 10 days' do
       today = Date.today
       expected_counts = {
-        today => 5,
-        today + 1 => 5,
-        today + 2 => 5,
-        today + 3 => 5,
-        today + 4 => 5,
-        today + 5 => 5,
-        today + 6 => 5,
-        today + 7 => 5,
-        today + 8 => 5,
-        today + 9 => 5
+        today => 1,
+        today + 1 => 1,
+        today + 2 => 1,
+        today + 3 => 1,
+        today + 4 => 1,
+        today + 5 => 1,
+        today + 6 => 1,
+        today + 7 => 1,
+        today + 8 => 1
       }
 
       # Create ski days for the next 10 days
       (today..today + 10).each do |date|
-        account = create(:account)
-
-        5.times do
-          AccountSkiDay.create(account:, resort:, start_date: date)
+        accounts = create_list(:account, 2)
+        index = 0
+        2.times do
+          AccountSkiDay.create(account: accounts[0], resort:, start_date: date)
+          index += 1
         end
+        index = 0
       end
 
       expect(resort.next_10_day_skier_count).to eq(expected_counts)

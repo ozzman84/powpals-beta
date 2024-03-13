@@ -18,8 +18,11 @@ RSpec.describe Account, type: :model do
       resort2 = create(:resort, name: 'Breck')
       create(:season_pass, resorts: [resort1])
       create(:season_pass, resorts: [resort2])
-      create_list(:account_ski_day, 5, account:, resort: resort1, start_date: Date.today)
-      create_list(:account_ski_day, 3, account:, resort: resort2, start_date: Date.today + 1.day)
+      create(:account_ski_day, account:, resort: resort1, start_date: Date.today)
+      create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 1)
+      create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 2)
+      create(:account_ski_day, account:, resort: resort2, start_date: Date.today)
+      create(:account_ski_day, account:, resort: resort2, start_date: Date.today + 1)
 
       ordered_resorts = account.order_resorts_by_ski_days(2)
 
@@ -34,8 +37,11 @@ RSpec.describe Account, type: :model do
       resort2 = create(:resort, name: 'Resort B')
       create(:season_pass, resorts: [resort1])
       create(:season_pass, name: 'Epic Pass', resorts: [resort2])
-      create_list(:account_ski_day, 5, account:, resort: resort1, start_date: Date.today)
-      create_list(:account_ski_day, 3, account:, resort: resort2, start_date: Date.today + 1.day)
+      create(:account_ski_day, account:, resort: resort1, start_date: Date.today)
+      create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 1)
+      create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 2)
+      create(:account_ski_day, account:, resort: resort2, start_date: Date.today)
+      create(:account_ski_day, account:, resort: resort2, start_date: Date.today + 1)
 
       resort_data = account.resort_data_for_multiple_days
 

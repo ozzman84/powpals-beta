@@ -17,7 +17,7 @@ RSpec.describe Account, type: :model do
       resort1 = create(:resort)
       resort2 = create(:resort, name: 'Breck')
       create(:season_pass, resorts: [resort1])
-      create(:season_pass, resorts: [resort2])
+      create(:season_pass, name: 'Epic Pass', resorts: [resort2])
       create(:account_ski_day, account:, resort: resort1, start_date: Date.today)
       create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 1)
       create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 2)

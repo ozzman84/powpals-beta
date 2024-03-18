@@ -1,10 +1,63 @@
-<h1 class="font-bold text-4xl">Welcome to PowPals Beta</h1>
+<h1 class="font-bold text-4xl">Welcome to PowPals</h1>
 <div>
-  <h1 class="font-bold text-4xl">Home#index</h1>
   <% if account_signed_in? %> 
- <div> Welcome <%= current_account.email %> </div> 
   <%= button_to "Sign out", destroy_account_session_path, method: :delete %> 
 <% else %>
   <%= button_to "Sign in", new_account_session_path %> 
 <% end %>
 </div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Resorts
+                </th>
+                <% (0..8).each do |i| %>
+                <th scope="col" class="px-6 py-3 text-center">
+                    <%= (Date.today + i).strftime('%a %d') %>
+                </th>
+                <% end %>
+            </tr>
+        </thead>
+        <tbody>
+            <% @resorts.each do |r| %>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <div class="flex items-center justify-between">
+                          <div class="mr-2">
+                              <%= r[0].sub(/(?:\bSki|\bMountain|\bResort)+\b\s*$/, "").strip %>
+                          </div>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                              <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+                          </svg>
+                      </div>
+                  </th>
+                    <% r[1][:next_10_day_skier_count].each do |count| %>
+                      <td class="px-6 py-4 text-center">
+                          <div class="flex items-center">
+                              <div>
+                                  0" <!-- Replace this with your weather measurement -->
+                              </div>
+                              <div class="ml-2">
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                                      <path d="M8.5 4.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 13c.552 0 1.01-.452.9-.994a5.002 5.002 0 0 0-9.802 0c-.109.542.35.994.902.994h8ZM12.5 3.5a.75.75 0 0 1 .75.75v1h1a.75.75 0 0 1 0 1.5h-1v1a.75.75 0 0 1-1.5 0v-1h-1a.75.75 0 0 1 0-1.5h1v-1a.75.75 0 0 1 .75-.75Z" />
+                                  </svg>
+                              </div>
+                              <div class="ml-2">
+                                  <%= count %>
+                              </div>
+                          </div>
+                      </td>
+                    <% end %>
+                <%# <td class="flex items-center px-6 py-4">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td> %>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>
+
+

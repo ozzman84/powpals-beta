@@ -29,6 +29,9 @@ class Account < ApplicationRecord
   end
 
   def order_resorts_by_ski_days(number_of_days)
+    account_ski_days = AccountSkiDay.where(start_date: Date.today..number_of_days.days.from_now)
+    return Resort.all.limit(10) if account_ski_days.empty?
+
     pass_or_all_resorts.joins(:account_ski_days)
                        .merge(AccountSkiDay.where(start_date: Date.today..number_of_days.days.from_now))
                        .group('resorts.id')

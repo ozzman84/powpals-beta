@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BasicCachingStrategy
   def initialize(service)
     @service = CachingWeatherServiceDecorator.new(service)

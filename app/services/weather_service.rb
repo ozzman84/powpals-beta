@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class WeatherService
-  BASE_URL = 'http://api.weatherapi.com/v1'.freeze
+  BASE_URL = 'http://api.weatherapi.com/v1'
 
   def self.fetch_forecast_for_resort(resort_name)
     query = CGI.escape(resort_name)

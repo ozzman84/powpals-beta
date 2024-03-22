@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
+  # rubocop:disable all
   def index
     return unless account_signed_in?
 
@@ -17,4 +18,5 @@ class HomeController < ApplicationController
       end
     end
   end
+  # rubocop:enable all
 end

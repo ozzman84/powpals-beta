@@ -32,6 +32,7 @@ gem 'tailwindcss-rails'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem 'devise'
 gem 'dotenv-rails'
+gem 'httparty'
 gem 'jbuilder'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
@@ -39,7 +40,10 @@ gem 'omniauth-rails_csrf_protection'
 
 gem 'actionpack', '7.0.8'
 gem 'activestorage', '~> 7.0.8'
+gem 'dalli'
+gem 'geocoder'
 gem 'rake'
+gem 'sidekiq'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"

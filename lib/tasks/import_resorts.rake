@@ -15,9 +15,11 @@ namespace :import do
 
       resort.update(lat: row['latitude'].to_f, long: row['longitude'].to_f)
 
-      season_pass_names = row['season_passes'].split(',') # Assuming season_passes are provided as comma-separated values in the CSV
-      season_passes = season_pass_names.map { |name| SeasonPass.find_or_create_by(name:) }
-      resort.season_passes << season_passes
+      if row['season_passes']
+        season_pass_names = row['season_passes'].split(',') # Assuming season_passes are provided as comma-separated values in the CSV
+        season_passes = season_pass_names.map { |name| SeasonPass.find_or_create_by(name:) }
+        resort.season_passes << season_passes
+      end
     end
   end
 end

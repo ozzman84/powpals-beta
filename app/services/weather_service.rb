@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
+require 'httparty'
+
 class WeatherService
+  include HTTParty
   BASE_URL = 'http://api.weatherapi.com/v1'
 
   def self.fetch_forecast_for_resort(resort_name)

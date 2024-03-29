@@ -25,22 +25,28 @@ class Account < ApplicationRecord
   end
 
   def pass_or_all_resorts
-    any_season_passes? ? resorts : Resort.all
+    any_season_passes? ? resorts.includes(:account_ski_days) : Resort.all
   end
 
-  def order_resorts_by_ski_days(number_of_days)
-    account_ski_days = AccountSkiDay.where(start_date: Date.today..number_of_days.days.from_now)
-    return Resort.where(state: user.state).limit(10) if account_ski_days.empty?
+  def ski_days_within_range(start_date, end_date)
+    AccountSkiDay.where(start_date: start_date..end_date)
+  end
 
+  def order_resorts_by_ski_day_counts(account_ski_days)
     pass_or_all_resorts.joins(:account_ski_days)
-                       .merge(AccountSkiDay.where(start_date: Date.today..number_of_days.days.from_now))
+                       .merge(account_ski_days)
                        .group('resorts.id')
                        .order('COUNT(account_ski_days.id) DESC')
   end
 
   def resort_data_for_multiple_days(number_of_days = 10)
-    resorts = order_resorts_by_ski_days(number_of_days)
+    account_ski_days = ski_days_within_range(Date.today, number_of_days.days.from_now)
+    ordered_resorts = account_ski_days.empty? ? pass_or_all_resorts : order_resorts_by_ski_day_counts(account_ski_days)
 
+    aggregate_resort_data(ordered_resorts.limit(20))
+  end
+
+  def aggregate_resort_data(resorts)
     resorts.each_with_object({}) do |resort, result|
       result[resort.name] = {
         next_10_day_skier_count: resort.next_10_day_skier_count.values

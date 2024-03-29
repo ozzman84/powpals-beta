@@ -22,7 +22,7 @@ class Resort < ApplicationRecord
 
     ski_day_counts = account_ski_days.where(start_date: Date.today..end_date)
                                      .group(:start_date)
-                                     .count
+                                     .size
 
     (Date.today..end_date).each_with_object({}) do |date, result|
       result[date] = ski_day_counts[date] || 0

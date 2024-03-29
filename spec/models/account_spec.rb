@@ -24,9 +24,10 @@ RSpec.describe Account, type: :model do
       create(:account_ski_day, account:, resort: resort2, start_date: Date.today)
       create(:account_ski_day, account:, resort: resort2, start_date: Date.today + 1)
 
-      ordered_resorts = account.order_resorts_by_ski_days(2)
+      ordered_resorts = account.resort_data_for_multiple_days(2)
 
-      expect(ordered_resorts).to eq([resort1, resort2])
+      expect(ordered_resorts).to eq({ resort2.name => { next_10_day_skier_count: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0] },
+                                      resort1.name => { next_10_day_skier_count: [1, 1, 1, 0, 0, 0, 0, 0, 0, 0] } })
     end
   end
 
@@ -46,8 +47,8 @@ RSpec.describe Account, type: :model do
       resort_data = account.resort_data_for_multiple_days
 
       expect(resort_data.keys).to match_array(['Resort A', 'Resort B'])
-      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(9)
-      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(9)
+      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(10)
+      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(10)
     end
   end
 end

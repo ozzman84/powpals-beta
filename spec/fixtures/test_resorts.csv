@@ -1,2 +1,2 @@
-name,city,state,season passes
-Breck,Denver,CO,"season Pass A, season Pass B"
+name,city,state,ski_passes,latitude,longitude
+Breck,Denver,CO,"Ski Pass A, Ski Pass B",-29.285473763779194,10.843018571694358

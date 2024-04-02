@@ -27,47 +27,39 @@
             <tbody>
                 <% @resorts.each do |r| %>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                              <div class="flex items-center justify-between">
-                                  <div class="mr-2">
-                                      <%= r[0].sub(/(?:\bSki|\bMountain|\bResort)+\b\s*$/, "").strip %>
-                                  </div>
-                                  <%# <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-                                      <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
-                                  </svg> %>
-                              </div>
-                          </th>
-                            <% r[1][:next_10_day_skier_count].each_with_index do |count, index| %>
-                                  <td class="px-6 py-4 text-center">
-                                      <div class="flex items-center">
-                                          <div>
-                                              <% if @weather_forecasts[r.first][index][:snow].zero? %>
-                                                <%= image_tag @weather_forecasts[r.first][index][:icon], alt: ' ', loading: "lazy", class: 'w-6 h-6' %>
-                                              <% else %>
-                                                <%= "#{@weather_forecasts[r.first][index][:snow].round()}\"" %>
-                                              <% end %>
-                                          </div>
-                                          <div class="ml-2">
-                                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-                                                  <path d="M8.5 4.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 13c.552 0 1.01-.452.9-.994a5.002 5.002 0 0 0-9.802 0c-.109.542.35.994.902.994h8ZM12.5 3.5a.75.75 0 0 1 .75.75v1h1a.75.75 0 0 1 0 1.5h-1v1a.75.75 0 0 1-1.5 0v-1h-1a.75.75 0 0 1 0-1.5h1v-1a.75.75 0 0 1 .75-.75Z" />
-                                              </svg>
-                                          </div>
-                                          <div class="ml-2">
-                                              <%= count %>
-                                          </div>
-                                      </div>
-                                  </td>
-                            <% end %>
-                        <%# <td class="flex items-center px-6 py-4">
-                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        </td> %>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <div class="flex items-center justify-between">
+                                <div class="mr-2">
+                                    <%= r[0].sub(/(?:\bSki|\bMountain|\bResort)+\b\s*$/, "").strip %>
+                                </div>
+                            </div>
+                        </th>
+                        <% r[1][:next_10_day_skier_count].each_with_index do |count, index| %>
+                                <td class="px-6 py-4 text-center">
+                                    <div class="flex items-center">
+                                        <div>
+                                            <% if @weather_forecasts[r.first][index][:snow].zero? %>
+                                            <%= image_tag @weather_forecasts[r.first][index][:icon], alt: ' ', loading: "lazy", class: 'w-6 h-6' %>
+                                            <% else %>
+                                            <%= "#{@weather_forecasts[r.first][index][:snow].round()}\"" %>
+                                            <% end %>
+                                        </div>
+                                        <div class="ml-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
+                                                <path d="M8.5 4.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 13c.552 0 1.01-.452.9-.994a5.002 5.002 0 0 0-9.802 0c-.109.542.35.994.902.994h8ZM12.5 3.5a.75.75 0 0 1 .75.75v1h1a.75.75 0 0 1 0 1.5h-1v1a.75.75 0 0 1-1.5 0v-1h-1a.75.75 0 0 1 0-1.5h1v-1a.75.75 0 0 1 .75-.75Z" />
+                                            </svg>
+                                        </div>
+                                        <div class="ml-2">
+                                            <%= count %>
+                                        </div>
+                                    </div>
+                                </td>
+                        <% end %>
                     </tr>
                 <% end %>
             </tbody>
         </table>
     </div>
-
-    
 <% end %>
 
 

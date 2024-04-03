@@ -31,6 +31,6 @@ class Bed < ApplicationRecord
   private
 
   def set_capacity
-    self.capacity = CAPACITY[size.to_sym]
+    self.capacity = CAPACITY[size&.to_sym]
   end
 end

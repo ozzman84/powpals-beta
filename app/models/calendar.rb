@@ -63,6 +63,7 @@ class Calendar < ApplicationRecord
       status_counts[day] = {
         away: roommates.where(status: statuses[:away]).size,
         staying: roommates.where(status: statuses[:staying]).size,
+        guests: roommates.sum(:guest_count),
         avatar_urls: User.where(id: roommates.staying.pluck(:id))&.pluck(:avatar_url)
       }
     end

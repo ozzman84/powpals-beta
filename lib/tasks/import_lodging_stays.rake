@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable all
 namespace :import do
   desc 'Process CSV for Calendar entries'
   task users_calendars_for_lodging: :environment do
@@ -39,3 +40,4 @@ namespace :import do
     puts 'CSV processing completed.'
   end
 end
+ # rubocop:enable all

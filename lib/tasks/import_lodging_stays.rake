@@ -19,11 +19,11 @@ namespace :import do
 
         date = Date.strptime(header, '%m/%d/%Y')
         value = row[header].to_i
-
-        status, guest_count = case value
-                              when 0
+        # binding.pry
+        status, guest_count = if value == 0
                                 ['away', 0]
-                              when value.positive?
+                              elsif value.positive?
+                                # binding.pry
                                 ['staying', value - 1]
                               else
                                 next

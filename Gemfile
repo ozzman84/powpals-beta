@@ -111,6 +111,12 @@ group :development do
 end
 
 gem 'dockerfile-rails', '>= 1.5', group: :development
+gem 'rack-mini-profiler'
+# For memory profiling
+gem 'memory_profiler'
+
+# For call-stack profiling flamegraphs
+gem 'stackprof'
 
 gem 'redis', '~> 5.0'
 

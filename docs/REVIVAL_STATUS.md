@@ -20,9 +20,9 @@ Production deployment is outside this revival scope.
 
 ## Verification
 
-Latest full run including the historical import: 117 examples, zero failures, including the
+Latest full run including sheet operations: 139 examples, zero failures, including the
 390px phone workflow. Brakeman: zero warnings. Dependency audit: no vulnerabilities.
-Ruby lint: 125 files, no offenses. ERB lint: 36 files, clean.
+Ruby lint: 142 files, no offenses. ERB lint: 40 files, clean.
 Local development boot and HTTP 200 smoke test also passed; test server stopped.
 
 ## Preserved historical data
@@ -40,3 +40,16 @@ three linked accounts/profiles, three memberships, five rooms, seven beds and
 205 historical calendar records. The original database and a private backup
 preserve all excluded records. No manager access was inferred. See
 HISTORICAL_DATA.md for scope, safeguards and current-season setup still needed.
+
+## Sheet operations
+
+Stories #143–145 add separate seasonal rules/rates, a manual guest-fee and expense
+ledger, partial-payment recording and repeatable source-sheet imports. The latest
+TSV has a blank 2024–25 day plan and 137 populated 2023–24 bed annotations; these
+are preserved as historical observations without changing the 205 existing stays
+or matching names to accounts. The 31 historical financial rows reconcile to
+the supplied monthly nets. Current 2026–27 rates remain unconfirmed.
+
+Story #146 provides a private Tailscale HTTPS preview, preserving the existing
+other-app route and normal sign-in. Users, invitations, manager assignments,
+public deployment and money transfers remain excluded.

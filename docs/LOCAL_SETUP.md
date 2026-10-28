@@ -74,10 +74,16 @@ or Fly resources have been accessed or changed.
 
 ## Scope and remaining product work
 
-Public friendships, messaging, meetups, bed reservations, expense integrations,
+Public friendships, messaging, meetups, guaranteed bed reservations, external payment integrations,
 and AI features remain separate future work. The directory is informational.
 Room inventory is not a bed-booking system. Production hosting, delivery,
 backups, Fly deployment, and server configuration are explicitly excluded.
 
 Do not run the historical factory-based db:seed against your existing dataset.
 Keep the user's pre-existing README edits intact.
+
+## Sheet operations and phone preview
+
+See HOUSE_OPERATIONS.md for season rules, the manual ledger, source-sheet imports
+and reconciliation. See PHONE_PREVIEW.md for the private Tailscale preview.
+Current-season users and manager assignments remain deferred.

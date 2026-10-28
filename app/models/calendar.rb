@@ -4,23 +4,22 @@ class Calendar < ApplicationRecord
   belongs_to :user
   belongs_to :lodging
 
-  validates :date, :user_id, :lodging_id, presence: true
-  validates :date, uniqueness: { scope: %i[lodging_id user_id], message: 'A user cannot have a duplicatedate for a lodging' }
+  validates :date, presence: true
+  validates :date,
+    uniqueness: { scope: %i[lodging_id user_id], message: 'A user cannot have a duplicatedate for a lodging' }
 
-  enum status: {
+  enum :status, {
     away: 'away',
     staying: 'staying',
     undecided: 'undecided'
-  }
-  CALENDAR_LENGTH = 42
+  }, validate: true
+  validates :status, presence: true
+  validates :guest_count, :cars, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  before_validation :default_counts
+  validate :within_season
+  validate :within_capacity
 
-  # scope :grouped_by_date_with_avatars, ->(start_date) {
-  #   where(date: build_dates(start_date))
-  #     .includes(:user)
-  #     .order(:date)
-  #     .group_by(&:date)
-  #     .transform_values { |calendars| calendars.map { |calendar| calendar.user } }
-  # }
+  CALENDAR_LENGTH = 42
 
   def self.grouped_by_date_with_avatars(start_date)
     date_range = build_dates(start_date)
@@ -52,20 +51,43 @@ class Calendar < ApplicationRecord
     month.map { |date| existing_records[date] || Struct::Date.new(date) }
   end
 
-  def seven_days
-    (Date.today..6.days.from_now).to_a
+  def self.this_week
+    (Date.current..6.days.from_now.to_date).to_h do |day|
+      entries = where(date: day).includes(:user).to_a
+      staying = entries.select(&:staying?)
+      [day, { away: entries.count(&:away?), staying: staying.size,
+              guests: staying.sum { |entry| entry.guest_count.to_i },
+              cars: staying.sum { |entry| entry.cars.to_i },
+              avatar_urls: staying.filter_map { |entry| entry.user.avatar_url } }]
+    end
   end
 
-  def self.this_week
-    (Date.today..6.days.from_now).to_a.each_with_object({}) do |day, status_counts|
-      roommates = where(date: day)
+  def seven_days
+    (Date.current..6.days.from_now).to_a
+  end
 
-      status_counts[day] = {
-        away: roommates.where(status: statuses[:away]).size,
-        staying: roommates.where(status: statuses[:staying]).size,
-        guests: roommates.sum(:guest_count),
-        avatar_urls: User.where(id: roommates.staying.pluck(:id))&.pluck(:avatar_url)
-      }
-    end
+  private
+
+  def default_counts
+    self.guest_count ||= 0
+    self.cars ||= 0
+  end
+
+  def within_season
+    return unless lodging && date
+
+    errors.add(:date, 'is before the rental season') if lodging.season_start && date < lodging.season_start
+    errors.add(:date, 'is after the rental season') if lodging.season_end && date > lodging.season_end
+  end
+
+  def within_capacity
+    return unless staying? && lodging && date && guest_count.to_i >= 0 && cars.to_i >= 0
+
+    others = lodging.calendars.staying.where(date: date).where.not(id: id)
+    occupants = others.count + others.sum(:guest_count) + 1 + guest_count.to_i
+    errors.add(:base, 'House capacity would be exceeded') if lodging.max_guests && occupants > lodging.max_guests
+    return unless lodging.max_cars && others.sum(:cars) + cars.to_i > lodging.max_cars
+
+    errors.add(:cars, 'exceed available parking')
   end
 end

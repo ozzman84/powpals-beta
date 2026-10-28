@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_26_000200) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_28_000100) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -98,6 +98,74 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_000200) do
     t.index ["lodging_id", "user_id", "date"], name: "unique_calendars_identity", unique: true
     t.index ["lodging_id"], name: "index_calendars_on_lodging_id"
     t.index ["user_id"], name: "index_calendars_on_user_id"
+  end
+
+  create_table "house_ledger_entries", force: :cascade do |t|
+    t.bigint "house_season_id", null: false
+    t.bigint "recorded_by_id"
+    t.string "kind", null: false
+    t.string "description", null: false
+    t.date "month_on", null: false
+    t.bigint "amount_cents", null: false
+    t.string "source_key"
+    t.jsonb "source_data", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["house_season_id", "source_key"], name: "index_house_ledger_entries_on_house_season_id_and_source_key", unique: true
+    t.index ["house_season_id"], name: "index_house_ledger_entries_on_house_season_id"
+    t.index ["recorded_by_id"], name: "index_house_ledger_entries_on_recorded_by_id"
+    t.check_constraint "amount_cents > 0", name: "house_ledger_positive_amount"
+  end
+
+  create_table "house_payments", force: :cascade do |t|
+    t.bigint "house_ledger_entry_id", null: false
+    t.bigint "recorded_by_id"
+    t.bigint "amount_cents", null: false
+    t.date "paid_on"
+    t.boolean "source_reported", default: false, null: false
+    t.string "reference"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["house_ledger_entry_id"], name: "index_house_payments_on_house_ledger_entry_id"
+    t.index ["recorded_by_id"], name: "index_house_payments_on_recorded_by_id"
+    t.check_constraint "amount_cents > 0", name: "house_payment_positive_amount"
+  end
+
+  create_table "house_seasons", force: :cascade do |t|
+    t.bigint "lodging_id", null: false
+    t.string "name", null: false
+    t.date "starts_on", null: false
+    t.date "ends_on", null: false
+    t.string "policy_status", default: "draft", null: false
+    t.bigint "monthly_rent_cents"
+    t.integer "participant_count"
+    t.jsonb "guest_rates", default: {}, null: false
+    t.bigint "dog_fee_cents"
+    t.string "dog_fee_basis", default: "unconfirmed", null: false
+    t.integer "free_nights", default: 0, null: false
+    t.text "rules"
+    t.text "source_notes"
+    t.jsonb "source_summary", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lodging_id", "starts_on", "ends_on"], name: "unique_house_season_dates", unique: true
+    t.index ["lodging_id"], name: "index_house_seasons_on_lodging_id"
+    t.check_constraint "ends_on >= starts_on", name: "house_season_date_order"
+  end
+
+  create_table "house_sheet_cells", force: :cascade do |t|
+    t.bigint "house_season_id", null: false
+    t.string "kind", null: false
+    t.date "observed_on", null: false
+    t.string "person_label"
+    t.string "room_label"
+    t.string "bed_label"
+    t.string "value", null: false
+    t.string "source_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["house_season_id", "source_key"], name: "index_house_sheet_cells_on_house_season_id_and_source_key", unique: true
+    t.index ["house_season_id"], name: "index_house_sheet_cells_on_house_season_id"
   end
 
   create_table "lodgings", force: :cascade do |t|
@@ -205,6 +273,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_26_000200) do
   add_foreign_key "blackout_days", "season_passes"
   add_foreign_key "calendars", "lodgings"
   add_foreign_key "calendars", "users"
+  add_foreign_key "house_ledger_entries", "accounts", column: "recorded_by_id"
+  add_foreign_key "house_ledger_entries", "house_seasons"
+  add_foreign_key "house_payments", "accounts", column: "recorded_by_id"
+  add_foreign_key "house_payments", "house_ledger_entries"
+  add_foreign_key "house_seasons", "lodgings"
+  add_foreign_key "house_sheet_cells", "house_seasons"
   add_foreign_key "roommates", "lodgings"
   add_foreign_key "roommates", "users"
   add_foreign_key "rooms", "lodgings"

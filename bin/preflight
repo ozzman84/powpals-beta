@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+ruby_runner=()
+if command -v rbenv >/dev/null 2>&1; then
+  rbenv version
+  ruby_runner=(rbenv exec)
+elif [[ "${CI:-}" != "true" ]]; then
+  echo 'rbenv is required for local development.' >&2
+  exit 1
+fi
+"${ruby_runner[@]}" bundle exec rubocop --parallel
+"${ruby_runner[@]}" bundle exec erb_lint --lint-all
+RAILS_ENV=test "${ruby_runner[@]}" bundle exec rails tailwindcss:build
+"${ruby_runner[@]}" bundle exec rspec
+"${ruby_runner[@]}" bundle exec brakeman --no-pager
+"${ruby_runner[@]}" bundle exec bundler-audit check --update

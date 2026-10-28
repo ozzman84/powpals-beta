@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe Room, type: :model do
+RSpec.describe Room do
   describe 'relationships' do
-    it { should have_many(:beds) }
-    it { should belong_to(:lodging) }
-    it { should accept_nested_attributes_for(:beds) }
+    it { is_expected.to have_many(:beds) }
+    it { is_expected.to belong_to(:lodging) }
+    it { is_expected.to accept_nested_attributes_for(:beds) }
   end
 
   describe 'validations' do
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
   end
 end

@@ -1,6 +1,3 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
-RSpec.describe 'calendars/show.html.tailwindcss', type: :view do
-end
+# Obsolete generated scaffold; behavior is covered by request and system specs.

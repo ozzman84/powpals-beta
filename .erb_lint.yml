@@ -1,0 +1,28 @@
+---
+glob: "app/**/*.html{+*,}.erb"
+linters:
+  ErbSafety:
+    enabled: true
+  Rubocop:
+    enabled: false
+  RubocopText:
+    enabled: false
+  FinalNewline:
+    enabled: true
+  TrailingWhitespace:
+    enabled: true
+  SpaceAroundErbTag:
+    enabled: true
+  ClosingErbTagIndent:
+    enabled: true
+  NoJavascriptTagHelper:
+    enabled: true
+  SelfClosingTag:
+    enabled: true
+  SpaceIndentation:
+    enabled: true
+  AllowedScriptType:
+    enabled: true
+    allowed_types:
+      - text/javascript
+      - application/ld+json

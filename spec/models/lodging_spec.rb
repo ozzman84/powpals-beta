@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe Lodging, type: :model do
+RSpec.describe Lodging do
   describe 'relationships' do
-    it { should have_many(:roommates) }
-    it { should have_many(:users).through(:roommates) }
-    it { should have_many(:rooms) }
-    it { should have_many(:calendars).dependent(:destroy) }
+    it { is_expected.to have_many(:roommates) }
+    it { is_expected.to have_many(:users).through(:roommates) }
+    it { is_expected.to have_many(:rooms) }
+    it { is_expected.to have_many(:calendars).dependent(:destroy) }
   end
 
   describe 'Full address' do
@@ -21,13 +21,13 @@ RSpec.describe Lodging, type: :model do
       }
     end
 
-    it 'should return the full address' do
+    it 'returns the full address' do
       lodging = create(:lodging, nil_address2)
 
       expect(lodging.full_address).to eq('1234 Main St Denver, CO 80205')
     end
 
-    it 'should return the full address' do
+    it 'returns the full address' do
       lodging = create(:lodging, nil_address2.merge(address2: 'apt 4'))
 
       expect(lodging.full_address).to eq('1234 Main St apt 4 Denver, CO 80205')

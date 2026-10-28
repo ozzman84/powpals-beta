@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe BlackoutDay, type: :model do
-  it { should belong_to(:resort) }
-  it { should belong_to(:season_pass) }
+RSpec.describe BlackoutDay do
+  it { is_expected.to belong_to(:resort) }
+  it { is_expected.to belong_to(:season_pass) }
 end

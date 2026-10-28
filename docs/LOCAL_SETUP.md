@@ -47,7 +47,8 @@ POWPALS_DATABASE=powpals_beta_revival_development bin/dev
 
 This separate database has been created and verified and is now the development
 default, so ordinary bin/setup and bin/dev use it. These commands do not copy or
-delete the historical dataset. Select POWPALS_DATABASE=powpals_beta_development
+delete the historical dataset. Bear Lodge history has since been restored through
+the separate guarded import described in HISTORICAL_DATA.md. Select POWPALS_DATABASE=powpals_beta_development
 only for a reviewed reconciliation of the historical records. No production data
 or Fly resources have been accessed or changed.
 

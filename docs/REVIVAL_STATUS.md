@@ -20,9 +20,9 @@ Production deployment is outside this revival scope.
 
 ## Verification
 
-Latest full run before final handoff: 111 examples, zero failures, including the
+Latest full run including the historical import: 117 examples, zero failures, including the
 390px phone workflow. Brakeman: zero warnings. Dependency audit: no vulnerabilities.
-Ruby lint: 122 files, no offenses. ERB lint: 36 files, clean.
+Ruby lint: 125 files, no offenses. ERB lint: 36 files, clean.
 Local development boot and HTTP 200 smoke test also passed; test server stopped.
 
 ## Preserved historical data
@@ -32,3 +32,11 @@ local database. The original powpals_beta_development was not changed or reset.
 It contains duplicates and missing manager assignments; importing it remains
 a separate, reviewed task. Use POWPALS_DATABASE to select a development database.
 See LOCAL_SETUP.md for findings, startup commands, and external-service limits.
+
+## Historical house restoration
+
+Bear Lodge was confirmed and imported into the isolated revival database with
+three linked accounts/profiles, three memberships, five rooms, seven beds and
+205 historical calendar records. The original database and a private backup
+preserve all excluded records. No manager access was inferred. See
+HISTORICAL_DATA.md for scope, safeguards and current-season setup still needed.

@@ -9,6 +9,7 @@ class AccountsController < ApplicationController
     else
       flash[:alert] = 'Something went wrong!'
     end
+
     redirect_to edit_profile_path
   end
 
@@ -21,15 +22,6 @@ class AccountsController < ApplicationController
   private
 
   def account_params
-    params
-      .require(:account)
-      .permit(
-        :email,
-        account_season_passes_attributes: %i[
-          account_id
-          season_pass_id
-          id
-        ]
-      )
+    params.expect(account: [account_season_passes_attributes: [%i[season_pass_id id]]])
   end
 end

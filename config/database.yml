@@ -23,7 +23,7 @@ default: &default
 
 development:
   <<: *default
-  database: powpals_beta_development
+  database: <%= ENV.fetch("POWPALS_DATABASE", "powpals_beta_revival_development") %>
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

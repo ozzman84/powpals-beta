@@ -1,25 +1,23 @@
 # frozen_string_literal: true
 
 module Users
-  # brakeman-disable-all
   class RoommatesController < ApplicationController
     before_action :authenticate_account!
 
     def create
-      @lodging = current_account.user.lodgings.find(params[:lodging_id])
-      roommate = @lodging.roommates.new(roommate_params)
+      lodging = current_account.user.lodgings.find(params[:lodging_id])
+      authorize lodging, :manage_roommates?
+      attributes = params.expect(roommate: [:user_id])
+      role = params.dig(:roommate, :role).presence || 'roommate'
+      return head :unprocessable_entity unless Roommate.roles.key?(role)
+
+      roommate = lodging.roommates.new(attributes)
+      roommate.role = role
       if roommate.save
-        flash[:success]
+        redirect_to users_lodging_path(lodging), notice: 'Roommate added.'
       else
-        flash.now[:errors] = roommate.errors.full_messages
+        redirect_to users_lodging_path(lodging), alert: roommate.errors.full_messages.to_sentence
       end
-    end
-
-    private
-
-    # brakeman-disable-next-line MassAssignment
-    def roommate_params
-      params.require(:roommate).permit(:lodging_id, :role, :user_id)
     end
   end
 end

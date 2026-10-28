@@ -22,14 +22,16 @@ class UsersController < ApplicationController
       redirect_to user_path
     else
       flash.now[:errors] = current_account.user.errors.full_messages
-      render 'edit'
+      render 'edit', status: :unprocessable_entity
     end
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:full_name, :avatar_url, :first_name, :last_name, :preferred_name, :about, :ride_type, :level, :phone_number, :address1, :address2, :country, :city,
-                                 :state, :zip_code, :birthday, :allergies, :venmo_url, :instagram_url, :facebook_url)
+    params.expect(user: [:full_name, :avatar_url, :first_name, :last_name, :preferred_name, :about,
+      :ride_type, :level, :phone_number,
+      :address1, :address2, :country, :city,
+      :state, :zip_code, :birthday, :allergies, :venmo_url, :instagram_url, :facebook_url])
   end
 end

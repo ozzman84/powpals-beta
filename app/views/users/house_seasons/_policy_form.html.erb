@@ -1,0 +1,20 @@
+<section class="space-y-3 rounded border bg-white p-3">
+  <h3 class="text-xl font-semibold">Edit season policy</h3>
+  <p>Season history is separate from the house’s active stay-calendar date limits. Changing these dates does not move existing stays or receipts.</p>
+  <%= form_with model: @season, url: users_lodging_house_season_path(@lodging, @season), class: 'space-y-3' do |form| %>
+    <div><%= form.label :name %><%= form.text_field :name, required: true, autocomplete: 'off' %></div>
+    <div><%= form.label :starts_on, 'First rental night' %><%= form.date_field :starts_on, required: true, autocomplete: 'off' %></div>
+    <div><%= form.label :ends_on, 'Last rental night' %><%= form.date_field :ends_on, required: true, autocomplete: 'off' %></div>
+    <div><%= form.label :policy_status %><%= form.select :policy_status, HouseSeason.policy_statuses.keys.map { |status| [status.humanize, status] } %></div>
+    <div><%= form.label :monthly_rent, 'Monthly rent (USD)' %><%= form.number_field :monthly_rent, step: '0.01', min: 0, value: (@season.monthly_rent_cents / 100.0 if @season.monthly_rent_cents), autocomplete: 'off' %></div>
+    <div><%= form.label :participant_count, 'Rent split participants' %><%= form.number_field :participant_count, min: 1, autocomplete: 'off' %></div>
+    <fieldset><legend>Guest fee per night (USD)</legend>
+      <% Date::DAYNAMES.each do |day| %><div><%= label_tag "rate-#{day}", day %><%= number_field_tag "house_season[rates][#{day}]", (@season.guest_rates[day] / 100.0 if @season.guest_rates.key?(day)), id: "rate-#{day}", min: 0, step: '0.01', autocomplete: 'off' %></div><% end %>
+    </fieldset>
+    <div><%= form.label :free_nights %><%= form.number_field :free_nights, min: 0, autocomplete: 'off' %></div>
+    <div><%= form.label :dog_fee, 'Dog fee (USD)' %><%= form.number_field :dog_fee, step: '0.01', min: 0, value: (@season.dog_fee_cents / 100.0 if @season.dog_fee_cents), autocomplete: 'off' %></div>
+    <div><%= form.label :dog_fee_basis %><%= form.select :dog_fee_basis, HouseSeason.dog_fee_bases.keys.map { |basis| [basis.humanize, basis] } %></div>
+    <div><%= form.label :rules, 'House rules and departure checklist' %><%= form.text_area :rules, rows: 12, class: 'w-full', autocomplete: 'off' %></div>
+    <%= form.submit 'Save season policy', class: 'rounded bg-indigo-700 p-2 text-white' %>
+  <% end %>
+</section>

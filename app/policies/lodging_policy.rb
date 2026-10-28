@@ -10,6 +10,10 @@ class LodgingPolicy
     @membership.present?
   end
 
+  def view_operations?
+    show? && !@membership.guest?
+  end
+
   def update?
     @membership && %w[admin lease_holder].include?(@membership.role)
   end

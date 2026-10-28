@@ -1,0 +1,17 @@
+<%= render 'shared/header' %>
+<h2 class="text-2xl font-semibold">Seasons, guest fees and house rules</h2>
+<p>Each season keeps its own rates and history. Historical sources do not change current memberships or payment instructions.</p>
+<ul class="space-y-2">
+  <% @seasons.each do |season| %>
+    <li class="rounded border bg-white p-3"><%= link_to season.name, users_lodging_house_season_path(@lodging, season), class: 'font-semibold underline' %> — <%= season.starts_on %> to <%= season.ends_on %> · <%= season.policy_status.humanize %></li>
+  <% end %>
+</ul>
+<% if policy(@lodging).update? %>
+  <h3 class="text-xl font-semibold">Add a season</h3>
+  <%= form_with scope: :house_season, url: users_lodging_house_seasons_path(@lodging), class: 'space-y-3' do |form| %>
+    <div><%= form.label :name %><%= form.text_field :name, required: true, autocomplete: 'off' %></div>
+    <div><%= form.label :starts_on, 'First rental night' %><%= form.date_field :starts_on, required: true, autocomplete: 'off' %></div>
+    <div><%= form.label :ends_on, 'Last rental night' %><%= form.date_field :ends_on, required: true, autocomplete: 'off' %></div>
+    <%= form.submit 'Add season', class: 'rounded bg-indigo-700 p-2 text-white' %>
+  <% end %>
+<% end %>

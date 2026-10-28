@@ -8,6 +8,12 @@ Rails.application.routes.draw do
 
   namespace :users do
     resources :lodgings do
+      resources :house_seasons, only: %i[index show create update] do
+        post :quote, on: :member
+        resources :house_ledger_entries, only: :create do
+          resources :house_payments, only: :create
+        end
+      end
       resources :roommates, only: :create
       resources :rooms, only: %i[index create destroy]
       resource :calendars, only: %i[show create destroy update] do

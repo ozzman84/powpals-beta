@@ -1,0 +1,69 @@
+<%= render 'shared/header' %>
+<%= link_to 'All seasons', users_lodging_house_seasons_path(@lodging), class: 'underline' %>
+<h2 class="text-2xl font-semibold"><%= @season.name %></h2>
+<p><%= @season.starts_on %> to <%= @season.ends_on %> · Policy: <strong><%= @season.policy_status.humanize %></strong></p>
+<% unless @season.confirmed? %>
+  <p class="rounded border bg-yellow-50 p-3">These rules and rates are <%= @season.reference? ? 'historical reference material' : 'a draft' %>. They are not confirmed for charging guests.</p>
+<% end %>
+<nav aria-label="Season sections" class="flex flex-wrap gap-4"><a href="#fees">Fees and expenses</a><a href="#rules">House rules</a><a href="#sheet-history">Sheet stay history</a></nav>
+<section class="space-y-3" id="fees">
+  <h3 class="text-xl font-semibold">Guest fee policy</h3>
+  <p>Quotes count occupied nights; checkout is excluded. Free nights apply per guest per stay. Dog fees require an explicit per-night or per-stay choice.</p>
+  <ul><% Date::DAYNAMES.each do |day| %><li><%= day %>: <%= @season.guest_rates.key?(day) ? number_to_currency(@season.guest_rates[day] / 100.0) : 'Not set' %></li><% end %></ul>
+  <p>Free nights: <%= @season.free_nights %>. Dog fee: <%= @season.dog_fee_cents ? number_to_currency(@season.dog_fee_cents / 100.0) : 'Not set' %> · <%= @season.dog_fee_basis.humanize %>.</p>
+  <% if @season.confirmed? %>
+    <%= form_with url: quote_users_lodging_house_season_path(@lodging, @season), scope: :quote, class: 'flex flex-wrap items-end gap-3' do |form| %>
+      <div><%= form.label :arrival %><%= form.date_field :arrival, required: true, autocomplete: 'off' %></div>
+      <div><%= form.label :departure, 'Checkout' %><%= form.date_field :departure, required: true, autocomplete: 'off' %></div>
+      <div><%= form.label :guests %><%= form.number_field :guests, min: 1, value: 1, required: true, autocomplete: 'off' %></div>
+      <div><%= form.label :dogs %><%= form.number_field :dogs, min: 0, value: 0, required: true, autocomplete: 'off' %></div>
+      <%= form.submit 'Estimate guest fees', class: 'rounded border p-2' %>
+    <% end %>
+  <% end %>
+  <h3 class="text-xl font-semibold">Monthly ledger</h3>
+  <p>Received payments include receipts reported by the old sheet; these are not bank-verified. Net is guest fees received minus expenses incurred, including pending reimbursements. Outstanding is unpaid guest fees, not rent.</p>
+  <div class="overflow-x-auto"><table class="w-full text-left">
+    <thead><tr><th class="p-2">Month</th><th class="p-2">Guest charges</th><th class="p-2">Received</th><th class="p-2">Expenses</th><th class="p-2">Reimbursed</th><th class="p-2">Net</th><th class="p-2">Outstanding</th></tr></thead>
+    <tbody><% @season.months.each do |month| %><% totals = @season.monthly_summary(month) %>
+      <tr class="border-t"><td class="p-2"><%= month.strftime('%b %Y') %></td><% [:fees, :received, :expenses, :reimbursed].each do |key| %><td class="p-2"><%= number_to_currency(totals[key] / 100.0) %></td><% end %><td class="p-2"><%= number_to_currency((totals[:received] - totals[:expenses]) / 100.0) %></td><td class="p-2"><%= number_to_currency(totals[:outstanding] / 100.0) %></td></tr>
+    <% end %></tbody>
+  </table></div>
+  <% if @season.monthly_rent_cents && @season.participant_count %>
+    <% base, extra = @season.monthly_rent_cents.divmod(@season.participant_count) %>
+    <p>Rent reference: <%= number_to_currency(@season.monthly_rent_cents / 100.0) %>/month split <%= @season.participant_count %> ways: <%= number_to_currency(base / 100.0) %> each, with <%= extra %> additional penny allocations. This is not an occupancy limit or a rent payment record.</p>
+  <% end %>
+  <h3 class="text-xl font-semibold">Charges, expenses and receipts</h3>
+  <p>Entries and receipts are append-only. Amounts describe recorded charges or expenses; a blank receipt date means the source did not supply it.</p>
+  <% @entries.each do |entry| %>
+    <article class="space-y-2 rounded border bg-white p-3">
+      <h4 class="font-semibold"><%= entry.month_on.strftime('%b %Y') %> · <%= entry.kind.humanize %> · <%= entry.description %></h4>
+      <p>Amount: <%= number_to_currency(entry.amount_cents / 100.0) %>. <%= entry.expense? ? 'Reimbursed' : 'Received' %>: <%= number_to_currency(entry.paid_cents / 100.0) %>. Outstanding: <%= number_to_currency(entry.outstanding_cents / 100.0) %>.</p>
+      <ul><% entry.house_payments.each do |payment| %><li><%= number_to_currency(payment.amount_cents / 100.0) %> — <%= payment.paid_on || 'Exact date not supplied' %> · <%= payment.source_reported? ? 'Reported received by source sheet' : 'Manually recorded' %> <%= payment.reference %></li><% end %></ul>
+      <% if policy(@lodging).update? && entry.outstanding_cents.positive? %>
+        <%= form_with url: users_lodging_house_season_house_ledger_entry_house_payments_path(@lodging, @season, entry), scope: :house_payment, class: 'flex flex-wrap items-end gap-3' do |form| %>
+          <div><%= form.label :amount, 'Receipt amount (USD)', for: "payment-#{entry.id}-amount" %><%= form.number_field :amount, id: "payment-#{entry.id}-amount", min: '0.01', step: '0.01', required: true, autocomplete: 'off' %></div>
+          <div><%= form.label :paid_on, 'Payment date', for: "payment-#{entry.id}-date" %><%= form.date_field :paid_on, id: "payment-#{entry.id}-date", required: true, autocomplete: 'off' %></div>
+          <div><%= form.label :reference, 'Reference', for: "payment-#{entry.id}-reference" %><%= form.text_field :reference, id: "payment-#{entry.id}-reference", autocomplete: 'off' %></div>
+          <%= form.submit 'Record payment', class: 'rounded border p-2' %>
+        <% end %>
+      <% end %>
+    </article>
+  <% end %>
+  <% if policy(@lodging).update? %><%= render 'entry_form' %><% end %>
+</section>
+<section class="space-y-3" id="rules">
+  <h3 class="text-xl font-semibold">House rules and departure checklist</h3>
+  <%= simple_format(@season.rules.presence || 'Awaiting this season’s rules. Historical policies are kept in their original seasons.') %>
+  <h4 class="font-semibold">Source notes and unresolved differences</h4>
+  <%= simple_format(@season.source_notes.presence || 'No source notes.') %>
+</section>
+<section class="space-y-3" id="sheet-history">
+  <h3 class="text-xl font-semibold">Source sheet stay history</h3>
+  <p>Day-plan values mean 0 = away, 1 = staying, and each additional person = one guest. Blank cells remain unknown. Bed labels are requests or annotations, not confirmed bookings or guest counts. Repeated labels across beds are preserved without counting them as separate people. Names are source labels, not linked user accounts.</p>
+  <p>Import summary: <%= @season.source_summary.map { |key, value| "#{key.humanize}: #{value}" }.join(' · ') %></p>
+  <div class="overflow-x-auto"><table class="w-full text-left">
+    <thead><tr><th class="p-2">Night</th><th class="p-2">Type</th><th class="p-2">Person / room</th><th class="p-2">Source value</th></tr></thead>
+    <tbody><% @cells.each do |cell| %><tr class="border-t"><td class="p-2"><%= cell.observed_on %></td><td class="p-2"><%= cell.kind.humanize %></td><td class="p-2"><%= [cell.person_label, cell.room_label, cell.bed_label].compact.join(' · ') %></td><td class="p-2"><%= cell.value %></td></tr><% end %></tbody>
+  </table></div>
+</section>
+<% if policy(@lodging).update? %><%= render 'policy_form' %><% end %>

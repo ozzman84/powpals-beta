@@ -5,6 +5,9 @@
     <%= link_to 'House overview', users_lodging_path(@lodging) %>
     <%= link_to 'Rooms', users_lodging_rooms_path(@lodging) %>
     <%= link_to 'Shared calendar', users_lodging_calendars_path(@lodging) %>
+    <% if policy(@lodging).view_operations? %>
+      <%= link_to 'Seasons & guest fees', users_lodging_house_seasons_path(@lodging) %>
+    <% end %>
     <%= link_to 'My stays', my_calendar_users_lodging_calendars_path(@lodging) %>
     <% if policy(@lodging).update? %>
       <%= link_to 'Edit house', edit_users_lodging_path(@lodging) %>

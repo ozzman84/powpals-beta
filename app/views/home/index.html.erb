@@ -1,65 +1,39 @@
-<h1 class="font-bold text-4xl">Welcome to PowPals</h1>
-<div>
-  <% if account_signed_in? %> 
-  <%= button_to "Sign out", destroy_account_session_path, method: :delete %> 
-<% else %>
-  <%= button_to "Sign in", new_account_session_path %> 
-<% end %>
-</div>
-
-<% if account_signed_in? %>
-
-    <!-- Resorts Table -->
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Resorts
-                    </th>
-                    <% (0..8).each do |i| %>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            <%= (Date.today + i).strftime('%a %d') %>
-                        </th>
-                    <% end %>
-                </tr>
-            </thead>
-            <tbody>
-                <% @resorts.each do |r| %>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <div class="flex items-center justify-between">
-                                <div class="mr-2">
-                                    <%= r[0].sub(/(?:\bSki|\bMountain|\bResort)+\b\s*$/, "").strip %>
-                                </div>
-                            </div>
-                        </th>
-                        <% r[1][:next_10_day_skier_count].each_with_index do |count, index| %>
-                                <td class="px-6 py-4 text-center">
-                                    <div class="flex items-center">
-                                        <div>
-                                            <% if @weather_forecasts[r.first][index][:snow].zero? %>
-                                            <%= image_tag @weather_forecasts[r.first][index][:icon], alt: ' ', loading: "lazy", class: 'w-6 h-6' %>
-                                            <% else %>
-                                            <%= "#{@weather_forecasts[r.first][index][:snow].round()}\"" %>
-                                            <% end %>
-                                        </div>
-                                        <div class="ml-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-                                                <path d="M8.5 4.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 13c.552 0 1.01-.452.9-.994a5.002 5.002 0 0 0-9.802 0c-.109.542.35.994.902.994h8ZM12.5 3.5a.75.75 0 0 1 .75.75v1h1a.75.75 0 0 1 0 1.5h-1v1a.75.75 0 0 1-1.5 0v-1h-1a.75.75 0 0 1 0-1.5h1v-1a.75.75 0 0 1 .75-.75Z" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-2">
-                                            <%= count %>
-                                        </div>
-                                    </div>
-                                </td>
-                        <% end %>
-                    </tr>
+<main class="mx-auto max-w-6xl space-y-6 p-4">
+  <h1 class="text-3xl font-bold">PowPals</h1>
+  <% if account_signed_in? %>
+    <nav class="flex flex-wrap gap-4">
+      <%= link_to 'My profile', user_path %>
+      <%= link_to 'My houses', users_lodgings_path %>
+      <%= link_to 'People', users_path %>
+      <%= link_to 'My passes', edit_profile_path %>
+      <%= button_to 'Sign out', destroy_account_session_path, method: :delete %>
+    </nav>
+    <h2 class="text-xl font-semibold">Mountains over the next 10 days</h2>
+    <p>Skier counts reflect recorded plans. A dash means the forecast is unavailable. Forecasts may take a moment to appear; refresh to see updates.</p>
+    <% if @resorts.empty? %>
+      <p>No resorts have been imported yet.</p>
+    <% else %>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead><tr><th class="p-2">Resort</th><% 10.times do |index| %><th class="p-2"><%= (Date.current + index).strftime('%a %d') %></th><% end %></tr></thead>
+          <tbody>
+            <% @resorts.each do |name, data| %>
+              <tr class="border-t">
+                <th class="p-2"><%= name %></th>
+                <% data[:next_10_day_skier_count].each_with_index do |count, index| %>
+                  <% forecast = @weather_forecasts[name][(Date.current + index).iso8601] %>
+                  <% snow = forecast&.dig('day', 'totalsnow_cm') %>
+                  <td class="p-2"><%= snow.is_a?(Numeric) ? "#{(snow / 2.54).round(1)} in" : '—' %><br><%= count %> skiers</td>
                 <% end %>
-            </tbody>
+              </tr>
+            <% end %>
+          </tbody>
         </table>
-    </div>
-<% end %>
-
-
+      </div>
+    <% end %>
+  <% else %>
+    <p>Plan ski days and manage your shared ski house.</p>
+    <%= link_to 'Sign in', new_account_session_path %>
+    <%= link_to 'Create an account', new_account_registration_path %>
+  <% end %>
+</main>

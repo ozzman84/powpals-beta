@@ -1,0 +1,22 @@
+<% if @lodging.errors.any? %><p role="alert"><%= @lodging.errors.full_messages.to_sentence %></p><% end %>
+<%= form_with model: @lodging, url: (@lodging.persisted? ? users_lodging_path(@lodging) : users_lodgings_path), class: 'grid max-w-xl gap-4' do |form| %>
+  <% %i[title description max_guests max_cars season_start season_end].each do |field| %>
+    <div>
+      <%= form.label field, class: 'block font-medium' %>
+      <% if %i[season_start season_end].include?(field) %>
+        <%= form.date_field field, required: true, class: 'w-full rounded border p-2' %>
+      <% elsif %i[max_guests max_cars].include?(field) %>
+        <%= form.number_field field, min: (field == :max_guests ? 1 : 0), class: 'w-full rounded border p-2' %>
+      <% else %>
+        <%= form.text_field field, required: (field == :title), class: 'w-full rounded border p-2' %>
+      <% end %>
+    </div>
+  <% end %>
+  <% unless @lodging.persisted? %>
+    <% %i[street address2 city state zip_code country].each do |field| %>
+      <div><%= form.label field %><%= form.text_field field, class: 'block w-full rounded border p-2' %></div>
+    <% end %>
+  <% end %>
+  <%= form.submit 'Save house', class: 'rounded bg-indigo-700 p-3 text-white' %>
+<% end %>
+<%= link_to 'Cancel', (@lodging.persisted? ? users_lodging_path(@lodging) : users_lodgings_path) %>

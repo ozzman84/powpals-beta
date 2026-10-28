@@ -20,7 +20,7 @@
         <% end %>
       </ul>
     </div>
-    <hr />
+    <hr>
     <div class="mt-4">
       <%= form_with model: current_account, url: edit_profile_path do |f| %>
         <%= f.fields_for :account_season_passes, current_account.account_season_passes.new do |ff| %>

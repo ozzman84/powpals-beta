@@ -63,7 +63,7 @@
           <div class="mt-2">
             <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
               <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">http://</span>
-              <input type="text" name="user[instagram_url]" id="instagram_url" value="<%= current_account.user.instagram_url %>" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="www.example.com">
+              <input autocomplete="off" type="text" name="user[instagram_url]" id="instagram_url" value="<%= current_account.user.instagram_url %>" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="www.example.com">
             </div>
           </div>
         </div>
@@ -73,7 +73,7 @@
           <div class="mt-2">
             <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
               <span class="flex select-none items-center pl-3 text-gray-500 sm:text-sm">http://</span>
-              <input type="text" name="user[facebook_url]" id="facebook_url" value="<%= current_account.user.facebook_url %>" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="www.example.com">
+              <input autocomplete="off" type="text" name="user[facebook_url]" id="facebook_url" value="<%= current_account.user.facebook_url %>" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="www.example.com">
             </div>
           </div>
         </div>
@@ -91,14 +91,14 @@
         <div class="sm:col-span-3">
           <label for="first_name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
           <div class="mt-2">
-            <input type="text" name="user[first_name]" id="first_name" value="<%= current_account.user.first_name %>" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input autocomplete="off" type="text" name="user[first_name]" id="first_name" value="<%= current_account.user.first_name %>" autocomplete="given-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
           </div>
         </div>
 
         <div class="sm:col-span-3">
           <label for="last_name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
           <div class="mt-2">
-            <input type="text" name="user[last_name]" id="last_name" value="<%= current_account.user.last_name %>" autocomplete="family-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input autocomplete="off" type="text" name="user[last_name]" id="last_name" value="<%= current_account.user.last_name %>" autocomplete="family-name" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
           </div>
         </div>
 
@@ -119,35 +119,35 @@
         <div class="col-span-full">
           <label for="address1" class="block text-sm font-medium leading-6 text-gray-900">Street address</label>
           <div class="mt-2">
-            <input type="text" name="user[address1]" id="address1" value="<%= current_account.user.address1 %>" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input autocomplete="off" type="text" name="user[address1]" id="address1" value="<%= current_account.user.address1 %>" autocomplete="street-address" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
           </div>
         </div>
 
         <div class="col-span-full">
           <label for="address2" class="block text-sm font-medium leading-6 text-gray-900">Street address 2 / Apt #</label>
           <div class="mt-2">
-            <input type="text" name="user[address2]" id="street-address" value="<%= current_account.user.address2 %>" autocomplete="street-address2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input autocomplete="off" type="text" name="user[address2]" id="street-address" value="<%= current_account.user.address2 %>" autocomplete="street-address2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
           </div>
         </div>
 
         <div class="sm:col-span-2 sm:col-start-1">
           <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
           <div class="mt-2">
-            <input type="text" name="user[city]" id="city" value="<%= current_account.user.city %>" autocomplete="address-level2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input autocomplete="off" type="text" name="user[city]" id="city" value="<%= current_account.user.city %>" autocomplete="address-level2" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
           </div>
         </div>
 
         <div class="sm:col-span-2">
           <label for="state" class="block text-sm font-medium leading-6 text-gray-900">State / Province</label>
           <div class="mt-2">
-            <input type="text" name="user[state]" id="state" value="<%= current_account.user.state %>" autocomplete="address-level1" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input autocomplete="off" type="text" name="user[state]" id="state" value="<%= current_account.user.state %>" autocomplete="address-level1" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
           </div>
         </div>
 
         <div class="sm:col-span-2">
           <label for="zip_code" class="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal code</label>
           <div class="mt-2">
-            <input type="text" name="user[zip_code]" id="zip_code" value="<%= current_account.user.zip_code %>" autocomplete="postal-code" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input autocomplete="off" type="text" name="user[zip_code]" id="zip_code" value="<%= current_account.user.zip_code %>" autocomplete="postal-code" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
           </div>
         </div>
 

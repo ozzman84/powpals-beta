@@ -4,21 +4,21 @@ class Bed < ApplicationRecord
   belongs_to :room
   before_validation :set_capacity
 
-  enum size: {
+  enum :size, {
     twin: 'twin',
     full: 'full',
     queen: 'queen',
     king: 'king',
     california_king: 'california_king'
-  }
+  }, validate: true
 
-  enum style: {
+  enum :style, {
     mattress: 'mattress',
     airmattress: 'airmattress',
     pullout: 'pullout',
     couch: 'couch',
     bunk: 'bunk'
-  }, _default: 'mattress'
+  }, default: 'mattress', validate: true
 
   CAPACITY = {
     twin: 1,

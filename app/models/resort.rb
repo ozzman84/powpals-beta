@@ -13,19 +13,19 @@ class Resort < ApplicationRecord
   validates :lat, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
   validates :long, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
 
-  def skier_count_for_date(date = Date.today)
+  def skier_count_for_date(date = Date.current)
     account_ski_days.where(start_date: date).count
   end
 
   def next_10_day_skier_count
-    end_date = 8.days.from_now
+    end_date = Date.current + 9
 
-    ski_day_counts = account_ski_days.where(start_date: Date.today..end_date)
+    ski_day_counts = account_ski_days.where(start_date: Date.current..end_date)
                                      .group(:start_date)
                                      .size
 
-    (Date.today..end_date).each_with_object({}) do |date, result|
-      result[date] = ski_day_counts[date] || 0
+    (Date.current..end_date).index_with do |date|
+      ski_day_counts[date] || 0
     end
   end
 end

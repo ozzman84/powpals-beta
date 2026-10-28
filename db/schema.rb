@@ -10,15 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_26_000200) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "account_season_passes", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "season_pass_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id", "season_pass_id"], name: "unique_account_season_passes_identity", unique: true
     t.index ["account_id"], name: "index_account_season_passes_on_account_id"
     t.index ["season_pass_id"], name: "index_account_season_passes_on_season_pass_id"
   end
@@ -30,6 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.bigint "resort_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id", "resort_id", "start_date"], name: "unique_account_ski_days_identity", unique: true
     t.index ["account_id"], name: "index_account_ski_days_on_account_id"
     t.index ["resort_id"], name: "index_account_ski_days_on_resort_id"
   end
@@ -58,6 +60,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.string "uid"
     t.index ["confirmation_token"], name: "index_accounts_on_confirmation_token", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
+    t.index ["provider", "uid"], name: "unique_accounts_identity", unique: true
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_accounts_on_unlock_token", unique: true
   end
@@ -90,8 +93,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.bigint "lodging_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "guest_count"
-    t.integer "cars"
+    t.integer "guest_count", default: 0, null: false
+    t.integer "cars", default: 0, null: false
+    t.index ["lodging_id", "user_id", "date"], name: "unique_calendars_identity", unique: true
     t.index ["lodging_id"], name: "index_calendars_on_lodging_id"
     t.index ["user_id"], name: "index_calendars_on_user_id"
   end
@@ -111,6 +115,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "address2"
+    t.date "season_start"
+    t.date "season_end"
+    t.integer "max_cars"
   end
 
   create_table "resorts", force: :cascade do |t|
@@ -121,6 +128,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.datetime "updated_at", null: false
     t.decimal "lat", precision: 10, scale: 6
     t.decimal "long", precision: 10, scale: 6
+    t.index "lower((name)::text)", name: "unique_resorts_name", unique: true
   end
 
   create_table "roommates", force: :cascade do |t|
@@ -129,6 +137,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.bigint "lodging_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["lodging_id", "user_id"], name: "unique_roommates_identity", unique: true
     t.index ["lodging_id"], name: "index_roommates_on_lodging_id"
     t.index ["user_id"], name: "index_roommates_on_user_id"
   end
@@ -148,6 +157,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["resort_id"], name: "index_season_pass_resorts_on_resort_id"
+    t.index ["season_pass_id", "resort_id"], name: "unique_season_pass_resorts_identity", unique: true
     t.index ["season_pass_id"], name: "index_season_pass_resorts_on_season_pass_id"
   end
 
@@ -155,6 +165,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "lower((name)::text)", name: "unique_season_passes_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -182,6 +193,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.string "instagram_url"
     t.string "facebook_url"
     t.index ["account_id"], name: "index_users_on_account_id"
+    t.index ["account_id"], name: "unique_users_identity", unique: true
   end
 
   add_foreign_key "account_season_passes", "accounts"

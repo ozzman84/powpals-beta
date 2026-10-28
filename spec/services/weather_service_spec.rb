@@ -3,19 +3,31 @@
 require 'rails_helper'
 
 RSpec.describe WeatherService do
-  #   describe '.fetch_forecast_for_resort' do
-  #     let(:resort_name) { 'Breckenridge' }
-  #     let(:api_response) { File.read(Rails.root.join('spec/fixtures/weather_api_response.json')) }
+  around do |example|
+    previous = ENV.fetch('WEATHER_API_KEY', nil)
+    ENV['WEATHER_API_KEY'] = 'test-key'
+    example.run
+  ensure
+    ENV['WEATHER_API_KEY'] = previous
+  end
 
-  #     before do
-  #       stub_request(:get, /weatherapi.com/)
-  #         .to_return(status: 200, body: api_response)
-  #     end
+  it 'returns forecast data from a successful HTTPS response' do
+    stub_request(:get, /api.weatherapi.com/).to_return(status: 200, body: '{"forecast":{"forecastday":[]}}')
+    expect(described_class.fetch_forecast_for_resort('Winter Park')).to eq('forecast' => { 'forecastday' => [] })
+  end
 
-  #     it 'fetches weather forecast data for a given resort' do
-  #       forecast = WeatherService.fetch_forecast_for_resort(resort_name)
-  #       expect(forecast).not_to be_nil
-  #       expect(forecast['forecast']['forecastday'].size).to eq(10)
-  #     end
-  #   end
+  it 'handles timeouts without breaking the caller' do
+    stub_request(:get, /api.weatherapi.com/).to_timeout
+    expect(described_class.fetch_forecast_for_resort('Winter Park')).to be_nil
+  end
+
+  it 'handles malformed responses' do
+    stub_request(:get, /api.weatherapi.com/).to_return(status: 200, body: 'not JSON')
+    expect(described_class.fetch_forecast_for_resort('Winter Park')).to be_nil
+  end
+
+  it 'handles rejected API requests' do
+    stub_request(:get, /api.weatherapi.com/).to_return(status: 403)
+    expect(described_class.fetch_forecast_for_resort('Winter Park')).to be_nil
+  end
 end

@@ -9,7 +9,6 @@
     <fieldset><legend>Guest fee per night (USD)</legend>
       <% Date::DAYNAMES.each do |day| %><div><%= label_tag "rate-#{day}", day %><%= number_field_tag "house_season[rates][#{day}]", (@season.guest_rates[day] / 100.0 if @season.guest_rates.key?(day)), id: "rate-#{day}", min: 0, step: '0.01', autocomplete: 'off' %></div><% end %>
     </fieldset>
-    <div><%= form.label :free_nights %><%= form.number_field :free_nights, min: 0, autocomplete: 'off' %></div>
     <div><%= form.label :dog_fee, 'Dog fee (USD)' %><%= form.number_field :dog_fee, step: '0.01', min: 0, value: (@season.dog_fee_cents / 100.0 if @season.dog_fee_cents), autocomplete: 'off' %></div>
     <div><%= form.label :dog_fee_basis %><%= form.select :dog_fee_basis, HouseSeason.dog_fee_bases.keys.map { |basis| [basis.humanize, basis] } %></div>
     <div><%= form.label :rules, 'House rules and departure checklist' %><%= form.text_area :rules, rows: 12, class: 'w-full', autocomplete: 'off' %></div>

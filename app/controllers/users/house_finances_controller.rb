@@ -7,7 +7,7 @@ module Users
 
     def show
       @entries = @season.house_ledger_entries.includes(:user, :house_payments).order(:month_on, :id)
-      @entry_kinds = HouseLedgerEntry.kinds.keys
+      @entry_kinds = HouseLedgerEntry.kinds.keys - ['guest_fee']
       @can_record_payments = true
     end
 

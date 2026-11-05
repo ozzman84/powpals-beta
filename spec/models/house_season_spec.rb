@@ -36,7 +36,7 @@ RSpec.describe HouseSeason do
     end.to raise_error(ArgumentError, /within the rental season/)
   end
 
-  it 'requires a dog-fee basis and handles configured free nights' do
+  it 'requires a dog-fee basis and ignores obsolete free-night allowances' do
     season.update!(policy_status: :confirmed, guest_rates: Date::DAYNAMES.index_with { 5000 },
       free_nights: 1, dog_fee_cents: 2500)
     quote = GuestFeeQuote.new(season)
@@ -44,7 +44,7 @@ RSpec.describe HouseSeason do
       quote.call(arrival: '2026-11-05', departure: '2026-11-08', guests: 1, dogs: 1)
     end.to raise_error(ArgumentError, /dog fee/)
     season.update!(dog_fee_basis: :per_stay)
-    expect(quote.call(arrival: '2026-11-05', departure: '2026-11-08', guests: 1, dogs: 1)).to eq(12_500)
+    expect(quote.call(arrival: '2026-11-05', departure: '2026-11-08', guests: 1, dogs: 1)).to eq(17_500)
   end
 
   it 'supports partial receipts without allowing overpayment' do

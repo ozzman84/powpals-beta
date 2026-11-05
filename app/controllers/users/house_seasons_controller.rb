@@ -52,7 +52,7 @@ module Users
 
     def season_params
       values = params.expect(house_season: [:name, :starts_on, :ends_on, :rules, :policy_status,
-        :dog_fee, :dog_fee_basis, :free_nights, { rates: Date::DAYNAMES }]).to_h
+        :dog_fee, :dog_fee_basis, { rates: Date::DAYNAMES }]).to_h
       convert_money(values)
     end
 

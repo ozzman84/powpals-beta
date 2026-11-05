@@ -13,7 +13,7 @@ module Users
       entries = season.house_ledger_entries
       entries = entries.rent_and_deposits unless permissions.manage_finances?
       entry = entries.find(params[:house_ledger_entry_id])
-      values = params.expect(house_payment: [:amount, :paid_on, :reference]).to_h
+      values = params.expect(house_payment: [:amount, :paid_on, :reference, :paid_by_id]).to_h
       values['amount_cents'] = HouseMoney.cents(values.delete('amount'))
       entry.record_payment!(values.merge(recorded_by: current_account))
       redirect_to house_money_destination(lodging, season),

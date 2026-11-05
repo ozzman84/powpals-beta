@@ -20,7 +20,9 @@ Rails.application.routes.draw do
           resources :house_payments, only: :create
         end
       end
-      resources :guest_stays, only: %i[index create update]
+      resources :guest_stays, only: %i[index create update] do
+        post :charge, on: :member
+      end
       resources :bed_requests, only: %i[index create update]
       resources :house_members, only: %i[index create update]
       resources :roommates, only: %i[create destroy]

@@ -8,6 +8,7 @@
   <div><%= form.label :house_season_id, 'Season' %><%= form.collection_select :house_season_id, @seasons, :id, :name, {}, class: 'w-full rounded border' %></div>
   <div><%= form.label :guest_name %><%= form.text_field :guest_name, required: true, class: 'w-full rounded border' %></div>
   <div><%= form.label :email, 'Guest email' %><%= form.email_field :email, required: true, class: 'w-full rounded border' %></div>
+  <div><%= form.label :dogs, 'Dogs (if permitted by house rules)' %><%= form.number_field :dogs, value: 0, min: 0, class: 'w-full rounded border' %></div>
   <div><%= form.label :cars, 'Additional guest cars' %><%= form.number_field :cars, value: 0, min: 0, class: 'w-full rounded border' %></div>
   <div><%= form.label :arrival %><%= form.date_field :arrival, required: true, class: 'w-full rounded border' %></div>
   <div><%= form.label :departure, 'Departure (checkout)' %><%= form.date_field :departure, required: true, class: 'w-full rounded border' %></div>
@@ -15,6 +16,7 @@
 <% end %>
 <div class="space-y-4"><% @stays.each do |stay| %>
   <article class="rounded border p-4"><h3 class="font-semibold"><%= stay.guest_name %> · Host: <%= stay.host.display_name %></h3><p><%= stay.arrival %> to <%= stay.departure %> (checkout) · <%= stay.status.humanize %> · Invitation <%= stay.accepted_at ? 'accepted' : 'not accepted' %></p>
+    <% if policy(@lodging).manage_finances? && stay.approved? %><%= button_to stay.billed_at ? 'View / verify posted charges' : 'Post guest charges', charge_users_lodging_guest_stay_path(@lodging, stay), class: 'my-3 rounded border p-2' %><% end %>
     <% if policy(@lodging).manage_roommates? %><%= form_with model: stay, url: users_lodging_guest_stay_path(@lodging, stay), class: 'mt-3 flex flex-wrap gap-3' do |form| %><%= form.label :status %><%= form.select :status, GuestStay.statuses.keys %><%= form.submit 'Update guest stay', class: 'rounded border p-2' %><% end %>
     <% elsif stay.host_id == current_account.user.id %><%= button_to 'Cancel guest stay', users_lodging_guest_stay_path(@lodging, stay), method: :patch, params: { guest_stay: { status: 'cancelled' } }, class: 'mt-3 text-red-700' %><% end %>
   </article>

@@ -6,6 +6,6 @@
 <p>Only entries assigned to your account are shown. Recorded payments are not bank verification.</p>
 <% if @entries.empty? %><p>No entries are assigned to you for this season. This does not confirm that your season account has been reconciled.</p><% else %>
   <% personal = @entries.reject(&:expense?) %>
-  <p>Your charges: <%= number_to_currency(personal.sum(&:amount_cents) / 100.0) %>. Recorded paid: <%= number_to_currency(personal.sum(&:paid_cents) / 100.0) %>. Outstanding: <%= number_to_currency(personal.sum(&:outstanding_cents) / 100.0) %>.</p>
+  <p>Your charges: <%= number_to_currency(personal.sum(&:charge_cents) / 100.0) %>. Recorded paid: <%= number_to_currency(personal.sum(&:paid_cents) / 100.0) %>. Outstanding: <%= number_to_currency(personal.sum(&:outstanding_cents) / 100.0) %>.</p>
   <%= render 'users/house_seasons/ledger_entries' %>
 <% end %>

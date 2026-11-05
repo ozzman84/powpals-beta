@@ -5,6 +5,7 @@ class GuestStay < ApplicationRecord
   belongs_to :host, class_name: 'User'
   belongs_to :guest, class_name: 'User', optional: true
   has_one :lodging, through: :house_season
+  has_many :house_ledger_entries, dependent: :restrict_with_error
   has_many :bed_requests, dependent: :restrict_with_error
   attr_reader :token
 
@@ -13,6 +14,7 @@ class GuestStay < ApplicationRecord
     validate: true
   validates :guest_name, :arrival, :departure, presence: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :dogs, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :cars, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validate :valid_guest_stay
   validate :guest_is_not_roommate
@@ -36,6 +38,12 @@ class GuestStay < ApplicationRecord
 
   def transition!(value)
     with_lock do
+      if cancelled? && value != 'cancelled'
+        errors.add(:base, 'Cancelled stays cannot be reopened; create a new request')
+        raise ActiveRecord::RecordInvalid, self
+      end
+
+      cancel_charges! if %w[cancelled declined].include?(value)
       update!(status: value)
 
       bed_requests.where.not(status: 'cancelled').find_each { |request| request.transition!('cancelled') } if
@@ -44,6 +52,16 @@ class GuestStay < ApplicationRecord
   end
 
   private
+
+  def cancel_charges!
+    entries = house_ledger_entries.order(:id).lock.to_a
+    if entries.any? { |entry| entry.paid_cents.positive? }
+      errors.add(:base, 'This stay has receipts. The accountant must reconcile refunds before cancellation.')
+      raise ActiveRecord::RecordInvalid, self
+    end
+
+    entries.each { |entry| entry.update!(voided_at: Time.current) unless entry.voided_at }
+  end
 
   def prepare_invitation
     self.email = email.to_s.strip.downcase
@@ -70,13 +88,15 @@ class GuestStay < ApplicationRecord
   def guest_is_not_roommate
     return unless house_season
 
-    members = house_season.lodging.roommates.where(access_state: 'active').where.not(role: 'guest').joins(user: :account)
+    members = house_season.lodging.roommates.where(access_state: 'active').where.not(role: 'guest')
+      .joins(user: :account)
+
     errors.add(:email, 'belongs to a roommate, who does not owe guest fees') if
       members.exists?(['LOWER(accounts.email) = ?', email.to_s.downcase])
   end
 
   def no_duplicate_guest
-    return unless new_record? && arrival && departure
+    return unless new_record? && house_season && arrival && departure
 
     duplicate = house_season.lodging.guest_stays.where.not(status: %w[cancelled declined]).where(email: email)
       .where('arrival < ? AND departure > ?', departure, arrival)

@@ -35,11 +35,12 @@ RSpec.describe 'House fees on a phone' do
     expect(HouseLedgerEntry.count).to eq(0)
     login_as accountant.account, scope: :account
     visit users_lodging_house_season_finance_path(house, season)
+    select 'Shared charge', from: 'Kind'
     select user.display_name, from: 'Member'
-    fill_in 'Description', with: 'Weekend guest fees'
+    fill_in 'Description', with: 'Shared house charge'
     fill_in 'Amount (USD)', with: '100'
     click_on 'Add ledger entry'
-    expect(page).to have_content('Weekend guest fees')
+    expect(page).to have_content('Shared house charge')
     fill_in 'Receipt amount (USD)', with: '40'
     fill_in 'Payment date', with: '2026-11-10'
     click_on 'Record payment'

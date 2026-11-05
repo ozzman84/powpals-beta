@@ -31,7 +31,7 @@ class HouseSeason < ApplicationRecord
   end
 
   def monthly_summary(month)
-    entries = house_ledger_entries.where(month_on: month).includes(:house_payments)
+    entries = house_ledger_entries.posted.where(month_on: month).includes(:house_payments)
     fees = entries.select(&:guest_fee?)
     expenses = entries.select(&:expense?)
     { fees: fees.sum(&:amount_cents), received: fees.sum(&:paid_cents),

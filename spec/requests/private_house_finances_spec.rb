@@ -18,12 +18,14 @@ RSpec.describe 'Private house finances' do
   let!(:mine) do
     membership
     season.house_ledger_entries.create!(user: member, kind: :guest_fee, description: 'My guest fees',
+      source_key: 'legacy-mine',
       month_on: '2026-11-01', amount_cents: 5000)
   end
 
   let!(:theirs) do
     create(:roommate, lodging: house, user: other)
     season.house_ledger_entries.create!(user: other, kind: :guest_fee, description: 'Other member private charge',
+      source_key: 'legacy-theirs',
       month_on: '2026-11-01', amount_cents: 9900)
   end
 

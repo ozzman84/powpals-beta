@@ -13,7 +13,7 @@ class GuestFeeQuote
     guests = Integer(guests.to_s, 10)
     dogs = Integer(dogs.to_s, 10)
     validate_dates!(arrival, departure, guests, dogs)
-    nights = (arrival...departure).to_a.drop(@season.free_nights)
+    nights = (arrival...departure).to_a
     fee = nights.sum { |date| @season.guest_rates.fetch(Date::DAYNAMES[date.wday]) } * guests
     fee + dog_fee((departure - arrival).to_i, dogs)
   end

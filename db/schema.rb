@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_05_000700) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -141,6 +141,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000700) do
     t.datetime "accepted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "billed_at"
+    t.integer "dogs", default: 0, null: false
     t.index ["guest_id"], name: "index_guest_stays_on_guest_id"
     t.index ["host_id"], name: "index_guest_stays_on_host_id"
     t.index ["house_season_id"], name: "index_guest_stays_on_house_season_id"
@@ -179,6 +181,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000700) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.date "due_on"
+    t.bigint "guest_stay_id"
+    t.datetime "voided_at"
+    t.index ["guest_stay_id", "month_on"], name: "unique_guest_stay_month_charge", unique: true, where: "(guest_stay_id IS NOT NULL)"
+    t.index ["guest_stay_id"], name: "index_house_ledger_entries_on_guest_stay_id"
     t.index ["house_season_id", "source_key"], name: "index_house_ledger_entries_on_house_season_id_and_source_key", unique: true
     t.index ["house_season_id"], name: "index_house_ledger_entries_on_house_season_id"
     t.index ["recorded_by_id"], name: "index_house_ledger_entries_on_recorded_by_id"
@@ -195,7 +201,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000700) do
     t.string "reference"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "paid_by_id"
     t.index ["house_ledger_entry_id"], name: "index_house_payments_on_house_ledger_entry_id"
+    t.index ["paid_by_id"], name: "index_house_payments_on_paid_by_id"
     t.index ["recorded_by_id"], name: "index_house_payments_on_recorded_by_id"
     t.check_constraint "amount_cents > 0", name: "house_payment_positive_amount"
   end
@@ -372,10 +380,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000700) do
   add_foreign_key "house_invitations", "house_seasons"
   add_foreign_key "house_invitations", "lodgings"
   add_foreign_key "house_ledger_entries", "accounts", column: "recorded_by_id"
+  add_foreign_key "house_ledger_entries", "guest_stays"
   add_foreign_key "house_ledger_entries", "house_seasons"
   add_foreign_key "house_ledger_entries", "users"
   add_foreign_key "house_payments", "accounts", column: "recorded_by_id"
   add_foreign_key "house_payments", "house_ledger_entries"
+  add_foreign_key "house_payments", "users", column: "paid_by_id"
   add_foreign_key "house_season_memberships", "house_seasons"
   add_foreign_key "house_season_memberships", "roommates"
   add_foreign_key "house_seasons", "lodgings"

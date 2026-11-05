@@ -4,3 +4,9 @@
 <p><%= @stay.arrival %> to <%= @stay.departure %> (checkout) · <strong><%= @stay.status.humanize %></strong></p>
 <% if @stay.approved? %><p class="mt-4"><%= @stay.house_season.lodging.full_address %></p><div class="mt-4 whitespace-pre-line"><%= @stay.house_season.rules %></div><% end %>
 <p class="mt-4">This invitation gives access to your stay only.</p>
+
+<h2 class="mt-6 text-lg font-semibold">Guest fees</h2>
+<p>You and your host are responsible for the same balance. Payments are recorded by the accountant; this page does not transfer money.</p>
+<% if @stay.house_ledger_entries.empty? %><p>Charges have not been posted. This is not confirmation that nothing is owed.</p><% end %>
+<% @stay.house_ledger_entries.includes(:house_payments).each do |entry| %><article class="my-3 rounded border p-3"><p><%= entry.month_on.strftime('%b %Y') %> · <%= entry.voided_at ? 'Voided' : 'Posted' %></p><p>Charged: <%= number_to_currency(entry.charge_cents / 100.0) %> · Recorded paid: <%= number_to_currency(entry.paid_cents / 100.0) %> · Outstanding: <%= number_to_currency(entry.outstanding_cents / 100.0) %></p></article><% end %>
+<p class="mt-4">Arrange payment with your host using the house instructions. Recorded receipts do not verify a bank transfer.</p>

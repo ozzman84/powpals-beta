@@ -11,6 +11,7 @@ class Account < ApplicationRecord
   accepts_nested_attributes_for :user
 
   validates :email, uniqueness: true
+  validate :owned_pass_terms_do_not_overlap
 
   devise :database_authenticatable, :registerable, :recoverable,
     :rememberable, :validatable, :confirmable, :lockable, :timeoutable,
@@ -49,6 +50,18 @@ class Account < ApplicationRecord
       full_name: auth.info.name,
       avatar_url: auth.info.image, ride_type: :ski, level: :beginner
     }
+  end
+
+  def owned_pass_terms_do_not_overlap
+    terms = account_season_passes.reject do |owned|
+      owned.marked_for_destruction? || owned.season_unknown? || !owned.starts_on || !owned.expires_on
+    end
+    overlap = terms.group_by(&:season_pass_id).values.any? do |group|
+      group.combination(2).any? do |left, right|
+        left.starts_on <= right.expires_on && right.starts_on <= left.expires_on
+      end
+    end
+    errors.add(:base, 'Owned pass seasons cannot overlap for the same pass type') if overlap
   end
 
   def populate_google_avatar!(image)

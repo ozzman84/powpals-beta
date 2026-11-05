@@ -25,6 +25,8 @@ class Bed < ApplicationRecord
 
   validates :label, length: { maximum: 100 }, allow_blank: true
 
+  validate :confirmed_assignments_fit
+
   validates :capacity, numericality: { only_integer: true, greater_than: 0 }
 
   CAPACITY = {
@@ -40,6 +42,20 @@ class Bed < ApplicationRecord
   end
 
   private
+
+  def confirmed_assignments_fit
+    return unless persisted? && capacity && will_save_change_to_capacity?
+
+    events = bed_requests.confirmed.where('departure > ?', Date.current).flat_map do |request|
+      [[[request.arrival, Date.current].max, request.spaces], [request.departure, -request.spaces]]
+    end
+    occupancy = 0
+    exceeds = events.sort.any? do |_date, delta|
+      occupancy += delta
+      occupancy > capacity
+    end
+    errors.add(:capacity, 'cannot be lower than existing confirmed assignments') if exceeds
+  end
 
   def set_capacity
     self.capacity ||= CAPACITY[size&.to_sym]

@@ -8,7 +8,8 @@ module Users
       lodging = current_account.user.lodgings.find(params[:lodging_id])
       authorize lodging, :manage_roommates?
       values = params.expect(roommate: [:email, :user_id, :role, :house_season_id]).to_h
-      email = values['email'].presence || User.find(values['user_id']).account.email
+      email = values['email']
+      email = User.find(values['user_id']).account.email if email.blank? && values['user_id'].present?
       role = values['role'].presence || 'roommate'
       return head :unprocessable_entity unless (Roommate.roles.keys - ['guest']).include?(role)
 
@@ -27,8 +28,7 @@ module Users
       member = lodging.roommates.find(params[:id])
       values = params.expect(roommate: [:role, :access_state])
       lodging.with_lock do
-        managers = lodging.roommates.where(access_state: 'active',
-          role: %w[admin lease_holder]).where.not(id: member.id)
+        managers = lodging.roommates.accessible.where(role: %w[admin lease_holder]).where.not(id: member.id)
         leaving = values[:access_state] == 'revoked' || (values[:role] && %w[admin
           lease_holder].exclude?(values[:role]))
 

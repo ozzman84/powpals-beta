@@ -31,7 +31,11 @@ module Users
       @lodging = current_account.user.lodgings.find(params[:lodging_id])
       authorize @lodging, :manage_rooms?
       @room = @lodging.rooms.find(params[:id])
-      @room.destroy
+      unless @room.destroy
+        flash[:alert] = @room.errors.full_messages.to_sentence.presence ||
+          'This room has bed requests. Preserve or reconcile its assignments before removing it.'
+      end
+
       redirect_to users_lodging_rooms_path(@lodging), status: :see_other
     end
 

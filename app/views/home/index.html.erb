@@ -1,7 +1,7 @@
 <h1 class="text-4xl font-bold tracking-tight text-gray-900">Welcome to PowPals</h1>
 <p class="mt-3 text-gray-600">Plan ski days, find your people and manage your shared ski house.</p>
 <% if account_signed_in? %>
-  <nav class="my-6 flex flex-wrap gap-4"><%= link_to 'My profile', user_path, class: 'font-semibold text-indigo-600' %><%= link_to 'My houses', users_lodgings_path, class: 'font-semibold text-indigo-600' %><%= link_to 'My passes', edit_profile_path, class: 'font-semibold text-indigo-600' %></nav>
+  <nav class="my-6 flex flex-wrap gap-4"><%= link_to 'My profile', user_path, class: 'font-semibold text-indigo-600' %><% if current_account.user&.house_access? %><%= link_to 'My houses', users_lodgings_path, class: 'font-semibold text-indigo-600' %><% end %><%= link_to 'My passes', edit_profile_path, class: 'font-semibold text-indigo-600' %></nav>
   <h2 class="mt-8 text-xl font-semibold">Mountains over the next 10 days</h2>
   <p class="mt-2 text-sm text-gray-500">Skier counts reflect recorded plans. A dash means the forecast is unavailable. Forecasts refresh in the background.</p>
   <% if @resorts.empty? %><p class="mt-4">No resorts have been imported yet.</p><% else %><%= render 'shared/resort_table', resorts: @resorts, forecasts: @weather_forecasts %><% end %>

@@ -1,7 +1,6 @@
 <%= render 'shared/header' %>
 <%= render partial: 'shared/errors' %>
 <%= render partial: 'shared/notices' %>
-<%= render 'shared/header' %>
 <p class="mb-4 text-sm">Sleeping inventory is guidance. Temporary spaces count toward the displayed guidance. Bed requests are managed separately.</p>
 <% if @lodging.layout_reference_url.present? %><p class="mb-4"><%= link_to 'Room diagram / layout reference', @lodging.layout_reference_url, rel: 'noreferrer noopener', target: '_blank', class: 'text-indigo-600' %></p><% end %>
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class DemoSeedData
+  ROLE_BY_INDEX = { 0 => :lease_holder, 2 => :accountant, 3 => :rent_collector }.freeze
   PASSWORD = 'PowPals-Demo-Only-2026!'
   EMAIL = 'demo@powpals.test'
   PEOPLE = [%w[Alex Rider], %w[Jordan Snow], %w[Casey Summit], %w[Taylor Woods], %w[Morgan Peak],
@@ -34,7 +35,11 @@ class DemoSeedData
     user = account.user || FactoryBot.create(:user, account: account, first_name: name.first, last_name: name.last,
       full_name: name.join(' '), preferred_name: name.first, city: 'Frisco', state: 'CO',
       about: 'Fictional demo skier, separate from the real house.', ride_type: :ski, level: :intermediate)
-    AccountSeasonPass.find_or_create_by!(account: account, season_pass: SeasonPass.order(:id).first)
+    AccountSeasonPass.find_or_create_by!(account: account, season_pass: SeasonPass.order(:id).first,
+      starts_on: Date.new(season_start.year, 9, 1)) do |owned|
+      owned.expires_on = Date.new(season_start.year + 1, 6, 30)
+      owned.season_label = "Demo #{season_start.year}–#{season_start.year + 1}"
+    end
     Resort.order(:id).limit(3).each do |resort|
       AccountSkiDay.find_or_create_by!(account: account, resort: resort, start_date: Date.current + index)
     end
@@ -47,9 +52,9 @@ class DemoSeedData
       street: '1 Example Lane', address2: nil, city: 'Frisco', state: 'CO', zip_code: '80443', status: :published,
       season_start: season_start, season_end: season_start.next_year - 6.months - 1.day)
     users.each_with_index do |user, index|
-      Roommate.find_or_create_by!(lodging: house, user: user) do |member|
-        member.role = index.zero? ? :lease_holder : :roommate
-      end
+      role = ROLE_BY_INDEX.fetch(index, :roommate)
+      membership = Roommate.find_or_initialize_by(lodging: house, user: user)
+      membership.update!(role: role)
       create_stays(house, user, index)
     end
     create_rooms(house)
@@ -92,15 +97,36 @@ class DemoSeedData
       record.participant_count = 6
       record.rules = 'Demo rules: members have bed priority. Finish laundry, dishes and trash before departing.'
     end
-    entry = season.house_ledger_entries.find_or_create_by!(source_key: 'demo-fee') do |record|
-      record.kind = :guest_fee
-      record.description = 'Fictional weekend guest fees'
-      record.month_on = [Date.current.beginning_of_month, house.season_start].max
-      record.amount_cents = 10_000
-    end
-    return if entry.house_payments.any?
+    create_finance_examples(house, season)
+  end
 
-    entry.record_payment!(amount_cents: 4000, paid_on: Date.current, recorded_by: house.users.first.account,
+  def create_finance_examples(house, season)
+    member = house.users.joins(:account).find_by!(accounts: { email: 'pal1@powpals.test' })
+    accountant = house.roommates.find_by!(role: :accountant).user.account
+    collector = house.roommates.find_by!(role: :rent_collector).user.account
+    house.users.each do |person|
+      create_charge(season, "demo-rent-#{person.id}", :rent, person, 105_000, 30_000, collector)
+    end
+    create_charge(season, 'demo-fee', :guest_fee, member, 10_000, 4000, accountant)
+    create_charge(season, 'demo-deposit', :deposit, member, 20_000, 20_000, collector)
+    create_charge(season, 'demo-shared-charge', :shared_charge, member, 1500, 0, accountant)
+    create_charge(season, 'demo-supplies', :expense, member, 3400, 1000, accountant)
+  end
+
+  def create_charge(season, key, kind, owner, amount, paid, recorder)
+    entry = season.house_ledger_entries.find_or_initialize_by(source_key: key)
+    if entry.new_record?
+      entry.assign_attributes(kind: kind, user: owner, description: "Fictional demo #{kind.to_s.humanize}",
+        month_on: [Date.current.beginning_of_month, season.starts_on].max, amount_cents: amount,
+        recorded_by: recorder)
+      entry.save!
+    elsif entry.user.nil?
+      entry.update!(user: owner)
+    end
+
+    return if paid.zero? || entry.house_payments.any?
+
+    entry.record_payment!(amount_cents: paid, paid_on: Date.current, recorded_by: recorder,
       reference: 'Fictional demo receipt; no money transferred')
   end
 end

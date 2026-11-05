@@ -12,7 +12,6 @@ module Users
     end
 
     def show
-      @entries = @season.house_ledger_entries.includes(:house_payments).order(:month_on, :id)
       @cells = @season.house_sheet_cells.order(:observed_on, :room_label, :id)
     end
 
@@ -53,7 +52,7 @@ module Users
 
     def season_params
       values = params.expect(house_season: [:name, :starts_on, :ends_on, :rules, :policy_status,
-        :monthly_rent, :participant_count, :dog_fee, :dog_fee_basis, :free_nights, { rates: Date::DAYNAMES }]).to_h
+        :dog_fee, :dog_fee_basis, :free_nights, { rates: Date::DAYNAMES }]).to_h
       convert_money(values)
     end
 

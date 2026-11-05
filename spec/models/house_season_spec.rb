@@ -50,6 +50,7 @@ RSpec.describe HouseSeason do
   it 'supports partial receipts without allowing overpayment' do
     user = create(:user)
     entry = season.house_ledger_entries.create!(kind: :guest_fee, description: 'Weekend guest',
+      source_key: 'historical-fee',
       month_on: '2026-11-01', amount_cents: 10_000)
     entry.record_payment!(amount_cents: 4000, paid_on: '2026-11-10', recorded_by: user.account)
     expect(entry.outstanding_cents).to eq(6000)
@@ -61,7 +62,7 @@ RSpec.describe HouseSeason do
   end
 
   it 'separates source-reported receipts, incurred expenses and reimbursements' do
-    fee = season.house_ledger_entries.create!(kind: :guest_fee, description: 'Source fee',
+    fee = season.house_ledger_entries.create!(kind: :guest_fee, description: 'Source fee', source_key: 'historical-fee',
       month_on: '2026-11-01', amount_cents: 15_000)
     fee.record_payment!(amount_cents: 15_000, source_reported: true)
     season.house_ledger_entries.create!(kind: :expense, description: 'Supplies awaiting reimbursement',

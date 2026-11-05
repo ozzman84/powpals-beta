@@ -6,8 +6,6 @@
     <div><%= form.label :starts_on, 'First rental night' %><%= form.date_field :starts_on, required: true, autocomplete: 'off' %></div>
     <div><%= form.label :ends_on, 'Last rental night' %><%= form.date_field :ends_on, required: true, autocomplete: 'off' %></div>
     <div><%= form.label :policy_status %><%= form.select :policy_status, HouseSeason.policy_statuses.keys.map { |status| [status.humanize, status] } %></div>
-    <div><%= form.label :monthly_rent, 'Monthly rent (USD)' %><%= form.number_field :monthly_rent, step: '0.01', min: 0, value: (@season.monthly_rent_cents / 100.0 if @season.monthly_rent_cents), autocomplete: 'off' %></div>
-    <div><%= form.label :participant_count, 'Rent split participants' %><%= form.number_field :participant_count, min: 1, autocomplete: 'off' %></div>
     <fieldset><legend>Guest fee per night (USD)</legend>
       <% Date::DAYNAMES.each do |day| %><div><%= label_tag "rate-#{day}", day %><%= number_field_tag "house_season[rates][#{day}]", (@season.guest_rates[day] / 100.0 if @season.guest_rates.key?(day)), id: "rate-#{day}", min: 0, step: '0.01', autocomplete: 'off' %></div><% end %>
     </fieldset>

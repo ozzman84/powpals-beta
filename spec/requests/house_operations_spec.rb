@@ -39,10 +39,11 @@ RSpec.describe 'Season guest fees and house rules' do
   end
 
   it 'scopes payment entry IDs to the selected season' do
-    membership.update!(role: :lease_holder)
+    membership.update!(role: :accountant)
     other = create(:lodging)
     other_season = other.house_seasons.create!(name: 'Private', starts_on: '2026-11-01', ends_on: '2027-04-30')
     entry = other_season.house_ledger_entries.create!(kind: :guest_fee, description: 'Private fee',
+      source_key: 'historical-fee',
       amount_cents: 5000, month_on: '2026-11-01')
     expect do
       post users_lodging_house_season_house_ledger_entry_house_payments_path(house, season, entry),
@@ -57,8 +58,8 @@ RSpec.describe 'Season guest fees and house rules' do
     expect(response).to have_http_status(:forbidden)
   end
 
-  it 'lets managers record an expense and partial reimbursement with an audit identity' do
-    membership.update!(role: :lease_holder)
+  it 'lets accountants record an expense and partial reimbursement with an audit identity' do
+    membership.update!(role: :accountant)
     post users_lodging_house_season_house_ledger_entries_path(house, season), params: {
       house_ledger_entry: { kind: 'expense', description: 'Cleaning supplies', month_on: '2026-11-01', amount: '34.50' }
     }

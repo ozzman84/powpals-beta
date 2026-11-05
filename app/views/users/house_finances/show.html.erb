@@ -1,0 +1,17 @@
+<%= render 'shared/header' %>
+<h2 class="text-2xl font-semibold">House accounting — <%= @season.name %></h2>
+<p>Charges, expenses and recorded receipts. Deposits are tracked separately from income. Recording a receipt does not transfer money.</p>
+<%= link_to 'Season rules', users_lodging_house_season_path(@lodging, @season), class: 'text-indigo-600' %>
+<%= render 'users/house_seasons/accounting_summary' %>
+<h3 class="text-xl font-semibold">Source notes</h3>
+<%= simple_format(@season.source_notes.presence || 'No source notes.') %>
+<h3 class="text-xl font-semibold">Rent split reference</h3>
+<%= form_with url: users_lodging_house_season_finance_path(@lodging, @season), method: :patch, scope: :budget, class: 'flex flex-wrap items-end gap-3' do |form| %>
+  <div><%= form.label :monthly_rent, 'Monthly rent (USD)' %><%= form.number_field :monthly_rent, value: (@season.monthly_rent_cents / 100.0 if @season.monthly_rent_cents), min: 0, step: '0.01', autocomplete: 'off' %></div>
+  <div><%= form.label :participant_count, 'Rent split participants' %><%= form.number_field :participant_count, value: @season.participant_count, min: 1 %></div>
+  <%= form.submit 'Save budget reference', class: 'rounded border p-2' %>
+<% end %>
+<p>Saving a split reference does not create charges or assign debt to members.</p>
+<h3 class="text-xl font-semibold">Ledger</h3>
+<%= render 'users/house_seasons/ledger_entries' %>
+<%= render 'users/house_seasons/entry_form' %>

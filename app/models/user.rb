@@ -22,6 +22,10 @@ class User < ApplicationRecord
     advanced: 'advanced'
   }, default: 'beginner', validate: true
 
+  def display_name
+    full_name.presence || [first_name, last_name].compact_blank.join(' ')
+  end
+
   def initials
     "#{first_name&.first || ''}#{last_name&.first || ''}".upcase
   end

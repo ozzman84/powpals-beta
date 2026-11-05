@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'House fees on a phone' do
-  let(:user) { create(:user) }
+  let(:user) { create(:user, full_name: 'House Member') }
+  let(:accountant) { create(:user, full_name: 'House Accountant') }
   let(:house) { create(:lodging, title: 'Winter house') }
   let(:season) do
     house.house_seasons.create!(name: 'Winter season', starts_on: '2026-11-01', ends_on: '2027-04-30')
@@ -11,6 +12,7 @@ RSpec.describe 'House fees on a phone' do
 
   before do
     create(:roommate, user: user, lodging: house, role: :lease_holder)
+    create(:roommate, user: accountant, lodging: house, role: :accountant)
     login_as user.account, scope: :account
     page.current_window.resize_to(390, 844)
   end
@@ -31,6 +33,9 @@ RSpec.describe 'House fees on a phone' do
     click_on 'Estimate guest fees'
     expect(page).to have_content('Guest-fee estimate: $260.00')
     expect(HouseLedgerEntry.count).to eq(0)
+    login_as accountant.account, scope: :account
+    visit users_lodging_house_season_finance_path(house, season)
+    select user.display_name, from: 'Member'
     fill_in 'Description', with: 'Weekend guest fees'
     fill_in 'Amount (USD)', with: '100'
     click_on 'Add ledger entry'

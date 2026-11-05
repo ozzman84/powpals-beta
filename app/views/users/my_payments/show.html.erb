@@ -1,0 +1,11 @@
+<%= render 'shared/header' %>
+<h2 class="text-2xl font-semibold">My payments and balances</h2>
+<%= form_with url: users_lodging_my_payments_path(@lodging), method: :get, class: 'flex flex-wrap items-end gap-3' do |form| %>
+  <div><%= form.label :season_id, 'Season' %><%= form.collection_select :season_id, @seasons, :id, :name, { selected: @season&.id }, class: 'block w-full max-w-full' %></div><%= form.submit 'View season', class: 'rounded border p-2' %>
+<% end %>
+<p>Only entries assigned to your account are shown. Recorded payments are not bank verification.</p>
+<% if @entries.empty? %><p>No entries are assigned to you for this season. This does not confirm that your season account has been reconciled.</p><% else %>
+  <% personal = @entries.reject(&:expense?) %>
+  <p>Your charges: <%= number_to_currency(personal.sum(&:amount_cents) / 100.0) %>. Recorded paid: <%= number_to_currency(personal.sum(&:paid_cents) / 100.0) %>. Outstanding: <%= number_to_currency(personal.sum(&:outstanding_cents) / 100.0) %>.</p>
+  <%= render 'users/house_seasons/ledger_entries' %>
+<% end %>

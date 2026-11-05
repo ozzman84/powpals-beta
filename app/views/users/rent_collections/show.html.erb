@@ -1,0 +1,6 @@
+<%= render 'shared/header' %>
+<h2 class="text-2xl font-semibold">Rent collection — <%= @season.name %></h2>
+<p>Rent and deposits only. Shared expenses, guest fees and the accounting books are handled by the house accountant.</p>
+<p>Recorded rent: <%= number_to_currency(@entries.select(&:rent?).sum(&:paid_cents) / 100.0) %>. Recorded deposits: <%= number_to_currency(@entries.select(&:deposit?).sum(&:paid_cents) / 100.0) %>.</p>
+<%= render 'users/house_seasons/ledger_entries' %>
+<%= render 'users/house_seasons/entry_form' %>

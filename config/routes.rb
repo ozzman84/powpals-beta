@@ -10,11 +10,14 @@ Rails.application.routes.draw do
     resources :lodgings do
       resources :house_seasons, only: %i[index show create update] do
         post :quote, on: :member
+        resource :finance, only: %i[show update], controller: 'house_finances'
+        resource :rent_collection, only: :show, controller: 'rent_collections'
         resources :house_ledger_entries, only: :create do
           resources :house_payments, only: :create
         end
       end
       resources :roommates, only: :create
+      resource :my_payments, only: :show
       resources :rooms, only: %i[index create destroy] do
         resources :beds, only: :update
       end

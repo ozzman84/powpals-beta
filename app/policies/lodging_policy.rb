@@ -14,6 +14,18 @@ class LodgingPolicy
     show? && !@membership.guest?
   end
 
+  def manage_finances?
+    @membership&.accountant? || false
+  end
+
+  def collect_rent?
+    @membership&.rent_collector? || false
+  end
+
+  def my_payments?
+    show?
+  end
+
   def update?
     @membership && %w[admin lease_holder].include?(@membership.role)
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_28_000100) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000200) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,9 +19,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_000100) do
     t.bigint "season_pass_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id", "season_pass_id"], name: "unique_account_season_passes_identity", unique: true
+    t.date "starts_on"
+    t.date "expires_on"
+    t.string "season_label"
+    t.boolean "season_unknown", default: false, null: false
+    t.index ["account_id", "season_pass_id", "starts_on"], name: "unique_owned_pass_season", unique: true, where: "(starts_on IS NOT NULL)"
+    t.index ["account_id", "season_pass_id"], name: "unique_undated_owned_pass", unique: true, where: "(season_unknown = true)"
     t.index ["account_id"], name: "index_account_season_passes_on_account_id"
     t.index ["season_pass_id"], name: "index_account_season_passes_on_season_pass_id"
+    t.check_constraint "season_unknown AND starts_on IS NULL AND expires_on IS NULL OR NOT season_unknown AND starts_on IS NOT NULL AND expires_on IS NOT NULL AND expires_on >= starts_on", name: "owned_pass_valid_dates"
   end
 
   create_table "account_ski_days", force: :cascade do |t|
@@ -111,9 +117,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_000100) do
     t.jsonb "source_data", default: {}, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.date "due_on"
     t.index ["house_season_id", "source_key"], name: "index_house_ledger_entries_on_house_season_id_and_source_key", unique: true
     t.index ["house_season_id"], name: "index_house_ledger_entries_on_house_season_id"
     t.index ["recorded_by_id"], name: "index_house_ledger_entries_on_recorded_by_id"
+    t.index ["user_id"], name: "index_house_ledger_entries_on_user_id"
     t.check_constraint "amount_cents > 0", name: "house_ledger_positive_amount"
   end
 
@@ -207,6 +216,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_000100) do
     t.datetime "updated_at", null: false
     t.index ["lodging_id", "user_id"], name: "unique_roommates_identity", unique: true
     t.index ["lodging_id"], name: "index_roommates_on_lodging_id"
+    t.index ["lodging_id"], name: "one_accountant_per_house", unique: true, where: "((role)::text = 'accountant'::text)"
     t.index ["user_id"], name: "index_roommates_on_user_id"
   end
 
@@ -275,6 +285,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_000100) do
   add_foreign_key "calendars", "users"
   add_foreign_key "house_ledger_entries", "accounts", column: "recorded_by_id"
   add_foreign_key "house_ledger_entries", "house_seasons"
+  add_foreign_key "house_ledger_entries", "users"
   add_foreign_key "house_payments", "accounts", column: "recorded_by_id"
   add_foreign_key "house_payments", "house_ledger_entries"
   add_foreign_key "house_seasons", "lodgings"

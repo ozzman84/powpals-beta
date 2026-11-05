@@ -1,0 +1,12 @@
+  <h3 class="text-xl font-semibold">Monthly ledger</h3>
+  <p>Received payments include receipts reported by the old sheet; these are not bank-verified. Net is guest fees received minus expenses incurred, including pending reimbursements. Outstanding is unpaid guest fees, not rent.</p>
+  <div class="overflow-x-auto"><table class="w-full text-left">
+    <thead><tr><th class="p-2">Month</th><th class="p-2">Guest charges</th><th class="p-2">Received</th><th class="p-2">Expenses</th><th class="p-2">Reimbursed</th><th class="p-2">Net</th><th class="p-2">Outstanding</th></tr></thead>
+    <tbody><% @season.months.each do |month| %><% totals = @season.monthly_summary(month) %>
+      <tr class="border-t"><td class="p-2"><%= month.strftime('%b %Y') %></td><% [:fees, :received, :expenses, :reimbursed].each do |key| %><td class="p-2"><%= number_to_currency(totals[key] / 100.0) %></td><% end %><td class="p-2"><%= number_to_currency((totals[:received] - totals[:expenses]) / 100.0) %></td><td class="p-2"><%= number_to_currency(totals[:outstanding] / 100.0) %></td></tr>
+    <% end %></tbody>
+  </table></div>
+  <% if @season.monthly_rent_cents && @season.participant_count %>
+    <% base, extra = @season.monthly_rent_cents.divmod(@season.participant_count) %>
+    <p>Rent reference: <%= number_to_currency(@season.monthly_rent_cents / 100.0) %>/month split <%= @season.participant_count %> ways: <%= number_to_currency(base / 100.0) %> each, with <%= extra %> additional penny allocations. This is not an occupancy limit or a rent payment record.</p>
+  <% end %>

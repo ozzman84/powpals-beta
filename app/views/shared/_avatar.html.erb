@@ -1,13 +1,8 @@
-<% height = local_assigns[:height] || '10' %>
-<% width = local_assigns[:width] || '10' %>
-<% size_class = "h-#{height} w-#{width}" %>
-
-<div class="flex-shrink-0">
-    <% if user.avatar_url.present? %>
-        <img class="<%= size_class %> rounded-full" src="<%= user.avatar_url %>" alt="<%= user.initials %>">
-    <% else %>
-      <div class="relative inline-flex items-center justify-center <%= size_class %> overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-        <span class="font-medium text-gray-600 dark:text-white"><%= user.initials %></span>
-      </div>
-    <% end %>
+<% size_class = avatar_size_classes(local_assigns.fetch(:height, '10'), local_assigns.fetch(:width, '10')) %>
+<div class="<%= size_class %> flex-none overflow-hidden rounded-full" data-avatar>
+  <% if user.avatar_url.present? %>
+    <img class="block h-full w-full object-cover" src="<%= user.avatar_url %>" alt="<%= user.initials %>">
+  <% else %>
+    <div class="flex h-full w-full items-center justify-center bg-gray-100 text-sm font-medium text-gray-600"><%= user.initials %></div>
+  <% end %>
 </div>

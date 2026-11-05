@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  AVATAR_HEIGHTS = { '8' => 'h-8', '10' => 'h-10', '12' => 'h-12', '14' => 'h-14', '16' => 'h-16' }.freeze
+  AVATAR_WIDTHS = { '8' => 'w-8', '10' => 'w-10', '12' => 'w-12', '14' => 'w-14', '16' => 'w-16' }.freeze
+
+  def avatar_size_classes(height, width)
+    "#{AVATAR_HEIGHTS.fetch(height.to_s, 'h-10')} #{AVATAR_WIDTHS.fetch(width.to_s, 'w-10')}"
+  end
+
   def navigation_items
     links = [
       { body: 'Dashboard', href: user_path },

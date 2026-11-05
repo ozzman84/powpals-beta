@@ -3,7 +3,7 @@
 class LodgingPolicy
   def initialize(account, lodging)
     @lodging = lodging
-    @membership = lodging.roommates.find_by(user_id: account&.user&.id)
+    @membership = lodging.roommates.find_by(user_id: account&.user&.id, access_state: 'active')
   end
 
   def show?

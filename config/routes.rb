@@ -18,6 +18,7 @@ Rails.application.routes.draw do
           resources :house_payments, only: :create
         end
       end
+      resources :house_members, only: %i[index create update]
       resources :roommates, only: %i[create destroy]
       resource :my_payments, only: :show
       resources :rooms, only: %i[index create destroy] do

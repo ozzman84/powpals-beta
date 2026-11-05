@@ -103,6 +103,7 @@
   <p class="mt-2 text-sm">Access begins after acceptance. Share the generated link privately; no email is sent automatically.</p>
   <%= form_with url: users_lodging_roommates_path(@lodging), scope: :roommate, class: 'mt-4 flex flex-wrap items-end gap-3' do |form| %>
     <div><%= form.label :email %><%= form.email_field :email, required: true, class: 'max-w-full rounded border p-2' %></div>
+    <div><%= form.label :house_season_id, 'Season (optional)' %><%= form.collection_select :house_season_id, @lodging.house_seasons.order(starts_on: :desc), :id, :name, include_blank: 'House access only' %></div>
     <div><%= form.label :role %><%= form.select :role, (Roommate.roles.keys - ['guest']).map { |role| [role.humanize, role] } %></div>
     <%= form.submit 'Create invitation', class: 'rounded bg-indigo-600 p-2 text-white' %>
   <% end %>

@@ -1,0 +1,42 @@
+<%= render 'shared/header' %>
+<%= render 'shared/errors' %>
+<%= render 'shared/notices' %>
+<h2 class="text-xl font-semibold">Seasonal member directory</h2>
+<%= form_with url: users_lodging_house_members_path(@lodging), method: :get, class: 'my-4 flex flex-wrap gap-3' do |form| %>
+  <%= form.label :season_id, 'Season' %><%= form.collection_select :season_id, @seasons, :id, :name, selected: @season&.id %><%= form.submit 'View season' %>
+<% end %>
+<p class="my-4 text-sm">Profiles and passes carry across seasons. House details stay private. Members choose whether to share contact details.</p>
+<% if @season %>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <% @members.each do |membership| %>
+      <% person = membership.user %>
+      <article class="min-w-0 rounded border p-4">
+        <div class="flex gap-3"><%= render 'shared/avatar', user: person %><div><h3 class="font-semibold"><%= person.display_name %></h3><p><%= membership.status.humanize %> · <%= membership.roommate.role.humanize %></p></div></div>
+        <p class="mt-2"><%= person.ride_type&.humanize %> · <%= person.level&.humanize %></p>
+        <ul><% person.account.account_season_passes.where('starts_on <= ? AND expires_on >= ?', @season.ends_on, @season.starts_on).includes(:season_pass).each do |owned| %><li><%= owned.season_pass.name %> · <%= owned.season_label %></li><% end %></ul>
+        <% if membership.share_contact? %><p class="mt-2 break-words"><%= person.account.email %> · <%= person.phone_number %></p><% end %>
+        <p class="mt-2 whitespace-pre-line">Responsibilities: <%= membership.responsibilities.presence || 'Not assigned' %></p>
+        <p class="mt-2 whitespace-pre-line">Pets: <%= membership.pets.presence || 'Not provided' %></p>
+        <p class="mt-2 whitespace-pre-line">Pet rules: <%= membership.pet_rules.presence || 'Not confirmed' %></p>
+        <p class="mt-2 whitespace-pre-line">Preferences: <%= membership.preferences %></p>
+        <% if person == current_account.user || policy(@lodging).manage_roommates? %>
+          <%= form_with model: membership, url: users_lodging_house_member_path(@lodging, membership, season_id: @season.id), class: 'mt-4 space-y-3' do |form| %>
+            <% if policy(@lodging).manage_roommates? %>
+              <div><%= form.label :status %><%= form.select :status, HouseSeasonMembership.statuses.keys %></div>
+              <div><%= form.label :responsibilities %><%= form.text_area :responsibilities, class: 'w-full rounded border' %></div>
+              <div><%= form.label :pet_rules %><%= form.text_area :pet_rules, class: 'w-full rounded border' %></div>
+            <% end %>
+            <div><%= form.label :pets %><%= form.text_area :pets, class: 'w-full rounded border' %></div>
+            <div><%= form.label :preferences, 'Optional preferences: games, drinks, colors or other details' %><%= form.text_area :preferences, class: 'w-full rounded border' %></div>
+            <% if person == current_account.user %><div><%= form.check_box :share_contact %><%= form.label :share_contact, 'Share my email and phone with this house for this season' %></div><% end %>
+            <%= form.submit 'Save member details', class: 'rounded bg-indigo-600 p-2 text-white' %>
+          <% end %>
+        <% end %>
+      </article>
+    <% end %>
+  </div>
+  <% if policy(@lodging).manage_roommates? %>
+    <h3 class="mt-6 font-semibold">Include an already accepted house member in this season</h3>
+    <%= form_with url: users_lodging_house_members_path(@lodging, season_id: @season.id), class: 'mt-3 flex flex-wrap gap-3' do |form| %><%= form.collection_select :roommate_id, @lodging.roommates.where(access_state: 'active').where.not(role: 'guest').includes(:user), :id, :directory_name %><%= form.submit 'Add to season' %><% end %>
+  <% end %>
+<% else %><p>Create a house season before preparing its roster.</p><% end %>

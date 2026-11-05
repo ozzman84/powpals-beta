@@ -2,6 +2,8 @@
 
 class HouseInvitation < ApplicationRecord
   belongs_to :lodging
+  belongs_to :house_season, optional: true
+  validate :season_belongs_to_house
   belongs_to :invited_by, class_name: 'Account'
   attr_reader :token
 
@@ -23,12 +25,19 @@ class HouseInvitation < ApplicationRecord
       raise ArgumentError, 'Invitation is expired, revoked or already accepted' unless available?
       raise ArgumentError, 'Sign in with the invited email address' unless account.email.casecmp?(email)
 
-      lodging.roommates.find_or_create_by!(user: account.user) { |member| member.role = role }
+      member = lodging.roommates.find_or_initialize_by(user: account.user)
+      member.assign_attributes(role: role, access_state: 'active') if member.new_record? || member.access_revoked?
+      member.save!
+      house_season&.house_season_memberships&.find_or_create_by!(roommate: member)
       update!(accepted_at: Time.current)
     end
   end
 
   private
+
+  def season_belongs_to_house
+    errors.add(:house_season, 'must belong to this house') if house_season && house_season.lodging_id != lodging_id
+  end
 
   def prepare_invitation
     self.email = email.to_s.strip.downcase

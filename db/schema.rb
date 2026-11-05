@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_05_000300) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000400) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -117,6 +117,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000300) do
     t.datetime "revoked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "house_season_id"
+    t.index ["house_season_id"], name: "index_house_invitations_on_house_season_id"
     t.index ["invited_by_id"], name: "index_house_invitations_on_invited_by_id"
     t.index ["lodging_id"], name: "index_house_invitations_on_lodging_id"
     t.index ["token_digest"], name: "index_house_invitations_on_token_digest", unique: true
@@ -154,6 +156,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000300) do
     t.index ["house_ledger_entry_id"], name: "index_house_payments_on_house_ledger_entry_id"
     t.index ["recorded_by_id"], name: "index_house_payments_on_recorded_by_id"
     t.check_constraint "amount_cents > 0", name: "house_payment_positive_amount"
+  end
+
+  create_table "house_season_memberships", force: :cascade do |t|
+    t.bigint "house_season_id", null: false
+    t.bigint "roommate_id", null: false
+    t.string "status", default: "active", null: false
+    t.text "responsibilities"
+    t.text "pets"
+    t.text "pet_rules"
+    t.text "preferences"
+    t.boolean "share_contact", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["house_season_id", "roommate_id"], name: "unique_season_member", unique: true
+    t.index ["house_season_id"], name: "index_house_season_memberships_on_house_season_id"
+    t.index ["roommate_id"], name: "index_house_season_memberships_on_roommate_id"
   end
 
   create_table "house_seasons", force: :cascade do |t|
@@ -230,6 +248,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000300) do
     t.bigint "lodging_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "access_state", default: "active", null: false
     t.index ["lodging_id", "user_id"], name: "unique_roommates_identity", unique: true
     t.index ["lodging_id"], name: "index_roommates_on_lodging_id"
     t.index ["lodging_id"], name: "one_accountant_per_house", unique: true, where: "((role)::text = 'accountant'::text)"
@@ -300,12 +319,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000300) do
   add_foreign_key "calendars", "lodgings"
   add_foreign_key "calendars", "users"
   add_foreign_key "house_invitations", "accounts", column: "invited_by_id"
+  add_foreign_key "house_invitations", "house_seasons"
   add_foreign_key "house_invitations", "lodgings"
   add_foreign_key "house_ledger_entries", "accounts", column: "recorded_by_id"
   add_foreign_key "house_ledger_entries", "house_seasons"
   add_foreign_key "house_ledger_entries", "users"
   add_foreign_key "house_payments", "accounts", column: "recorded_by_id"
   add_foreign_key "house_payments", "house_ledger_entries"
+  add_foreign_key "house_season_memberships", "house_seasons"
+  add_foreign_key "house_season_memberships", "roommates"
   add_foreign_key "house_seasons", "lodgings"
   add_foreign_key "house_sheet_cells", "house_seasons"
   add_foreign_key "roommates", "lodgings"

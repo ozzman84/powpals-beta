@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   has_many :roommates, dependent: :destroy
   has_many :house_memberships, lambda {
-    where.not(role: 'guest')
+    where.not(role: 'guest').where(access_state: 'active')
   }, class_name: 'Roommate', inverse_of: :user, dependent: nil
   has_many :lodgings, through: :house_memberships
   belongs_to :account
@@ -26,7 +26,7 @@ class User < ApplicationRecord
   }, default: 'beginner', validate: true
 
   def house_access?
-    roommates.where.not(role: 'guest').exists?
+    house_memberships.exists?
   end
 
   def display_name

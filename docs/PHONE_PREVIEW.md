@@ -1,29 +1,66 @@
-# Private phone preview — Story #146
+# Private phone previews
 
-The existing Tailscale connection is reused. PowPals serves from localhost:3105
-and is proxied privately through Tailscale HTTPS port 8443. Another application's
-existing HTTPS port 443 route remains unchanged. No public Funnel was enabled.
-Normal app authentication remains in place; users and manager roles were not set up.
-The private HTTPS URL was tested successfully with HTTP 200.
+Tailscale Serve exposes two separate local development processes to the existing
+tailnet. It does not publish either application through public Funnel. The other
+application's HTTPS port 443 route is preserved.
 
-To restart, use the machine's actual Tailscale DNS name in place of TAILNET_HOST:
+| Preview | Local port | Tailscale HTTPS port | Database |
+| --- | --- | --- | --- |
+| Bear Lodge | 3105 | 8443 | powpals_beta_revival_development |
+| Fictional demo | 3106 | 10000 | powpals_beta_demo_development |
+
+On the phone, connect Tailscale and use https://TAILNET_HOST:8443/ or
+https://TAILNET_HOST:10000/, substituting the Mac's actual Tailscale DNS name.
+The Mac must remain on and reachable. The demo sign-in page displays sample
+credentials; the main site uses existing accounts. No real users or manager roles
+were set up as part of these previews.
+
+## Background services
+
+User LaunchAgents keep the processes independent of chat terminal sessions and
+restart them if they exit. They run at user login:
+
+- ~/Library/LaunchAgents/com.powpals.phone-preview.plist
+- ~/Library/LaunchAgents/com.powpals.demo-preview.plist
+
+Both run bin/dev in this checkout with the exact private hostname allowed.
+The demo additionally sets POWPALS_DATABASE=powpals_beta_demo_development,
+PORT=3106 and PIDFILE=tmp/pids/demo-server.pid. Separate PID files avoid Rails
+mistaking the other preview for an already running server. The demo disables
+external weather API calls; it still shows catalog and seeded skier counts.
+
+The demo uses _powpals_demo_session rather than the main cookie, so testing the
+sample sign-in does not replace the main site's session cookie. Google sign-in
+is not offered in the fictional demo. It uses the normal password sign-in form.
+
+Logs are in ~/Library/Logs/PowPals/. Check a service with:
 
 ```sh
-RAILS_DEVELOPMENT_HOSTS=TAILNET_HOST PORT=3105 bin/dev
+launchctl print gui/$(id -u)/com.powpals.phone-preview
+launchctl print gui/$(id -u)/com.powpals.demo-preview
+```
+
+Stop a service, without removing its saved plist or any data:
+
+```sh
+launchctl bootout gui/$(id -u)/com.powpals.demo-preview
+```
+
+Load it again with launchctl bootstrap and its exact plist path. Do not launch a
+second manual process on the same local port while its LaunchAgent is running.
+
+## Tailscale routes
+
+```sh
 tailscale serve --bg --https=8443 http://127.0.0.1:3105
+tailscale serve --bg --https=10000 http://127.0.0.1:3106
 ```
 
-On the phone, connect Tailscale and open https://TAILNET_HOST:8443/.
-The Mac and the development server must remain running. Google sign-in may need
-this exact callback URL added to the existing provider configuration; live OAuth
-has not been reconfigured by this preview setup. Local development email opens
-on the Mac through letter_opener.
+Stop only the desired proxy using tailscale serve --https=10000 off (demo) or
+--https=8443 off (main). Do not use serve reset; that would also remove the other
+application's route.
 
-Stop this preview proxy without touching the other app:
-
-```sh
-tailscale serve --https=8443 off
-```
-
-Stop the local foreground bin/dev process with Ctrl-C. Do not use serve reset,
-which would also remove other applications' private preview routes.
+The main Google OAuth client must permit the exact callback
+https://TAILNET_HOST:8443/accounts/auth/google/callback, including its port.
+This is a Google client setting, not a reason to change the existing password or
+client secret. Local development email opens on the Mac through letter_opener.

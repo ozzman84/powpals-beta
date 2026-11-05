@@ -2,7 +2,7 @@
 
 ## Runtime
 
-Ruby 3.4.12 (rbenv), Rails 8.1.4, PostgreSQL. The upgrade was checked incrementally
+Ruby 3.4.12 (rbenv), Rails 8.1.4.1, PostgreSQL. The upgrade was checked incrementally
 through Rails 7.1, 7.2, and 8.0 before 8.1. The application uses Mountain Time.
 The existing Sprockets/Tailwind/Hotwire stack is retained; this is not a rewrite.
 
@@ -87,3 +87,10 @@ Keep the user's pre-existing README edits intact.
 See HOUSE_OPERATIONS.md for season rules, the manual ledger, source-sheet imports
 and reconciliation. See PHONE_PREVIEW.md for the private Tailscale preview.
 Current-season users and manager assignments remain deferred.
+
+## Original interface and isolated demo seeds
+
+The original branded shell, detailed screens and month grids are restored. See
+INTERFACE_RESTORATION.md for the restored catalog, explicit FactoryBot demo
+workflow and data-isolation safeguards. The main preview retains real history;
+the separate demo preview contains fictional populated screens.

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_05_000500) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000600) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,6 +69,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000500) do
     t.index ["provider", "uid"], name: "unique_accounts_identity", unique: true
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_accounts_on_unlock_token", unique: true
+  end
+
+  create_table "bed_requests", force: :cascade do |t|
+    t.bigint "bed_id", null: false
+    t.bigint "user_id", null: false
+    t.date "arrival", null: false
+    t.date "departure", null: false
+    t.integer "spaces", default: 1, null: false
+    t.string "status", default: "requested", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bed_id", "arrival", "departure"], name: "index_bed_requests_on_bed_id_and_arrival_and_departure"
+    t.index ["bed_id"], name: "index_bed_requests_on_bed_id"
+    t.index ["user_id"], name: "index_bed_requests_on_user_id"
+    t.check_constraint "departure > arrival AND spaces > 0", name: "valid_bed_request"
   end
 
   create_table "beds", force: :cascade do |t|
@@ -318,6 +333,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000500) do
   add_foreign_key "account_season_passes", "season_passes"
   add_foreign_key "account_ski_days", "accounts"
   add_foreign_key "account_ski_days", "resorts"
+  add_foreign_key "bed_requests", "beds"
+  add_foreign_key "bed_requests", "users"
   add_foreign_key "beds", "rooms"
   add_foreign_key "blackout_days", "resorts"
   add_foreign_key "blackout_days", "season_passes"

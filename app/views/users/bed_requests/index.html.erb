@@ -1,0 +1,21 @@
+<%= render 'shared/header' %>
+<%= render 'shared/errors' %>
+<%= render 'shared/notices' %>
+<h2 class="text-xl font-semibold">Room and bed requests</h2>
+<p class="my-4">Requests do not guarantee a bed. Roommates have priority over guests. Managers confirm assignments after reviewing available spaces.</p>
+<%= form_with url: users_lodging_bed_requests_path(@lodging), scope: :bed_request, class: 'my-6 grid gap-3 sm:grid-cols-2' do |form| %>
+  <div><%= form.label :bed_id, 'Sleeping space' %><%= form.select :bed_id, @beds.map { |bed| ["#{bed.room.name}: #{bed.inventory_name}", bed.id] }, {}, class: 'w-full rounded border' %></div>
+  <div><%= form.label :spaces %><%= form.number_field :spaces, min: 1, value: 1, required: true, class: 'w-full rounded border' %></div>
+  <div><%= form.label :arrival %><%= form.date_field :arrival, required: true, class: 'w-full rounded border' %></div>
+  <div><%= form.label :departure, 'Departure (checkout)' %><%= form.date_field :departure, required: true, class: 'w-full rounded border' %></div>
+  <%= form.submit 'Request bed', class: 'rounded bg-indigo-600 p-2 text-white' %>
+<% end %>
+<div class="space-y-4">
+  <% @requests.each do |request| %>
+    <article class="rounded border p-4"><h3 class="font-semibold"><%= request.bed.room.name %> · <%= request.bed.inventory_name %></h3><p><%= request.user.display_name %> · <%= request.spaces %> spaces · <%= request.arrival %> to <%= request.departure %> (checkout)</p><p class="font-medium"><%= request.status.humanize %></p>
+      <% if policy(@lodging).manage_rooms? %>
+        <%= form_with model: request, url: users_lodging_bed_request_path(@lodging, request), class: 'mt-3 flex flex-wrap gap-3' do |form| %><%= form.label :status %><%= form.select :status, BedRequest.statuses.keys %><%= form.submit 'Update assignment', class: 'rounded border p-2' %><% end %>
+      <% elsif request.user_id == current_account.user.id && !request.cancelled? %><%= button_to 'Cancel request', users_lodging_bed_request_path(@lodging, request), method: :patch, params: { bed_request: { status: 'cancelled' } }, class: 'mt-3 text-red-700' %><% end %>
+    </article>
+  <% end %>
+</div>

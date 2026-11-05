@@ -2,6 +2,7 @@
 
 class Bed < ApplicationRecord
   belongs_to :room
+  has_many :bed_requests, dependent: :restrict_with_error
   before_validation :set_capacity
 
   enum :size, {

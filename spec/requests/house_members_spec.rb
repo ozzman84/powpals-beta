@@ -61,4 +61,27 @@ RSpec.describe 'Seasonal house directory' do
     expect(details.reload.responsibilities).to eq('Trash coordinator')
     expect(new_season.house_season_memberships.first.responsibilities).to be_nil
   end
+
+  it 'removes private access for a former current-season member and restores it only through acceptance' do
+    house.update!(season_start: season.starts_on, season_end: season.ends_on)
+    details.update!(status: :former)
+    sign_in person.account
+    get users_lodging_house_members_path(house, season_id: season.id)
+    expect(response).to have_http_status(:forbidden)
+    expect(person.reload.house_access?).to be(false)
+    invitation = house.house_invitations.create!(email: person.account.email, invited_by: manager.account,
+      house_season: season)
+    invitation.accept!(person.account)
+    expect(details.reload).to be_status_active
+    expect(person.reload.house_access?).to be(true)
+  end
+
+  it 'allows a manager to revoke access without deleting history or letting a member revoke other users' do
+    patch users_lodging_roommate_path(house, member), params: { roommate: { access_state: 'revoked' } }
+    expect(member.reload).to be_access_revoked
+    expect(details.reload).to be_present
+    sign_in person.account
+    get users_lodging_path(house)
+    expect(response).to have_http_status(:forbidden)
+  end
 end

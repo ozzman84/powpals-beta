@@ -10,7 +10,7 @@
   <h3 class="text-xl font-semibold">Guest fee policy</h3>
   <p>Quotes count occupied nights; checkout is excluded. Free nights apply per guest per stay. Dog fees require an explicit per-night or per-stay choice.</p>
   <ul><% Date::DAYNAMES.each do |day| %><li><%= day %>: <%= @season.guest_rates.key?(day) ? number_to_currency(@season.guest_rates[day] / 100.0) : 'Not set' %></li><% end %></ul>
-  <p>Free nights: <%= @season.free_nights %>. Dog fee: <%= @season.dog_fee_cents ? number_to_currency(@season.dog_fee_cents / 100.0) : 'Not set' %> · <%= @season.dog_fee_basis.humanize %>.</p>
+  <p>Guests are charged for every occupied night; roommates are not charged for their own stays. Dog fee: <%= @season.dog_fee_cents ? number_to_currency(@season.dog_fee_cents / 100.0) : 'Not set' %> · <%= @season.dog_fee_basis.humanize %>.</p>
   <% if @season.confirmed? %>
     <%= form_with url: quote_users_lodging_house_season_path(@lodging, @season), scope: :quote, class: 'flex flex-wrap items-end gap-3' do |form| %>
       <div><%= form.label :arrival %><%= form.date_field :arrival, required: true, autocomplete: 'off' %></div>

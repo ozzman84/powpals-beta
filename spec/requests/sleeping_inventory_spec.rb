@@ -37,4 +37,11 @@ RSpec.describe 'Sleeping inventory maintenance' do
     patch users_lodging_path(house), params: { lodging: { layout_reference_url: 'https://example.com/layout' } }
     expect(house.reload.layout_reference_url).to eq('https://example.com/layout')
   end
+
+  it 'lets managers add temporary sleeping spaces to an existing room' do
+    post users_lodging_room_beds_path(house, room), params: {
+      bed: { size: 'twin', style: 'sleeping_bag', temporary: true, label: 'Spare sleeping bag' }
+    }
+    expect(room.beds.last).to have_attributes(temporary: true, capacity: 1, label: 'Spare sleeping bag')
+  end
 end

@@ -4,6 +4,15 @@ module Users
   class BedsController < ApplicationController
     before_action :authenticate_account!
 
+    def create
+      house = current_account.user.lodgings.find(params[:lodging_id])
+      authorize house, :manage_rooms?
+      bed = house.rooms.find(params[:room_id]).beds.new(
+        params.expect(bed: [:capacity, :size, :style, :label, :temporary, :notes]))
+      success = bed.save
+      redirect_to users_lodging_rooms_path(house), alert: (success ? nil : bed.errors.full_messages.to_sentence)
+    end
+
     def update
       house = current_account.user.lodgings.find(params[:lodging_id])
       authorize house, :manage_rooms?

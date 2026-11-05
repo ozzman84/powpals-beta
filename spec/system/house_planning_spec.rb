@@ -18,7 +18,7 @@ RSpec.describe 'House planning on a phone' do
     visit users_lodging_path(lodging)
     click_on 'My stays'
     fill_in 'Date', with: Date.current.iso8601
-    fill_in 'Guests', with: 1
+    fill_in 'Additional unnamed guests', with: 1
     fill_in 'Cars', with: 1
     click_on 'Add stay'
     expect(page).to have_button('Save stay')

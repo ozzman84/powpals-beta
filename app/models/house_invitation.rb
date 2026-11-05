@@ -28,7 +28,12 @@ class HouseInvitation < ApplicationRecord
       member = lodging.roommates.find_or_initialize_by(user: account.user)
       member.assign_attributes(role: role, access_state: 'active') if member.new_record? || member.access_revoked?
       member.save!
-      house_season&.house_season_memberships&.find_or_create_by!(roommate: member)
+
+      if house_season
+        record = house_season.house_season_memberships.find_or_initialize_by(roommate: member)
+        record.update!(status: 'active')
+      end
+
       update!(accepted_at: Time.current)
     end
   end

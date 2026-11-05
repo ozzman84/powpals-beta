@@ -21,6 +21,29 @@ module Users
       redirect_to users_lodging_path(lodging), alert: e.record.errors.full_messages.to_sentence
     end
 
+    def update
+      lodging = current_account.user.lodgings.find(params[:lodging_id])
+      authorize lodging, :manage_roommates?
+      member = lodging.roommates.find(params[:id])
+      values = params.expect(roommate: [:role, :access_state])
+      lodging.with_lock do
+        managers = lodging.roommates.where(access_state: 'active',
+          role: %w[admin lease_holder]).where.not(id: member.id)
+        leaving = values[:access_state] == 'revoked' || (values[:role] && %w[admin
+          lease_holder].exclude?(values[:role]))
+
+        if member.user_id == current_account.user.id && leaving && !managers.exists?
+          member.errors.add(:base, 'Keep at least one house manager')
+          raise ActiveRecord::RecordInvalid, member
+        end
+
+        member.update!(values)
+      end
+      redirect_to users_lodging_house_members_path(lodging), notice: 'House access updated.'
+    rescue ActiveRecord::RecordInvalid => e
+      redirect_to users_lodging_house_members_path(lodging), alert: e.record.errors.full_messages.to_sentence
+    end
+
     def destroy
       lodging = current_account.user.lodgings.find(params[:lodging_id])
       authorize lodging, :manage_roommates?

@@ -48,4 +48,4 @@
   </ul>
 <% end %>
 
-<%= link_to "New Lodging", new_users_lodging_path, class: "mt-6 inline-block rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white" if @lodgings.any? %>
+<%= link_to "New Lodging", new_users_lodging_path, class: "mt-6 inline-block rounded-md bg-indigo-600 px-3 py-2 font-semibold text-white" if current_account.user.house_memberships.exists?(role: %w[admin lease_holder]) %>

@@ -13,7 +13,7 @@ class HouseInvitationsController < ApplicationController
   def update
     @invitation.accept!(current_account)
     redirect_to users_lodging_path(@invitation.lodging), notice: 'House invitation accepted.'
-  rescue ArgumentError => e
+  rescue ArgumentError, ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
     redirect_to user_path, alert: e.message
   end
 

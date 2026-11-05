@@ -43,6 +43,11 @@ class GuestStay < ApplicationRecord
         raise ActiveRecord::RecordInvalid, self
       end
 
+      if billed_at && value != status && %w[cancelled declined].exclude?(value)
+        errors.add(:base, 'Charged stays can only be cancelled; create a new request for changed dates')
+        raise ActiveRecord::RecordInvalid, self
+      end
+
       cancel_charges! if %w[cancelled declined].include?(value)
       update!(status: value)
 
@@ -80,13 +85,14 @@ class GuestStay < ApplicationRecord
       errors.add(:base, 'Use occupied nights within this season') unless valid
     end
 
-    return if house.roommates.exists?(user_id: host_id, access_state: 'active', role: Roommate.roles.keys - ['guest'])
+    return if cancelled? || declined? || house.roommates.accessible.exists?(user_id: host_id)
 
     errors.add(:host, 'must be an accepted roommate')
   end
 
   def guest_is_not_roommate
     return unless house_season
+    return if !new_record? && (!approved? || billed_at.present?)
 
     members = house_season.lodging.roommates.where(access_state: 'active').where.not(role: 'guest')
       .joins(user: :account)

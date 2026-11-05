@@ -3,7 +3,7 @@
 class User < ApplicationRecord
   has_many :roommates, dependent: :destroy
   has_many :house_memberships, lambda {
-    where.not(role: 'guest').where(access_state: 'active')
+    accessible
   }, class_name: 'Roommate', inverse_of: :user, dependent: nil
   has_many :lodgings, through: :house_memberships
   belongs_to :account

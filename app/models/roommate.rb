@@ -6,6 +6,13 @@ class Roommate < ApplicationRecord
   has_many :house_season_memberships, dependent: :restrict_with_error
   enum :access_state, { active: 'active', revoked: 'revoked' }, prefix: :access, validate: true
 
+  scope :accessible, lambda {
+    excluded = HouseSeasonMembership.joins(house_season: :lodging).where(status: 'former')
+      .where('house_seasons.starts_on = lodgings.season_start AND house_seasons.ends_on = lodgings.season_end')
+      .select(:roommate_id)
+    where(access_state: 'active').where.not(role: 'guest').where.not(id: excluded)
+  }
+
   validates :user_id, uniqueness: { scope: :lodging_id, message: 'This person is already a roommate.' }
 
   validates :lodging_id, uniqueness: { conditions: -> { where(role: 'accountant') } }, if: :accountant?

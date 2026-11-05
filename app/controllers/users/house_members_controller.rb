@@ -29,7 +29,9 @@ module Users
                end
 
       fields << :share_contact if membership.roommate.user_id == current_account.user.id
-      membership.update!(params.expect(house_season_membership: fields))
+      values = params.expect(house_season_membership: fields)
+      protect_manager!(membership) if values[:status] == 'former'
+      membership.update!(values)
       redirect_to users_lodging_house_members_path(@lodging, season_id: @season.id)
     rescue ActiveRecord::RecordInvalid => e
       redirect_to users_lodging_house_members_path(@lodging, season_id: @season.id),
@@ -37,6 +39,16 @@ module Users
     end
 
     private
+
+    def protect_manager!(membership)
+      return unless @season.starts_on == @lodging.season_start && @season.ends_on == @lodging.season_end
+      return unless membership.roommate.user_id == current_account.user.id
+      return if @lodging.roommates.accessible.where(role: %w[admin lease_holder])
+        .where.not(id: membership.roommate_id).exists?
+
+      membership.errors.add(:base, 'Keep at least one active house manager')
+      raise ActiveRecord::RecordInvalid, membership
+    end
 
     def load_directory
       @lodging = current_account.user.lodgings.find(params[:lodging_id])

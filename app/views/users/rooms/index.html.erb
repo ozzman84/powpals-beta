@@ -41,6 +41,16 @@
           </div>
 
         <% end %>
+        <% if policy(@lodging).manage_rooms? %>
+          <%= form_with url: users_lodging_room_beds_path(@lodging, room), scope: :bed, class: 'mt-5 space-y-3 rounded border p-3' do |form| %>
+            <h4 class="font-semibold">Add a sleeping space</h4>
+            <div><%= form.label :label, for: "new-bed-#{room.id}-label" %><%= form.text_field :label, id: "new-bed-#{room.id}-label", class: 'w-full rounded border' %></div>
+            <div><%= form.label :size, for: "new-bed-#{room.id}-size" %><%= form.select :size, Bed.sizes.keys, {}, id: "new-bed-#{room.id}-size" %></div>
+            <div><%= form.label :style, for: "new-bed-#{room.id}-style" %><%= form.select :style, Bed.styles.keys, {}, id: "new-bed-#{room.id}-style" %></div>
+            <div><%= form.check_box :temporary, id: "new-bed-#{room.id}-temporary" %><%= form.label :temporary, 'Temporary space', for: "new-bed-#{room.id}-temporary" %></div>
+            <%= form.submit 'Add sleeping space', class: 'rounded border p-2' %>
+          <% end %>
+        <% end %>
       </div>
       <% if policy(@lodging).manage_rooms? %><div class="border-t p-4"><%= button_to 'Remove room', users_lodging_room_path(@lodging, room), method: :delete, class: 'font-semibold text-red-700' %></div><% end %>
     </li>

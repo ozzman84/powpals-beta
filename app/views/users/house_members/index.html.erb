@@ -39,4 +39,13 @@
     <h3 class="mt-6 font-semibold">Include an already accepted house member in this season</h3>
     <%= form_with url: users_lodging_house_members_path(@lodging, season_id: @season.id), class: 'mt-3 flex flex-wrap gap-3' do |form| %><%= form.collection_select :roommate_id, @lodging.roommates.where(access_state: 'active').where.not(role: 'guest').includes(:user), :id, :directory_name %><%= form.submit 'Add to season' %><% end %>
   <% end %>
+<% if policy(@lodging).manage_roommates? %>
+  <section class="mt-8"><h3 class="text-lg font-semibold">House access and permission roles</h3><p class="my-3 text-sm">Revoking access removes private house access without deleting historical records. Season responsibilities do not grant permissions.</p>
+    <% @lodging.roommates.where.not(role: 'guest').includes(:user).each do |member| %>
+      <%= form_with model: member, url: users_lodging_roommate_path(@lodging, member), class: 'my-3 flex flex-wrap items-end gap-3 rounded border p-3' do |form| %>
+        <span><%= member.user.display_name %></span><div><%= form.label :role, for: "member-role-#{member.id}" %><%= form.select :role, Roommate.roles.keys - ['guest'], {}, id: "member-role-#{member.id}" %></div><div><%= form.label :access_state, 'House access', for: "member-access-#{member.id}" %><%= form.select :access_state, Roommate.access_states.keys, {}, id: "member-access-#{member.id}" %></div><%= form.submit 'Save access', class: 'rounded border p-2' %>
+      <% end %>
+    <% end %>
+  </section>
+<% end %>
 <% else %><p>Create a house season before preparing its roster.</p><% end %>

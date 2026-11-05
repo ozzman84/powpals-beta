@@ -45,7 +45,7 @@ class BedRequest < ApplicationRecord
     valid = departure > arrival && departure - arrival <= 183 &&
       (!house.season_start || arrival >= house.season_start) && (!house.season_end || departure - 1 <= house.season_end)
     errors.add(:base, 'Use occupied nights within the rental season') unless valid
-    return if house.roommates.exists?(user_id: user_id, access_state: 'active', role: Roommate.roles.keys - ['guest'])
+    return if cancelled? || house.roommates.accessible.exists?(user_id: user_id)
 
     errors.add(:user, 'must be an accepted roommate in this house')
   end

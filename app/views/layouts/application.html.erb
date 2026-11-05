@@ -134,7 +134,7 @@
           <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
 
             <% if demo_database? %><p class="mb-4 rounded bg-yellow-50 p-3 font-semibold">Demo data — this database contains fictional people, houses and stays.</p><% end %>
-            <% flash.each do |_kind, message| %><p role="status" class="mb-4 rounded border bg-white p-3"><%= message %></p><% end %>
+            <% flash.each do |_kind, message| %><p role="status" class="mb-4 break-words rounded border bg-white p-3"><%= message %></p><% end %>
             <%= yield %>
           </div>
         </div>

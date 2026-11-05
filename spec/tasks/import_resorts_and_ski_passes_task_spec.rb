@@ -16,4 +16,15 @@ RSpec.describe 'import:resorts_and_season_passes' do
     expect(Resort.where(name: 'Winter Park').count).to eq(1)
     expect(SeasonPassResort.count).to eq(2)
   end
+
+  it 'recognizes the original CSV season passes header' do
+    Rails.application.load_tasks unless Rake::Task.task_defined?('import:resorts_and_season_passes')
+    row = { 'name' => 'Vail Mountain Resort', 'city' => 'Vail', 'state' => 'CO',
+            'latitude' => '39.6', 'longitude' => '-106.3', 'season passes' => 'Epic Pass,Epic Local Pass' }
+    allow(CSV).to receive(:foreach).and_yield(row)
+    task = Rake::Task['import:resorts_and_season_passes']
+    task.reenable
+    task.invoke
+    expect(Resort.first.season_passes.pluck(:name)).to contain_exactly('Epic Pass', 'Epic Local Pass')
+  end
 end

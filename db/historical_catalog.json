@@ -1,0 +1,708 @@
+{
+  "resorts": [
+    {
+      "id": "71",
+      "name": "Seven Springs Mountain Resort",
+      "city": "Champion",
+      "state": "PA",
+      "lat": "40.022900",
+      "long": "-79.296800"
+    },
+    {
+      "id": "72",
+      "name": "Laurel Mountain",
+      "city": "Boswell",
+      "state": "PA",
+      "lat": "40.138400",
+      "long": "-79.183700"
+    },
+    {
+      "id": "73",
+      "name": "Hidden Valley Resort",
+      "city": "Hidden Valley",
+      "state": "PA",
+      "lat": "40.036300",
+      "long": "-79.254200"
+    },
+    {
+      "id": "74",
+      "name": "Afton Alps",
+      "city": "Hastings",
+      "state": "MN",
+      "lat": "44.863900",
+      "long": "-92.789900"
+    },
+    {
+      "id": "75",
+      "name": "Mount Brighton",
+      "city": "Brighton",
+      "state": "MI",
+      "lat": "42.542100",
+      "long": "-83.799400"
+    },
+    {
+      "id": "76",
+      "name": "Wilmot Mountain",
+      "city": "Wilmot",
+      "state": "WI",
+      "lat": "42.495100",
+      "long": "-88.184800"
+    },
+    {
+      "id": "77",
+      "name": "Alpine Valley Resort",
+      "city": "Elkhorn",
+      "state": "WI",
+      "lat": "42.730700",
+      "long": "-88.479400"
+    },
+    {
+      "id": "78",
+      "name": "Boston Mills",
+      "city": "Peninsula",
+      "state": "OH",
+      "lat": "41.271800",
+      "long": "-81.559900"
+    },
+    {
+      "id": "79",
+      "name": "Brandywine",
+      "city": "Peninsula",
+      "state": "OH",
+      "lat": "41.264200",
+      "long": "-81.559100"
+    },
+    {
+      "id": "80",
+      "name": "Mad River Mountain",
+      "city": "Zanesfield",
+      "state": "OH",
+      "lat": "40.296200",
+      "long": "-83.679600"
+    },
+    {
+      "id": "81",
+      "name": "Hidden Valley",
+      "city": "Wildwood",
+      "state": "MO",
+      "lat": "38.519500",
+      "long": "-90.677200"
+    },
+    {
+      "id": "82",
+      "name": "Snow Creek",
+      "city": "Weston",
+      "state": "MO",
+      "lat": "39.483600",
+      "long": "-94.934300"
+    },
+    {
+      "id": "83",
+      "name": "Paoli Peaks",
+      "city": "Paoli",
+      "state": "IN",
+      "lat": "38.557400",
+      "long": "-86.487500"
+    },
+    {
+      "id": "84",
+      "name": "Telluride",
+      "city": "Telluride",
+      "state": "CO",
+      "lat": "37.937500",
+      "long": "-107.812300"
+    },
+    {
+      "id": "85",
+      "name": "Winter Park Resort",
+      "city": "Winter Park",
+      "state": "CO",
+      "lat": "39.862800",
+      "long": "-105.778700"
+    },
+    {
+      "id": "86",
+      "name": "Copper Mountain Resort",
+      "city": "Frisco",
+      "state": "CO",
+      "lat": "39.479000",
+      "long": "-106.161300"
+    },
+    {
+      "id": "87",
+      "name": "Steamboat Ski Resort",
+      "city": "Steamboat Springs",
+      "state": "CO",
+      "lat": "40.490429",
+      "long": "-106.842384"
+    },
+    {
+      "id": "88",
+      "name": "Arapahoe Basin",
+      "city": "Dillon",
+      "state": "CO",
+      "lat": "39.383000",
+      "long": "-105.521800"
+    },
+    {
+      "id": "89",
+      "name": "Loveland Ski Area",
+      "city": "Dillon",
+      "state": "CO",
+      "lat": "39.680654",
+      "long": "-105.895886"
+    },
+    {
+      "id": "90",
+      "name": "Eldora Mountain Resort",
+      "city": "Nederland",
+      "state": "CO",
+      "lat": "39.937500",
+      "long": "-105.583610"
+    },
+    {
+      "id": "91",
+      "name": "Aspen Snowmass Ski Resort",
+      "city": "Snowmass Village",
+      "state": "CO",
+      "lat": "39.195600",
+      "long": "-105.583610"
+    },
+    {
+      "id": "49",
+      "name": "Vail Mountain Resort",
+      "city": "Vail",
+      "state": "CO",
+      "lat": "39.606100",
+      "long": "-106.354500"
+    },
+    {
+      "id": "50",
+      "name": "Beaver Creek Resort",
+      "city": "Avon",
+      "state": "CO",
+      "lat": "39.604200",
+      "long": "-106.516500"
+    },
+    {
+      "id": "51",
+      "name": "Breckenridge Ski Resort",
+      "city": "Breckenridge",
+      "state": "CO",
+      "lat": "39.480600",
+      "long": "-106.066700"
+    },
+    {
+      "id": "52",
+      "name": "Keystone Resort",
+      "city": "Keystone",
+      "state": "CO",
+      "lat": "39.604200",
+      "long": "-105.954200"
+    },
+    {
+      "id": "53",
+      "name": "Crested Butte Mountain Resort",
+      "city": "Crested Butte",
+      "state": "CO",
+      "lat": "38.869700",
+      "long": "-106.987800"
+    },
+    {
+      "id": "54",
+      "name": "Park City Mountain Resort",
+      "city": "Park City",
+      "state": "UT",
+      "lat": "40.651400",
+      "long": "-111.508000"
+    },
+    {
+      "id": "55",
+      "name": "Heavenly Mountain Resort",
+      "city": "South Lake Tahoe",
+      "state": "CA",
+      "lat": "38.935600",
+      "long": "-119.940000"
+    },
+    {
+      "id": "56",
+      "name": "Northstar California Resort",
+      "city": "Truckee",
+      "state": "CA",
+      "lat": "39.274600",
+      "long": "-120.121000"
+    },
+    {
+      "id": "57",
+      "name": "Kirkwood Mountain Resort",
+      "city": "Kirkwood",
+      "state": "CA",
+      "lat": "38.684200",
+      "long": "-120.065300"
+    },
+    {
+      "id": "58",
+      "name": "Stowe Mountain Resort",
+      "city": "Stowe",
+      "state": "VT",
+      "lat": "44.528800",
+      "long": "-72.804700"
+    },
+    {
+      "id": "59",
+      "name": "Mount Snow Resort",
+      "city": "West Dover",
+      "state": "VT",
+      "lat": "42.960600",
+      "long": "-72.907300"
+    },
+    {
+      "id": "60",
+      "name": "Okemo Mountain Resort",
+      "city": "Ludlow",
+      "state": "VT",
+      "lat": "43.402500",
+      "long": "-72.717500"
+    },
+    {
+      "id": "61",
+      "name": "Mount Sunapee Resort",
+      "city": "Newbury",
+      "state": "NH",
+      "lat": "43.320500",
+      "long": "-72.074100"
+    },
+    {
+      "id": "62",
+      "name": "Attitash Mountain Resort",
+      "city": "Bartlett",
+      "state": "NH",
+      "lat": "44.082100",
+      "long": "-71.229500"
+    },
+    {
+      "id": "63",
+      "name": "Wildcat Mountain",
+      "city": "Gorham",
+      "state": "NH",
+      "lat": "44.264700",
+      "long": "-71.239300"
+    },
+    {
+      "id": "64",
+      "name": "Crotched Mountain",
+      "city": "Bennington",
+      "state": "NH",
+      "lat": "42.984600",
+      "long": "-71.926700"
+    },
+    {
+      "id": "65",
+      "name": "Hunter Mountain",
+      "city": "Hunter",
+      "state": "NY",
+      "lat": "42.204400",
+      "long": "-74.217600"
+    },
+    {
+      "id": "66",
+      "name": "Liberty Mountain Resort",
+      "city": "Carroll Valley",
+      "state": "PA",
+      "lat": "39.757700",
+      "long": "-77.251600"
+    },
+    {
+      "id": "67",
+      "name": "Roundtop Mountain Resort",
+      "city": "Lewisberry",
+      "state": "PA",
+      "lat": "40.097900",
+      "long": "-76.912700"
+    },
+    {
+      "id": "68",
+      "name": "Whitetail Resort",
+      "city": "Mercersburg",
+      "state": "PA",
+      "lat": "39.752100",
+      "long": "-77.947700"
+    },
+    {
+      "id": "69",
+      "name": "Jack Frost Mountain",
+      "city": "Blakeslee",
+      "state": "PA",
+      "lat": "41.085200",
+      "long": "-75.623800"
+    },
+    {
+      "id": "70",
+      "name": "Big Boulder",
+      "city": "Lake Harmony",
+      "state": "PA",
+      "lat": "41.101900",
+      "long": "-75.591200"
+    }
+  ],
+  "season_passes": [
+    {
+      "id": "1",
+      "name": "Epic Pass"
+    },
+    {
+      "id": "2",
+      "name": "Epic Local Pass"
+    },
+    {
+      "id": "3",
+      "name": "Ikon Pass"
+    },
+    {
+      "id": "4",
+      "name": "Ikon Base Pass"
+    }
+  ],
+  "season_pass_resorts": [
+    {
+      "resort_id": "49",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "49",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "50",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "50",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "51",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "51",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "52",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "52",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "53",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "53",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "54",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "54",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "55",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "55",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "56",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "56",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "57",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "57",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "58",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "58",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "59",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "59",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "60",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "60",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "61",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "61",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "62",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "62",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "63",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "63",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "64",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "64",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "65",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "65",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "66",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "66",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "67",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "67",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "68",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "68",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "69",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "69",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "70",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "70",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "71",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "71",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "72",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "72",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "73",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "73",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "74",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "74",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "75",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "75",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "76",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "76",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "77",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "77",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "78",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "78",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "79",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "79",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "80",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "80",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "81",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "81",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "82",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "82",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "83",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "83",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "84",
+      "season_pass_id": "1"
+    },
+    {
+      "resort_id": "84",
+      "season_pass_id": "2"
+    },
+    {
+      "resort_id": "85",
+      "season_pass_id": "3"
+    },
+    {
+      "resort_id": "85",
+      "season_pass_id": "4"
+    },
+    {
+      "resort_id": "86",
+      "season_pass_id": "3"
+    },
+    {
+      "resort_id": "86",
+      "season_pass_id": "4"
+    },
+    {
+      "resort_id": "87",
+      "season_pass_id": "3"
+    },
+    {
+      "resort_id": "87",
+      "season_pass_id": "4"
+    },
+    {
+      "resort_id": "88",
+      "season_pass_id": "3"
+    },
+    {
+      "resort_id": "88",
+      "season_pass_id": "4"
+    },
+    {
+      "resort_id": "90",
+      "season_pass_id": "3"
+    },
+    {
+      "resort_id": "90",
+      "season_pass_id": "4"
+    },
+    {
+      "resort_id": "91",
+      "season_pass_id": "3"
+    },
+    {
+      "resort_id": "91",
+      "season_pass_id": "4"
+    }
+  ],
+  "source_label": "Preserved historical application catalog; not verified current pass coverage",
+  "accounts": [],
+  "account_season_passes": [],
+  "account_ski_days": []
+}

@@ -62,7 +62,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @lodging.calendars.this_week.each do |date, counts| %>
+            <% @lodging.calendars.this_week(lodging: @lodging).each do |date, counts| %>
               <tr class="border-b border-gray-100">
                 <td class="max-w-0 px-0 py-5 align-top">
                   <% @lodging.capacity_warnings(occupants: counts[:staying] + counts[:guests], cars: counts[:cars]).each do |warning| %><p class="text-xs text-yellow-800"><%= warning %></p><% end %>

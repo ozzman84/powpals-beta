@@ -20,7 +20,7 @@
       </select>
     <label class="mt-3 block"><input type="checkbox" name="room[beds_attributes][][temporary]" value="1"> Temporary sleeping space</label>
     <label class="block">Label <input autocomplete="off" name="room[beds_attributes][][label]" class="w-full rounded border"></label>
-    <label class="block">Sleeping spaces (optional override) <input type="number" min="1" name="room[beds_attributes][][capacity]" class="w-full rounded border"></label>
+    <label class="block">Sleeping spaces (optional override) <input autocomplete="off" type="number" min="1" name="room[beds_attributes][][capacity]" class="w-full rounded border"></label>
   </template>
 
   <form action="<%= users_lodging_rooms_path(lodging) %>" method="post">

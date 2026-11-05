@@ -2,6 +2,7 @@
 
 class HouseSeason < ApplicationRecord
   belongs_to :lodging
+  has_many :guest_stays, dependent: :restrict_with_error
   has_many :house_season_memberships, dependent: :restrict_with_error
   has_many :house_ledger_entries, dependent: :restrict_with_error
   has_many :house_sheet_cells, dependent: :restrict_with_error

@@ -20,7 +20,7 @@ RSpec.describe 'Dated bed requests' do
   it 'records requests without allowing a roommate to self-confirm' do
     post users_lodging_bed_requests_path(house), params: {
       bed_request: { bed_id: bed.id, arrival: Date.current, departure: Date.current + 2, spaces: 2,
-        status: 'confirmed' }
+                     status: 'confirmed' }
     }
     expect(bed.bed_requests.last).to be_requested
     patch users_lodging_bed_request_path(house, bed.bed_requests.last),

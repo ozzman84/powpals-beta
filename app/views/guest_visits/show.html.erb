@@ -1,0 +1,6 @@
+<%= render 'shared/notices' %>
+<h1 class="text-xl font-semibold">My guest stay</h1>
+<p class="mt-4"><%= @stay.house_season.lodging.title %> · Host: <%= @stay.host.display_name %></p>
+<p><%= @stay.arrival %> to <%= @stay.departure %> (checkout) · <strong><%= @stay.status.humanize %></strong></p>
+<% if @stay.approved? %><p class="mt-4"><%= @stay.house_season.lodging.full_address %></p><div class="mt-4 whitespace-pre-line"><%= @stay.house_season.rules %></div><% end %>
+<p class="mt-4">This invitation gives access to your stay only.</p>

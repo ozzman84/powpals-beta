@@ -50,13 +50,14 @@ class Calendar < ApplicationRecord
     month.map { |date| existing_records[date] || Day.new(date: date) }
   end
 
-  def self.this_week
+  def self.this_week(lodging: nil)
     (Date.current..6.days.from_now.to_date).to_h do |day|
       entries = where(date: day).includes(:user).to_a
       staying = entries.select(&:staying?)
+      named = lodging ? lodging.guest_stays.on_night(day) : GuestStay.none
       [day, { away: entries.count(&:away?), staying: staying.size,
-              guests: staying.sum { |entry| entry.guest_count.to_i },
-              cars: staying.sum { |entry| entry.cars.to_i },
+              guests: staying.sum { |entry| entry.guest_count.to_i } + named.count,
+              cars: staying.sum { |entry| entry.cars.to_i } + named.sum(:cars),
               avatar_urls: staying.filter_map { |entry| entry.user.avatar_url } }]
     end
   end
@@ -69,8 +70,9 @@ class Calendar < ApplicationRecord
     return [] unless staying? && lodging && date
 
     others = lodging.calendars.staying.where(date: date).where.not(id: id)
-    lodging.capacity_warnings(occupants: others.count + others.sum(:guest_count) + 1 + guest_count.to_i,
-      cars: others.sum(:cars) + cars.to_i)
+    named = lodging.guest_stays.on_night(date)
+    lodging.capacity_warnings(occupants: others.count + others.sum(:guest_count) + 1 + guest_count.to_i + named.count,
+      cars: others.sum(:cars) + cars.to_i + named.sum(:cars))
   end
 
   private

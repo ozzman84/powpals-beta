@@ -3,6 +3,9 @@
 class BedRequest < ApplicationRecord
   belongs_to :bed
   belongs_to :user
+  belongs_to :guest_stay, optional: true
+  validate :guest_matches_request
+  validate :member_priority, if: :confirmed?
   has_one :room, through: :bed
   enum :status, { requested: 'requested', confirmed: 'confirmed', declined: 'declined', cancelled: 'cancelled' },
     validate: true
@@ -18,6 +21,22 @@ class BedRequest < ApplicationRecord
   end
 
   private
+
+  def guest_matches_request
+    return unless guest_stay && bed
+
+    valid = guest_stay.house_season.lodging_id == bed.room.lodging_id && guest_stay.host_id == user_id &&
+      arrival && departure && arrival >= guest_stay.arrival && departure <= guest_stay.departure
+    errors.add(:guest_stay, 'must match this host, house and dates') unless valid
+    errors.add(:guest_stay, 'must be approved before confirming a bed') if confirmed? && !guest_stay.approved?
+  end
+
+  def member_priority
+    return unless guest_stay && bed && arrival && departure
+    return unless bed.bed_requests.requested.where(guest_stay_id: nil).overlapping(arrival, departure).exists?
+
+    errors.add(:base, 'Review roommate requests before confirming a guest bed')
+  end
 
   def valid_stay
     return unless bed && arrival && departure

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_05_000600) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000700) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -80,8 +80,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000600) do
     t.string "status", default: "requested", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "guest_stay_id"
     t.index ["bed_id", "arrival", "departure"], name: "index_bed_requests_on_bed_id_and_arrival_and_departure"
     t.index ["bed_id"], name: "index_bed_requests_on_bed_id"
+    t.index ["guest_stay_id"], name: "index_bed_requests_on_guest_stay_id"
     t.index ["user_id"], name: "index_bed_requests_on_user_id"
     t.check_constraint "departure > arrival AND spaces > 0", name: "valid_bed_request"
   end
@@ -122,6 +124,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000600) do
     t.index ["lodging_id", "user_id", "date"], name: "unique_calendars_identity", unique: true
     t.index ["lodging_id"], name: "index_calendars_on_lodging_id"
     t.index ["user_id"], name: "index_calendars_on_user_id"
+  end
+
+  create_table "guest_stays", force: :cascade do |t|
+    t.bigint "house_season_id", null: false
+    t.bigint "host_id", null: false
+    t.bigint "guest_id"
+    t.string "guest_name", null: false
+    t.string "email", null: false
+    t.date "arrival", null: false
+    t.date "departure", null: false
+    t.integer "cars", default: 0, null: false
+    t.string "status", default: "requested", null: false
+    t.string "token_digest", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "accepted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["guest_id"], name: "index_guest_stays_on_guest_id"
+    t.index ["host_id"], name: "index_guest_stays_on_host_id"
+    t.index ["house_season_id"], name: "index_guest_stays_on_house_season_id"
+    t.index ["token_digest"], name: "index_guest_stays_on_token_digest", unique: true
+    t.check_constraint "departure > arrival AND cars >= 0", name: "valid_guest_stay"
   end
 
   create_table "house_invitations", force: :cascade do |t|
@@ -334,12 +358,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000600) do
   add_foreign_key "account_ski_days", "accounts"
   add_foreign_key "account_ski_days", "resorts"
   add_foreign_key "bed_requests", "beds"
+  add_foreign_key "bed_requests", "guest_stays"
   add_foreign_key "bed_requests", "users"
   add_foreign_key "beds", "rooms"
   add_foreign_key "blackout_days", "resorts"
   add_foreign_key "blackout_days", "season_passes"
   add_foreign_key "calendars", "lodgings"
   add_foreign_key "calendars", "users"
+  add_foreign_key "guest_stays", "house_seasons"
+  add_foreign_key "guest_stays", "users", column: "guest_id"
+  add_foreign_key "guest_stays", "users", column: "host_id"
   add_foreign_key "house_invitations", "accounts", column: "invited_by_id"
   add_foreign_key "house_invitations", "house_seasons"
   add_foreign_key "house_invitations", "lodgings"

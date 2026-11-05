@@ -1,0 +1,4 @@
+<h1 class="text-xl font-semibold">Guest invitation</h1>
+<p class="my-4"><%= @stay.host.display_name %> invited you to <%= @stay.house_season.lodging.title %> from <%= @stay.arrival %> to <%= @stay.departure %> (checkout).</p>
+<p>Accepting identifies you as this guest. The house must still approve the stay.</p>
+<%= button_to 'Accept guest invitation', guest_invitation_path(token: params[:token]), method: :patch, class: 'mt-4 rounded bg-indigo-600 p-3 text-white' %>

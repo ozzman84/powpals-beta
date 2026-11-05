@@ -1,0 +1,38 @@
+<section class="house-panel" aria-labelledby="weekly-attendance-heading">
+  <header class="house-panel-heading flex items-center justify-between gap-3 px-4 py-3"><h2 id="weekly-attendance-heading" class="text-base font-semibold">This week</h2><span class="text-xs text-gray-600">Attendance · capacity</span></header>
+  <% capacity = @lodging.advisory_capacity %>
+  <div class="divide-y divide-slate-200">
+    <% @lodging.calendars.this_week(lodging: @lodging).each do |date, counts| %>
+      <% total = counts[:staying] + counts[:guests] %>
+      <% scale = [capacity.to_i, total, 1].max %>
+      <div class="attendance-day" data-attendance-date="<%= date %>">
+        <h3 class="text-sm font-semibold <%= 'text-indigo-700' if date == Date.current %>"><%= date == Date.current ? 'Today' : date.strftime('%A') %></h3>
+        <div class="min-w-0">
+          <p class="mb-2 text-xs text-gray-600"><%= counts[:staying] %> staying · <%= counts[:guests] %> guests · <%= capacity ? "#{[capacity - total, 0].max} available" : 'Capacity not set' %> · <%= pluralize(counts[:cars], 'car') %></p>
+          <div class="attendance-meter" role="img" aria-label="<%= counts[:staying] %> members, <%= counts[:guests] %> guests, capacity <%= capacity || 'not set' %>">
+            <span class="attendance-members" style="width: <%= counts[:staying].fdiv(scale) * 100 %>%"></span><span class="attendance-guests" style="width: <%= counts[:guests].fdiv(scale) * 100 %>%"></span>
+          </div>
+          <div class="attendance-people" data-controller="attendance" aria-label="People staying">
+            <% counts[:attendees].each do |person| %>
+              <button type="button" class="attendance-person" data-action="attendance#identify" aria-label="<%= person[:name] %><%= ' (guest)' if person[:guest] %>">
+                <% if person[:user] %><%= render 'shared/avatar', user: person[:user], height: '8', width: '8' %><% else %><span class="attendance-initials" aria-hidden="true"><%= person[:name].split.filter_map(&:first).first(2).join %></span><% end %>
+                <span class="attendance-name"><%= person[:name] %><%= ' (guest)' if person[:guest] %></span>
+              </button>
+            <% end %>
+            <% anonymous = counts[:guests] - counts[:attendees].count { |person| person[:guest] } %>
+            <% if anonymous.positive? %><span class="attendance-anonymous text-xs text-gray-600"><%= pluralize(anonymous, 'additional guest') %></span><% end %>
+            <span class="attendance-total" aria-label="<%= total %> people total"><%= total %></span>
+            <p class="attendance-selection text-xs text-gray-600" data-attendance-target="selection" aria-live="polite"></p>
+          </div>
+          <% @lodging.capacity_warnings(occupants: total, cars: counts[:cars]).each do |warning| %><p class="mt-2 text-xs text-yellow-800"><%= warning %></p><% end %>
+        </div>
+        <span class="attendance-ceiling text-xs text-gray-600" aria-label="Capacity"><%= capacity || '—' %></span>
+      </div>
+    <% end %>
+  </div>
+  <footer class="house-season-note border-t border-slate-200 px-4 py-3 text-xs text-gray-600">
+    <p><%= @lodging.season_start&.strftime('%b %-d, %Y') || 'Start not set' %>–<%= @lodging.season_end&.strftime('%b %-d, %Y') || 'End not set' %> · <%= capacity || 'Unconfirmed' %> sleeping spaces · Parking: <%= @lodging.max_cars || 'not confirmed' %></p>
+    <p class="mt-1">Capacity is guidance; exceeding it shows a warning.</p>
+    <% if @lodging.description.present? %><p class="mt-2"><%= @lodging.description %></p><% end %>
+  </footer>
+</section>

@@ -12,6 +12,7 @@ RSpec.describe 'Room availability card on phones and desktops' do
     bed.bed_requests.create!(user: user, arrival: Date.current, departure: Date.current + 1,
       spaces: 2, status: :confirmed)
     room.beds.create!(size: :twin, style: :bunk, label: 'Upper bunk')
+    create(:calendar, user: user, lodging: house, date: Date.current, status: :staying)
     login_as user.account, scope: :account
     [390, 1366].each do |width|
       page.current_window.resize_to(width, 1000)
@@ -21,6 +22,11 @@ RSpec.describe 'Room availability card on phones and desktops' do
         expect(page).to have_content('Taken')
         expect(page).to have_content('Upper bunk')
         expect(page).to have_content('Available')
+      end
+      within("[data-attendance-date='#{Date.current}']") do
+        click_on user.display_name
+        expect(page).to have_css('.attendance-selection', text: user.display_name)
+        expect(page).to have_css('.attendance-total', text: '1')
       end
       expect(page.evaluate_script('document.documentElement.scrollWidth <= innerWidth')).to be(true)
       expect(page.evaluate_script(<<~JS)).to eq([20, 20, 24, 24])

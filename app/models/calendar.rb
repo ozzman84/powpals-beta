@@ -54,10 +54,12 @@ class Calendar < ApplicationRecord
     (Date.current..6.days.from_now.to_date).to_h do |day|
       entries = where(date: day).includes(:user).to_a
       staying = entries.select(&:staying?)
-      named = lodging ? lodging.guest_stays.on_night(day) : GuestStay.none
+      named = lodging ? lodging.guest_stays.on_night(day).includes(:guest).to_a : []
       [day, { away: entries.count(&:away?), staying: staying.size,
               guests: staying.sum { |entry| entry.guest_count.to_i } + named.count,
-              cars: staying.sum { |entry| entry.cars.to_i } + named.sum(:cars),
+              cars: staying.sum { |entry| entry.cars.to_i } + named.sum { |guest| guest.cars.to_i },
+              attendees: staying.map { |entry| { user: entry.user, name: entry.user.display_name, guest: false } } +
+                named.map { |visit| { user: visit.guest, name: visit.guest_name, guest: true } },
               avatar_urls: staying.filter_map { |entry| entry.user.avatar_url } }]
     end
   end

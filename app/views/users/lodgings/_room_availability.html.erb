@@ -1,5 +1,5 @@
-<section id="rooms-today" aria-labelledby="rooms-today-heading" class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-  <header class="border-b border-gray-100 px-4 py-3">
+<section id="rooms-today" aria-labelledby="rooms-today-heading" class="house-panel overflow-hidden">
+  <header class="house-panel-heading px-4 py-3">
     <div class="flex items-start justify-between gap-3"><h2 id="rooms-today-heading" class="text-base font-semibold text-gray-900">Rooms · tonight</h2><span class="flex-none rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600"><%= pluralize(@bed_availability.values.sum(&:available), 'free space') %></span></div>
   </header>
   <% if @rooms.empty? %><p class="p-5 text-sm text-gray-500">No rooms configured yet.</p><% end %>

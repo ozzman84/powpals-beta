@@ -92,3 +92,16 @@ shared demo password on its sign-in page. Sign out before changing roles.
 
 Real Google login: https://macbook-air-2.tail969c8b.ts.net:8443/accounts/sign_in .
 Use fictional demo data for create/edit/cancel tests; no real house data is needed.
+
+## Story #180 — Slate overview and daily occupancy
+
+The approved house overview uses a slate background, bordered white panels and
+contrasting headers. Each upcoming day shows member and guest occupancy against
+advisory capacity, available spaces, cars, identifiable attendees and a final total
+circle. Hover/focus spreads avatars; tapping identifies a person on phones.
+Unnamed additional guests remain counted without inventing identities. Season,
+parking and capacity guidance sit beneath This week. Over-capacity stays remain
+allowed with warnings; unset capacity does not imply zero availability.
+
+Verified with full preflight (226 examples), including a phone/desktop regression
+for attendee taps and long names. Review the overview on either private preview.

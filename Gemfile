@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.4.12'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 8.1.0'
+gem 'rails', '~> 8.1.4', '>= 8.1.4.1'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -39,7 +39,7 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-rails_csrf_protection'
 
-gem 'dalli', '~> 3.2.13'
+gem 'dalli', '~> 3.2.15'
 gem 'geocoder'
 gem 'rake'
 gem 'csv'
@@ -128,16 +128,16 @@ gem 'sentry-ruby', '>= 6.6.2'
 gem 'sentry-rails', '>= 6.6.2'
 
 # Security floors for existing indirect dependencies, refreshed by bundler-audit.
-gem 'addressable', '>= 2.9.0', require: false
+gem 'addressable', '>= 2.9.1', require: false
 gem 'crass', '>= 1.0.8', require: false
 gem 'faraday', '>= 2.14.3', require: false
 gem 'jwt', '~> 2.10.3', require: false
-gem 'loofah', '>= 2.25.2', require: false
+gem 'loofah', '>= 2.25.3', require: false
 gem 'mail', '>= 2.9.1', require: false
 gem 'net-imap', '>= 0.6.4.1', require: false
-gem 'nokogiri', '>= 1.19.4', require: false
+gem 'nokogiri', '>= 1.19.5', require: false
 gem 'oauth2', '>= 2.0.22', require: false
-gem 'rack', '~> 2.2.23', require: false
-gem 'rails-html-sanitizer', '>= 1.7.1', require: false
+gem 'rack', '~> 2.2.25', require: false
+gem 'rails-html-sanitizer', '>= 1.7.2', require: false
 gem 'rdoc', '>= 6.5.1.1', require: false
 gem 'rexml', '>= 3.3.9', require: false

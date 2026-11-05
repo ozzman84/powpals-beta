@@ -1,5 +1,5 @@
 <div class="border-b border-gray-200 pb-6 sm:flex sm:items-center sm:justify-between">
-  <div class="flex items-center gap-4"><%= render 'shared/avatar', user: @user, height: '16', width: '16' %><div><h1 class="text-2xl font-semibold text-gray-900"><%= [@user.preferred_name.presence || @user.first_name, @user.last_name].compact.join(' ') %></h1><p class="text-sm text-gray-500"><%= [@user.level&.humanize, @user.ride_type&.humanize].compact.join(' · ') %></p><p class="text-sm text-gray-500"><%= [@user.city, @user.state].compact_blank.join(', ') %></p></div></div>
+  <div class="flex min-w-0 items-center gap-4"><%= render 'shared/avatar', user: @user, height: '16', width: '16' %><div class="min-w-0 break-words"><h1 class="text-2xl font-semibold text-gray-900"><%= [@user.preferred_name.presence || @user.first_name, @user.last_name].compact.join(' ') %></h1><p class="text-sm text-gray-500"><%= [@user.level&.humanize, @user.ride_type&.humanize].compact.join(' · ') %></p><p class="text-sm text-gray-500"><%= [@user.city, @user.state].compact_blank.join(', ') %></p></div></div>
   <%= link_to 'Edit profile', edit_user_path, class: 'mt-4 inline-block rounded-md border px-3 py-2 text-sm font-semibold sm:mt-0' %>
 </div>
 <div class="mt-6 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3">

@@ -95,8 +95,8 @@
     </div>
   </div>
 </main>
-<section id="house-members" class="mt-6 border-t pt-6"><h2 class="text-xl font-semibold">Roommates</h2><ul class="mt-4 grid gap-4 sm:grid-cols-2">
-  <% @lodging.roommates.includes(:user).each do |membership| %><li class="flex items-center gap-3 rounded-lg border p-4"><%= render 'shared/avatar', user: membership.user %><div><p class="font-medium"><%= membership.user.first_name %> <%= membership.user.last_name %></p><p class="text-sm text-gray-500"><%= membership.role&.humanize || 'Roommate' %></p></div></li><% end %>
+<section id="house-members" class="mt-6 border-t pt-6"><h2 class="text-xl font-semibold">Roommates</h2><ul class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+  <% @lodging.roommates.includes(:user).each do |membership| %><li class="flex min-w-0 items-center gap-3 rounded-lg border p-4"><%= render 'shared/avatar', user: membership.user %><div class="min-w-0 break-words"><p class="font-medium"><%= membership.user.first_name %> <%= membership.user.last_name %></p><p class="text-sm text-gray-500"><%= membership.role&.humanize || 'Roommate' %></p></div></li><% end %>
 </ul>
 <% if policy(@lodging).manage_roommates? %>
   <h3 class="mt-6 font-semibold">Invite a roommate</h3>

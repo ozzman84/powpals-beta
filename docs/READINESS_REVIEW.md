@@ -18,6 +18,10 @@ previews and restored local data, not a deployed production system.
 | Unavailable weather | Existing safe failure path keeps the rest of the dashboard usable; demo disables external calls | Live forecast completeness cannot be verified with disabled key |
 | Season configuration | Rental dates November 1, 2026–April 30, 2027 | Confirm rates, rent split, policies and payment instructions (#154) |
 
+For the subsequently implemented first seven features, see
+[FIRST_SEVEN_STORIES.md](FIRST_SEVEN_STORIES.md). Its delivery table supersedes the
+earlier limitations above for invitations, rosters, guest stays and bed requests.
+
 ## Review accounts
 
 Use the isolated demo preview at https://macbook-air-2.tail969c8b.ts.net:10000/.

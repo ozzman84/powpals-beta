@@ -98,6 +98,33 @@ class DemoSeedData
       record.rules = 'Demo rules: members have bed priority. Finish laundry, dishes and trash before departing.'
     end
     create_finance_examples(house, season)
+    create_directory_examples(house, season)
+    create_guest_examples(house, season)
+  end
+
+  def create_directory_examples(house, season)
+    house.roommates.where.not(role: 'guest').find_each do |member|
+      season.house_season_memberships.find_or_create_by!(roommate: member) do |details|
+        details.responsibilities = member.lease_holder? ? 'Coordinate house setup' : nil
+        details.preferences = 'Fictional demo preferences'
+      end
+    end
+  end
+
+  def create_guest_examples(house, season)
+    account = Account.find_by(email: 'guest@powpals.test') || FactoryBot.create(:account,
+      email: 'guest@powpals.test', password: PASSWORD)
+    guest = account.user || FactoryBot.create(:user, account: account, first_name: 'Sky', last_name: 'Visitor',
+      full_name: 'Sky Visitor', about: 'Fictional guest with access to their stay only.')
+    host = house.users.joins(:account).find_by!(accounts: { email: 'pal1@powpals.test' })
+    arrival = [Date.current + 7, season.starts_on].max
+    stay = season.guest_stays.find_by(email: account.email, arrival: arrival) || season.guest_stays.create!(
+      email: account.email, guest_name: guest.display_name, host: host, guest: guest, arrival: arrival,
+      departure: arrival + 2, status: :approved, accepted_at: Time.current)
+    accountant = house.roommates.find_by!(role: :accountant).user.account
+    GuestStayBilling.new(stay, accountant).post!
+    bed = house.rooms.find_by!(name: 'Queen room').beds.first
+    bed.bed_requests.find_or_create_by!(user: host, guest_stay: stay, arrival: arrival, departure: arrival + 2)
   end
 
   def create_finance_examples(house, season)

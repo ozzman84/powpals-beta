@@ -16,8 +16,8 @@ rates, rent, participant count, rules and payment instructions are unconfirmed.
 Historical rates never automatically become current rates. Policies are draft,
 reference or confirmed. Quotes require a confirmed seven-day rate schedule.
 
-Quotes count occupied nights and exclude checkout. An explicitly configured
-free-night allowance applies per guest per stay. Dog fees require an amount and
+Quotes count occupied nights and exclude checkout. All occupied guest nights are charged; no free allowance applies.
+Rent-paying roommates do not incur guest fees for their own stays. Dog fees require an amount and
 an explicit per-night or per-stay basis. Estimating never creates a charge or
 transfers money. Historical policies disagree: a 2022 screenshot describes one
 free night and $25 extras, later notes mention $50 nightly, and the detailed
@@ -101,4 +101,7 @@ The phone acceptance test exercises confirming a policy, calculating occupied
 nights, creating a fee and recording a partial payment at a 390px viewport, with
 no horizontal page overflow. Regression checks cover privacy, nested resource
 boundaries, partial payments, overpayments, source revisions, date years, blanks,
-explicit zeros, draft policies, free nights, dog-fee basis and exact-cent parsing.
+explicit zeros, draft policies, obsolete free-night values being ignored, dog-fee basis and exact-cent parsing.
+
+See FIRST_SEVEN_STORIES.md for accepted invitations, the seasonal directory, named
+guest stays, bed requests, shared guest/host balances and cancellation behavior.

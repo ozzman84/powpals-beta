@@ -63,8 +63,8 @@ RSpec.describe 'House overview bed availability' do
     get users_lodging_path(house)
     day = Nokogiri::HTML(response.body).at_css("[data-attendance-date='#{Date.current}']")
     expect(day.text).to include('Today', '1 staying', '2 guests', '0 available', 'Sleeping guidance exceeded')
-    expect(day.at_css('.attendance-total').text).to eq('3')
-    expect(day.at_css('button[aria-label="Confirmed Roommate"]')).to be_present
+    expect(day.at_css('.attendee-stack-count').text).to eq('3')
+    expect(day.at_css('.attendee-dialog-person').text).to include(user.attendance_name)
     expect(day.at_css('.attendance-members')['style']).to include('33.333')
     expect(Nokogiri::HTML(response.body).css('#weekly-attendance-heading').size).to eq(1)
   end

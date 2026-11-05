@@ -6,7 +6,8 @@ module Users
     before_action :load_lodging
 
     def show
-      @lodging_calendars = @lodging.calendars.grouped_by_date_with_avatars(calendar_start)
+      @lodging_calendars = HouseAttendance.new(@lodging.calendars,
+        lodging: @lodging).call(Calendar.build_dates(calendar_start))
     end
 
     def my_calendar

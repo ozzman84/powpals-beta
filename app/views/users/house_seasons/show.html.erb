@@ -6,7 +6,7 @@
   <p class="rounded border bg-yellow-50 p-3">These rules and rates are <%= @season.reference? ? 'historical reference material' : 'a draft' %>. They are not confirmed for charging guests.</p>
 <% end %>
 <nav aria-label="Season sections" class="flex flex-wrap gap-4"><a href="#fees">Fees and expenses</a><a href="#rules">House rules</a><a href="#sheet-history">Sheet stay history</a></nav>
-<section class="space-y-3" id="fees">
+<section class="house-panel my-4 space-y-3 p-4" id="fees">
   <h3 class="text-xl font-semibold">Guest fee policy</h3>
   <p>Quotes count occupied nights; checkout is excluded. Free nights apply per guest per stay. Dog fees require an explicit per-night or per-stay choice.</p>
   <ul><% Date::DAYNAMES.each do |day| %><li><%= day %>: <%= @season.guest_rates.key?(day) ? number_to_currency(@season.guest_rates[day] / 100.0) : 'Not set' %></li><% end %></ul>
@@ -26,11 +26,11 @@
     <% if policy(@lodging).collect_rent? %><%= link_to 'Rent collection', users_lodging_house_season_rent_collection_path(@lodging, @season) %><% end %>
   </nav>
 </section>
-<section class="space-y-3" id="rules">
+<section class="house-panel my-4 space-y-3 p-4" id="rules">
   <h3 class="text-xl font-semibold">House rules and departure checklist</h3>
   <%= simple_format(@season.rules.presence || 'Awaiting this season’s rules. Historical policies are kept in their original seasons.') %>
 </section>
-<section class="space-y-3" id="sheet-history">
+<section class="house-panel my-4 space-y-3 p-4" id="sheet-history">
   <h3 class="text-xl font-semibold">Source sheet stay history</h3>
   <p>Day-plan values mean 0 = away, 1 = staying, and each additional person = one guest. Blank cells remain unknown. Bed labels are requests or annotations, not confirmed bookings or guest counts. Repeated labels across beds are preserved without counting them as separate people. Names are source labels, not linked user accounts.</p>
   <p>Import summary: <%= @season.source_summary.except('monthly_net_reconciled').map { |key, value| "#{key.humanize}: #{value}" }.join(' · ') %></p>

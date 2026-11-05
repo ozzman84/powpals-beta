@@ -8,7 +8,7 @@
 </ul>
 <% if policy(@lodging).update? %>
   <h3 class="text-xl font-semibold">Add a season</h3>
-  <%= form_with scope: :house_season, url: users_lodging_house_seasons_path(@lodging), class: 'space-y-3' do |form| %>
+  <%= form_with scope: :house_season, url: users_lodging_house_seasons_path(@lodging), class: 'house-panel my-4 space-y-3 p-4' do |form| %>
     <div><%= form.label :name %><%= form.text_field :name, required: true, autocomplete: 'off' %></div>
     <div><%= form.label :starts_on, 'First rental night' %><%= form.date_field :starts_on, required: true, autocomplete: 'off' %></div>
     <div><%= form.label :ends_on, 'Last rental night' %><%= form.date_field :ends_on, required: true, autocomplete: 'off' %></div>

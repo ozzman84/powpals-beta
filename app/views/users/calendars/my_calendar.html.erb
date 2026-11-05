@@ -1,7 +1,7 @@
 <%= render 'shared/header' %>
 
-<div data-controller="my-calendar" class="md:grid md:grid-cols-2 md:gap-8 md:divide-x md:divide-gray-200">
-  <div class="min-w-0 md:pr-4">
+<div data-controller="my-calendar" class="md:grid md:grid-cols-2 md:gap-8 ">
+  <div class="house-panel min-w-0 p-4">
     <div class="flex items-center">
       <div data-my-calendar-target="currentDate">
         <%= render partial: 'shared/errors' %>
@@ -113,5 +113,5 @@
 
     </div>
   </div>
-  <section class="mt-8 min-w-0 md:mt-0 md:pl-8"><h2 class="mb-2 text-base font-semibold text-gray-900">Schedule for <%= @current_date.strftime('%B %Y') %></h2><%= render 'stay_details' %></section>
+  <section class="house-panel mt-8 min-w-0 p-4 md:mt-0"><h2 class="mb-2 text-base font-semibold text-gray-900">Schedule for <%= @current_date.strftime('%B %Y') %></h2><%= render 'stay_details' %></section>
 </div>

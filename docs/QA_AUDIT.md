@@ -105,3 +105,23 @@ allowed with warnings; unset capacity does not imply zero availability.
 
 Verified with full preflight (226 examples), including a phone/desktop regression
 for attendee taps and long names. Review the overview on either private preview.
+
+## Story #181 — shared Slate surfaces and people stacks
+
+Slate surfaces now extend through rooms, personal/shared calendars, seasonal
+members, guest stays, bed requests, season policies, accounting, rent collection
+and personal balances. The application background shares the same slate palette.
+Both attendee stacks use shared/attendee_stack and one Stimulus controller. The
+final circle always shows the total, including unnamed guests. Calendar cells
+use a compact stack; weekly rows use the larger stack. Hover expands icons with
+names; clicking opens a native dialog with enlarged icons and preferred names
+underneath. Fallbacks use full names or the guest name supplied by the host.
+
+The dialog supports Escape, Close, backdrop dismissal and focus restoration.
+Unnamed guests are counted separately without inventing profiles. Shared monthly
+and weekly attendance now use one scoped aggregation with checkout excluded and
+only approved named guests. Existing house permissions remain enforced.
+
+Full preflight: 227 RSpec examples passed; Ruby/ERB lint, CSS build, Brakeman and
+refreshed dependency audit clean. Dialog and overflow checks cover 320, 390 and
+1366px. The final mobile stack spacing was checked again after visual review.

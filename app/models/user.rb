@@ -33,6 +33,10 @@ class User < ApplicationRecord
     full_name.presence || [first_name, last_name].compact_blank.join(' ')
   end
 
+  def attendance_name
+    preferred_name.presence || display_name
+  end
+
   def initials
     "#{first_name&.first || ''}#{last_name&.first || ''}".upcase
   end

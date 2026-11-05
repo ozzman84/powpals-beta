@@ -35,7 +35,9 @@ RSpec.describe 'House planning on a phone' do
     # Capture the verified mobile layout for visual review.
     page.save_screenshot(Rails.root.join('tmp/phone-house-overview.png')) # rubocop:disable Lint/Debugger
     click_on 'Shared calendar'
-    expect(page).to have_content('1 staying')
+    within("[data-calendar-date='#{Date.current}']") do
+      expect(page).to have_css('.attendee-stack-count', text: '2')
+    end
   end
 
   it 'adds several nights from arrival to checkout on a phone' do

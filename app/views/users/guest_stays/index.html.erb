@@ -4,7 +4,7 @@
 <h2 class="text-xl font-semibold">Guest stays</h2>
 <p class="mt-3">Roommates do not pay guest fees for their own stays. Each named guest links to their host. Only approved stays contribute to occupancy; invitation acceptance is tracked separately.</p>
 <p class="mt-3">Calendar guest counts represent additional unnamed guests. Remove any matching unnamed count when recording a named guest to avoid counting that person twice.</p>
-<%= form_with url: users_lodging_guest_stays_path(@lodging), scope: :guest_stay, class: 'my-6 grid gap-3 sm:grid-cols-2' do |form| %>
+<%= form_with url: users_lodging_guest_stays_path(@lodging), scope: :guest_stay, class: 'house-panel my-6 grid gap-3 p-4 sm:grid-cols-2' do |form| %>
   <div><%= form.label :house_season_id, 'Season' %><%= form.collection_select :house_season_id, @seasons, :id, :name, {}, class: 'w-full rounded border' %></div>
   <div><%= form.label :guest_name %><%= form.text_field :guest_name, required: true, class: 'w-full rounded border' %></div>
   <div><%= form.label :email, 'Guest email' %><%= form.email_field :email, required: true, class: 'w-full rounded border' %></div>

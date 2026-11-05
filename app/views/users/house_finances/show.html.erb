@@ -2,6 +2,7 @@
 <%= render 'shared/notices' %>
 <%= render 'shared/errors' %>
 <p class="my-3">Guest charges are generated from approved named stays. <%= link_to 'Review guest stays', users_lodging_guest_stays_path(@lodging), class: 'text-indigo-600' %></p>
+<section class="house-panel space-y-4 p-4">
 <h2 class="text-2xl font-semibold">House accounting — <%= @season.name %></h2>
 <p>Charges, expenses and recorded receipts. Deposits are tracked separately from income. Recording a receipt does not transfer money.</p>
 <%= link_to 'Season rules', users_lodging_house_season_path(@lodging, @season), class: 'text-indigo-600' %>
@@ -18,3 +19,4 @@
 <h3 class="text-xl font-semibold">Ledger</h3>
 <%= render 'users/house_seasons/ledger_entries' %>
 <%= render 'users/house_seasons/entry_form' %>
+</section>

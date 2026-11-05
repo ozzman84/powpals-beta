@@ -4,7 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Room availability card on phones and desktops' do
   it 'fits the overview and uses small bed and occupant icons' do
-    user = create(:user, full_name: 'AlexandriaWinterhouseMontgomerySnowboarding Reviewer', avatar_url: nil)
+    user = create(:user, preferred_name: nil, full_name: 'AlexandriaWinterhouseMontgomerySnowboarding Reviewer',
+      avatar_url: nil)
     house = create(:lodging, season_start: Date.current, season_end: Date.current + 30)
     create(:roommate, user: user, lodging: house)
     room = house.rooms.create!(name: 'Master bedroom')
@@ -24,9 +25,11 @@ RSpec.describe 'Room availability card on phones and desktops' do
         expect(page).to have_content('Available')
       end
       within("[data-attendance-date='#{Date.current}']") do
-        click_on user.display_name
-        expect(page).to have_css('.attendance-selection', text: user.display_name)
-        expect(page).to have_css('.attendance-total', text: '1')
+        find('.attendee-stack-trigger').click
+        expect(page).to have_css('dialog[open] .attendee-dialog-person', text: user.attendance_name)
+        click_on 'Close'
+        expect(page).to have_no_css('dialog[open]')
+        expect(page).to have_css('.attendee-stack-count', text: '1')
       end
       expect(page.evaluate_script('document.documentElement.scrollWidth <= innerWidth')).to be(true)
       expect(page.evaluate_script(<<~JS)).to eq([20, 20, 24, 24])

@@ -5,29 +5,8 @@
 <main>
   <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
     <div class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-      <!-- Rooms summary -->
-      <div class="lg:col-start-3 lg:row-end-1">
-        <h2 class="sr-only">Summary</h2>
-        <div class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
-          <dl class="flex flex-wrap">
-            <div class="flex-auto pl-6 pt-6">
-              <dt class="text-sm font-semibold leading-6 text-gray-900">Rooms</dt>
-            </div>
-            <div class="flex-none self-end px-6 pt-4">
-              <dt class="sr-only">Status</dt>
-              <dd class="rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-600/20">Inventory</dd>
-            </div>
-            <% @lodging.rooms.each do |room| %>
-              <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
-                <dt class="flex-none">
-                  <span class="sr-only">Status</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-6 flex-none" aria-hidden="true" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M176 256c44.11 0 80-35.89 80-80s-35.89-80-80-80-80 35.89-80 80 35.89 80 80 80zm352-128H304c-8.84 0-16 7.16-16 16v144H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v352c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16v-48h512v48c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V240c0-61.86-50.14-112-112-112z" /></svg>
-                </dt>
-                <dd class="text-sm leading-6 text-gray-500"><%= room.name %></dd>
-              </div>
-            <% end %>
-          </dl>
-        </div>
+      <div class="min-w-0 lg:col-start-3 lg:row-end-1">
+        <%= render 'room_availability' %>
       </div>
 
       <!-- Lodging Details -->

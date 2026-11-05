@@ -10,6 +10,12 @@ module Users
 
     def show
       @lodging = current_account.user.lodgings.find(params[:id])
+      @availability_date = Date.current
+      @rooms = @lodging.rooms.includes(:beds).order(:name)
+      beds = @rooms.flat_map(&:beds)
+      requests = BedRequest.where(bed_id: beds.map(&:id), status: %w[confirmed requested])
+        .overlapping(@availability_date, @availability_date + 1).includes(:user, guest_stay: :guest).group_by(&:bed_id)
+      @bed_availability = beds.to_h { |bed| [bed.id, BedAvailability.new(bed, requests.fetch(bed.id, []))] }
     end
 
     def new

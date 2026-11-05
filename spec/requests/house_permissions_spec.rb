@@ -51,7 +51,8 @@ RSpec.describe 'House permissions' do
     newcomer = create(:user)
     post users_lodging_roommates_path(lodging),
       params: { roommate: { user_id: newcomer.id, lodging_id: other_lodging.id, role: 'roommate' } }
-    expect(newcomer.lodgings).to contain_exactly(lodging)
+    expect(newcomer.lodgings).to be_empty
+    expect(lodging.house_invitations.last.email).to eq(newcomer.account.email)
   end
 
   it 'does not allow guests to write stays' do

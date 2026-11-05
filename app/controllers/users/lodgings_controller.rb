@@ -13,6 +13,8 @@ module Users
     end
 
     def new
+      return head :forbidden unless current_account.user.roommates.exists?(role: %w[admin lease_holder])
+
       @lodging = Lodging.new
     end
 
@@ -22,6 +24,8 @@ module Users
     end
 
     def create
+      return head :forbidden unless current_account.user.roommates.exists?(role: %w[admin lease_holder])
+
       @lodging = Lodging.new(create_lodging_params)
 
       saved = Lodging.transaction do

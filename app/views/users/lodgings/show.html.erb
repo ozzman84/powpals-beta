@@ -99,10 +99,14 @@
   <% @lodging.roommates.includes(:user).each do |membership| %><li class="flex items-center gap-3 rounded-lg border p-4"><%= render 'shared/avatar', user: membership.user %><div><p class="font-medium"><%= membership.user.first_name %> <%= membership.user.last_name %></p><p class="text-sm text-gray-500"><%= membership.role&.humanize || 'Roommate' %></p></div></li><% end %>
 </ul>
 <% if policy(@lodging).manage_roommates? %>
-  <h3 class="mt-6 font-semibold">Add an existing account to this house</h3>
+  <h3 class="mt-6 font-semibold">Invite a roommate</h3>
+  <p class="mt-2 text-sm">Access begins after acceptance. Share the generated link privately; no email is sent automatically.</p>
   <%= form_with url: users_lodging_roommates_path(@lodging), scope: :roommate, class: 'mt-4 flex flex-wrap items-end gap-3' do |form| %>
-    <div><%= form.label :user_id, 'Person' %><%= form.collection_select :user_id, User.where.not(id: @lodging.user_ids).order(:first_name), :id, :full_name, { prompt: 'Choose a person' }, required: true %></div>
-    <div><%= form.label :role %><%= form.select :role, Roommate.roles.keys.map { |role| [role.humanize, role] }, selected: 'roommate' %></div>
-    <%= form.submit 'Add roommate', class: 'rounded bg-indigo-600 p-2 text-white' %>
+    <div><%= form.label :email %><%= form.email_field :email, required: true, class: 'max-w-full rounded border p-2' %></div>
+    <div><%= form.label :role %><%= form.select :role, (Roommate.roles.keys - ['guest']).map { |role| [role.humanize, role] } %></div>
+    <%= form.submit 'Create invitation', class: 'rounded bg-indigo-600 p-2 text-white' %>
+  <% end %>
+  <% @lodging.house_invitations.where(accepted_at: nil, revoked_at: nil).where('expires_at > ?', Time.current).each do |invitation| %>
+    <div class="mt-3 flex flex-wrap gap-3"><span><%= invitation.email %> · expires <%= invitation.expires_at.to_date %></span><%= button_to 'Revoke invitation', users_lodging_roommate_path(@lodging, invitation), method: :delete, class: 'text-red-700' %></div>
   <% end %>
 <% end %></section>

@@ -25,6 +25,7 @@ RSpec.describe 'Local readiness' do
   end
 
   it 'creates a house and completes a stay planning workflow' do
+    create(:roommate, user: user, role: :lease_holder)
     post users_lodgings_path, params: { lodging: { title: 'Winter house', max_guests: 5,
                                                    season_start: Date.current, season_end: Date.current + 30 } }
     lodging = Lodging.find_by!(title: 'Winter house')

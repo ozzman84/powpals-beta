@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_05_000200) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000300) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -104,6 +104,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000200) do
     t.index ["lodging_id", "user_id", "date"], name: "unique_calendars_identity", unique: true
     t.index ["lodging_id"], name: "index_calendars_on_lodging_id"
     t.index ["user_id"], name: "index_calendars_on_user_id"
+  end
+
+  create_table "house_invitations", force: :cascade do |t|
+    t.bigint "lodging_id", null: false
+    t.bigint "invited_by_id", null: false
+    t.string "email", null: false
+    t.string "role", default: "roommate", null: false
+    t.string "token_digest", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "accepted_at"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invited_by_id"], name: "index_house_invitations_on_invited_by_id"
+    t.index ["lodging_id"], name: "index_house_invitations_on_lodging_id"
+    t.index ["token_digest"], name: "index_house_invitations_on_token_digest", unique: true
   end
 
   create_table "house_ledger_entries", force: :cascade do |t|
@@ -283,6 +299,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000200) do
   add_foreign_key "blackout_days", "season_passes"
   add_foreign_key "calendars", "lodgings"
   add_foreign_key "calendars", "users"
+  add_foreign_key "house_invitations", "accounts", column: "invited_by_id"
+  add_foreign_key "house_invitations", "lodgings"
   add_foreign_key "house_ledger_entries", "accounts", column: "recorded_by_id"
   add_foreign_key "house_ledger_entries", "house_seasons"
   add_foreign_key "house_ledger_entries", "users"

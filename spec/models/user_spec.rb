@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe User do
   describe 'relationships' do
     it { is_expected.to have_many(:roommates) }
-    it { is_expected.to have_many(:lodgings).through(:roommates) }
+    it { is_expected.to have_many(:lodgings).through(:house_memberships) }
     it { is_expected.to belong_to(:account) }
     it { is_expected.to have_many(:calendars).dependent(:destroy) }
   end

@@ -2,13 +2,14 @@
 
 module ApplicationHelper
   def navigation_items
-    [
+    links = [
       { body: 'Dashboard', href: user_path },
-      { body: 'My houses', href: users_lodgings_path },
       { body: 'PowPals', href: users_path },
       { body: 'Mountains', href: root_path },
       { body: 'Passes', href: edit_profile_path }
     ]
+    links.insert(1, { body: 'My houses', href: users_lodgings_path }) if current_account&.user&.house_access?
+    links
   end
 
   def demo_database?

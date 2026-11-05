@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   resource :user, only: %i[show edit update]
   resources :users, only: :index
 
+  resource :house_invitation, only: %i[show update]
+
   namespace :users do
     resources :lodgings do
       resources :house_seasons, only: %i[index show create update] do
@@ -16,7 +18,7 @@ Rails.application.routes.draw do
           resources :house_payments, only: :create
         end
       end
-      resources :roommates, only: :create
+      resources :roommates, only: %i[create destroy]
       resource :my_payments, only: :show
       resources :rooms, only: %i[index create destroy] do
         resources :beds, only: :update

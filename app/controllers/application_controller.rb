@@ -3,6 +3,15 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
 
+  before_action :require_house_access!
+
+  def require_house_access!
+    return unless controller_path.start_with?('users/') && account_signed_in?
+    return if current_account.user&.house_access?
+
+    head :forbidden
+  end
+
   rescue_from Pundit::NotAuthorizedError do
     head :forbidden
   end

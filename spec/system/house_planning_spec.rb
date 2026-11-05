@@ -22,6 +22,10 @@ RSpec.describe 'House planning on a phone' do
     fill_in 'Cars', with: 1
     click_on 'Add stay'
     expect(page).to have_button('Save stay')
+    within('[data-testid="personal-month-grid"]') do
+      expect(page).to have_css('[data-guest-count="1"]', text: '1')
+    end
+    page.save_screenshot(Rails.root.join('tmp/phone-calendar-guest-badges.png'), full: true) # rubocop:disable Lint/Debugger
     click_on 'House overview'
     expect(page).to have_content('This week')
     expect(page).to have_content('Winter house')

@@ -11,6 +11,16 @@ module Users
 
     def my_calendar
       @calendars = current_account.user.calendars.where(lodging: @lodging)
+      dates = Calendar.build_dates(@current_date)
+      @guest_counts = Hash.new(0)
+      @calendars.staying.where(date: dates).pluck(:date, :guest_count).each do |date, count|
+        @guest_counts[date] += count
+      end
+      @lodging.guest_stays.approved.where(host: current_account.user)
+        .where('arrival <= ? AND departure > ?', dates.last, dates.first)
+        .pluck(:arrival, :departure).each do |arrival, departure|
+        ([arrival, dates.first].max...[departure, dates.last + 1].min).each { |date| @guest_counts[date] += 1 }
+      end
     end
 
     def create

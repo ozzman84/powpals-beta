@@ -32,7 +32,7 @@
 
       <% end %>
     </div>
-    <p class="mt-4 text-sm text-gray-500">Choose a day: green is staying, red is away. Use the stay details to set guests and cars.</p>
+    <p class="mt-4 text-sm text-gray-500">Choose a day: green is staying, red is away. The blue badge shows your guest count. Use the stay details to set guests and cars.</p>
     <div class="mt-10 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
       <div>M</div>
       <div>T</div>
@@ -45,6 +45,7 @@
     <div class="mt-2 grid grid-cols-7 text-sm" data-testid="personal-month-grid">
       <% @calendars.fetch_records_and_dates(@current_date).each do |calendar| %>
 
+        <div class="relative mx-auto h-12 w-10">
         <% if !can_plan_stay?(@lodging, calendar.date) %>
           <div class="py-2 text-center"><span class="mx-auto flex h-8 w-8 items-center justify-center rounded-full <%= calendar.status == 'staying' ? 'bg-green-900 text-white' : (calendar.status == 'away' ? 'bg-red-700 text-white' : 'text-gray-400') %>" title="<%= calendar.status&.humanize || 'Unknown' %>"><%= calendar.date.day %></span></div>
         <% elsif calendar.status == "staying" %>
@@ -103,6 +104,11 @@
           </div>
 
         <% end %>
+        <% count = @guest_counts[calendar.date] %>
+        <% if count.positive? %>
+          <span data-guest-count="<%= count %>" aria-label="<%= pluralize(count, 'guest') %>" title="<%= pluralize(count, 'guest') %>" class="pointer-events-none absolute right-0 top-0 z-10 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-bold leading-none text-white ring-2 ring-white"><%= count > 99 ? '99+' : count %></span>
+        <% end %>
+        </div>
       <% end %>
 
     </div>

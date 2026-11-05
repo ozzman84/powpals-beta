@@ -17,11 +17,12 @@ RSpec.describe 'House planning on a phone' do
   it 'lets a roommate record guests and cars and see shared occupancy' do
     visit users_lodging_path(lodging)
     click_on 'My stays'
+    find('summary', text: 'Add a stay').click
     fill_in 'Date', with: Date.current.iso8601
     fill_in 'Additional unnamed guests', with: 1
     fill_in 'Cars', with: 1
     click_on 'Add stay'
-    expect(page).to have_button('Save stay')
+    expect(page).to have_button("Options for #{Date.current.strftime('%b %-d')}")
     within('[data-testid="personal-month-grid"]') do
       expect(page).to have_css('[data-guest-count="1"]', text: '1')
     end

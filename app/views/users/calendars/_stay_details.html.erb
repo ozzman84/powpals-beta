@@ -1,31 +1,56 @@
-<p class="mb-4 text-sm">Named approved guests are counted separately. Enter only additional unnamed guests and cars here; do not also include a named guest in these counts.</p>
+<div class="mb-5 flex items-center justify-between gap-3">
+  <p class="text-sm text-gray-500">Your attendance, guests and cars.</p>
+  <span class="flex-none rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600"><%= pluralize(@month_stays.size, 'day') %></span>
+</div>
 <% if policy(@lodging).stay? && !@lodging.archived? %>
-  <%= form_with url: users_lodging_calendars_path(@lodging), scope: :calendar, class: 'flex flex-wrap items-end gap-3 rounded border bg-white p-4' do |form| %>
-    <div><%= form.label :date %><%= form.date_field :date, value: @current_date, min: @lodging.season_start, max: @lodging.season_end, required: true %></div>
-    <div><%= form.label :status %><%= form.select :status, Calendar.statuses.keys, selected: 'staying' %></div>
-    <div><%= form.label :guest_count, 'Additional unnamed guests' %><%= form.number_field :guest_count, min: 0, value: 0, class: 'w-20' %></div>
-    <div><%= form.label :cars %><%= form.number_field :cars, min: 0, value: 0, class: 'w-20' %></div>
-    <%= hidden_field_tag :start_date, @current_date %>
-    <%= form.submit 'Add stay', class: 'rounded bg-indigo-700 p-2 text-white' %>
-  <% end %>
+  <details class="mb-5 rounded-xl border border-gray-200 bg-gray-50">
+    <summary class="cursor-pointer px-4 py-3 text-sm font-semibold text-indigo-700">Add a stay</summary>
+    <%= form_with url: users_lodging_calendars_path(@lodging), scope: :calendar, class: 'grid grid-cols-2 gap-4 border-t border-gray-200 p-4' do |form| %>
+      <div class="col-span-2"><%= form.label :date, class: 'block text-xs font-medium text-gray-700' %><%= form.date_field :date, value: @current_date, min: @lodging.season_start, max: @lodging.season_end, required: true, class: 'mt-1 block w-full rounded-md border-gray-300 text-sm' %></div>
+      <div class="col-span-2"><%= form.label :status, class: 'block text-xs font-medium text-gray-700' %><%= form.select :status, Calendar.statuses.keys.map { |status| [status.humanize, status] }, { selected: 'staying' }, class: 'mt-1 block w-full rounded-md border-gray-300 text-sm' %></div>
+      <div><%= form.label :guest_count, 'Additional unnamed guests', class: 'block text-xs font-medium text-gray-700' %><%= form.number_field :guest_count, min: 0, value: 0, class: 'mt-1 block w-full rounded-md border-gray-300 text-sm' %></div>
+      <div><%= form.label :cars, class: 'block text-xs font-medium text-gray-700' %><%= form.number_field :cars, min: 0, value: 0, class: 'mt-1 block w-full rounded-md border-gray-300 text-sm' %></div>
+      <%= hidden_field_tag :start_date, @current_date %>
+      <%= form.submit 'Add stay', class: 'col-span-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white' %>
+    <% end %>
+  </details>
 <% end %>
-<ul class="space-y-3">
-  <% @calendars.where(date: Calendar.build_dates(@current_date)).order(:date).each do |entry| %>
-    <li class="rounded border bg-white p-4">
-      <% entry.capacity_warnings.each do |warning| %><p class="text-sm text-yellow-800"><%= warning %></p><% end %>
-      <h3 class="font-semibold"><%= entry.date.strftime('%a %b %d') %></h3>
-      <% if policy(@lodging).stay? && !@lodging.archived? %>
-        <%= form_with model: entry, url: users_lodging_calendars_path(@lodging, id: entry.id), class: 'flex flex-wrap items-end gap-3' do |form| %>
-          <div><%= form.label :status, for: "status_#{entry.id}" %><%= form.select :status, Calendar.statuses.keys, {}, id: "status_#{entry.id}" %></div>
-          <div><%= form.label :guest_count, 'Additional unnamed guests', for: "guests_#{entry.id}" %><%= form.number_field :guest_count, id: "guests_#{entry.id}", min: 0, class: 'w-20' %></div>
-          <div><%= form.label :cars, for: "cars_#{entry.id}" %><%= form.number_field :cars, id: "cars_#{entry.id}", min: 0, class: 'w-20' %></div>
-          <%= hidden_field_tag :start_date, @current_date %>
-          <%= form.submit 'Save stay', class: 'rounded border p-2' %>
+<% if @month_stays.empty? %><div class="rounded-xl border border-dashed border-gray-300 p-6 text-center"><p class="font-medium text-gray-900">No days recorded yet</p><p class="mt-2 text-sm text-gray-500">Choose a day on the calendar to start your schedule.</p></div><% end %>
+<ol class="space-y-2" aria-label="Your monthly stays">
+  <% @month_stays.each do |entry| %>
+    <li data-stay-id="<%= entry.id %>" data-controller="stay-card" data-action="click@window->stay-card#close keydown.esc@window->stay-card#close" class="relative min-w-0 rounded-xl border border-gray-200 bg-white p-4 transition hover:bg-gray-50 focus-within:ring-2 focus-within:ring-indigo-200">
+      <div class="flex items-center gap-3">
+        <div class="flex h-12 w-12 flex-none flex-col items-center justify-center rounded-lg bg-gray-100 text-gray-700"><span class="text-[10px] font-semibold uppercase"><%= entry.date.strftime('%a') %></span><span class="text-lg font-semibold leading-5"><%= entry.date.day %></span></div>
+        <div class="min-w-0 flex-1">
+          <div class="flex flex-wrap items-center gap-2"><h3 class="text-sm font-semibold text-gray-900"><time datetime="<%= entry.date %>"><%= entry.date.strftime('%b %-d, %Y') %></time></h3><span class="rounded-full px-2 py-0.5 text-xs font-medium <%= { 'staying' => 'bg-green-50 text-green-800', 'away' => 'bg-red-50 text-red-700', 'undecided' => 'bg-gray-100 text-gray-600' }[entry.status] %>"><%= entry.status.humanize %></span></div>
+          <p class="mt-1 text-xs text-gray-500"><%= pluralize(@guest_counts[entry.date], 'guest') %> · <%= pluralize(entry.staying? ? entry.cars : 0, 'car') %></p>
+        </div>
+        <% if can_plan_stay?(@lodging, entry.date) %>
+          <div class="relative flex-none">
+            <button type="button" data-stay-card-target="toggle" data-action="stay-card#toggle" aria-label="Options for <%= entry.date.strftime('%b %-d') %>" aria-haspopup="menu" aria-expanded="false" aria-controls="stay-menu-<%= entry.id %>" class="flex h-10 w-10 items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <span class="sr-only">Options for <%= entry.date.strftime('%b %-d') %></span>
+              <svg class="h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm0 6.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm0 6.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" /></svg>
+            </button>
+            <div id="stay-menu-<%= entry.id %>" role="menu" data-stay-card-target="menu" hidden class="absolute right-0 top-full z-20 mt-1 w-40 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+              <button type="button" role="menuitem" data-action="stay-card#edit" class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50">Edit stay</button>
+              <%= button_to 'Delete stay', users_lodging_calendars_path(@lodging, id: entry.id, start_date: @current_date), method: :delete, role: 'menuitem', class: 'block w-full px-4 py-2 text-left text-sm text-red-700 hover:bg-red-50' %>
+            </div>
+          </div>
         <% end %>
-        <%= button_to 'Remove stay', users_lodging_calendars_path(@lodging, id: entry.id, start_date: @current_date), method: :delete, class: 'mt-2 text-red-700' %>
-      <% else %>
-        <p><%= entry.status %> · <%= entry.guest_count %> guests · <%= entry.cars %> cars</p>
-      <% end %>
+      </div>
+      <% entry.capacity_warnings.each do |warning| %><p class="mt-3 rounded-md bg-yellow-50 p-2 text-xs text-yellow-800"><%= warning %></p><% end %>
+      <% if can_plan_stay?(@lodging, entry.date) %>
+        <div data-stay-card-target="editor" hidden class="mt-4 border-t border-gray-100 pt-4">
+          <%= form_with model: entry, url: users_lodging_calendars_path(@lodging, id: entry.id), class: 'grid grid-cols-2 gap-4' do |form| %>
+            <div class="col-span-2"><%= form.label :status, for: "status_#{entry.id}", class: 'block text-xs font-medium text-gray-700' %><%= form.select :status, Calendar.statuses.keys.map { |status| [status.humanize, status] }, {}, id: "status_#{entry.id}", class: 'mt-1 block w-full rounded-md border-gray-300 text-sm' %></div>
+            <div><%= form.label :guest_count, 'Additional unnamed guests', for: "guests_#{entry.id}", class: 'block text-xs font-medium text-gray-700' %><%= form.number_field :guest_count, id: "guests_#{entry.id}", min: 0, class: 'mt-1 block w-full rounded-md border-gray-300 text-sm' %></div>
+            <div><%= form.label :cars, for: "cars_#{entry.id}", class: 'block text-xs font-medium text-gray-700' %><%= form.number_field :cars, id: "cars_#{entry.id}", min: 0, class: 'mt-1 block w-full rounded-md border-gray-300 text-sm' %></div>
+            <div class="col-span-2 rounded-lg bg-gray-50 p-3 text-xs text-gray-500">Named approved guests are counted automatically. Enter only additional unnamed guests and cars here.</div>
+            <%= hidden_field_tag :start_date, @current_date %>
+            <div class="col-span-2 flex flex-wrap justify-end gap-2"><button type="button" data-action="stay-card#cancel" class="rounded-md border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700">Cancel</button><%= form.submit 'Save stay', class: 'rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white' %></div>
+          <% end %>
+        </div>
+      <% else %><p class="mt-3 text-xs text-gray-400">View only · outside the active rental dates</p><% end %>
     </li>
   <% end %>
-</ul>
+</ol>

@@ -11,6 +11,7 @@ module Users
 
     def my_calendar
       @calendars = current_account.user.calendars.where(lodging: @lodging)
+      @month_stays = @calendars.where(date: @current_date.all_month).order(:date)
       dates = Calendar.build_dates(@current_date)
       @guest_counts = Hash.new(0)
       @calendars.staying.where(date: dates).pluck(:date, :guest_count).each do |date, count|

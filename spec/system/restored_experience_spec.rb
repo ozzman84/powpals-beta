@@ -45,7 +45,7 @@ RSpec.describe 'Restored PowPals screens' do
     expect(page).to have_css('[data-testid="personal-month-grid"]')
     within("[data-calendar-date='#{Date.current.iso8601}']") { click_on Date.current.day.to_s }
     expect(user.calendars.find_by!(lodging: house, date: Date.current)).to be_staying
-    expect(page).to have_button('Save stay')
+    expect(page).to have_button("Options for #{Date.current.strftime('%b %-d')}")
     page.save_screenshot(Rails.root.join('tmp/restored-phone-calendar.png')) # rubocop:disable Lint/Debugger
     within("[data-calendar-date='#{Date.current.iso8601}']") { click_on Date.current.day.to_s }
     expect(user.calendars.find_by!(lodging: house, date: Date.current)).to be_away

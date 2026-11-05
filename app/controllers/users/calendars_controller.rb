@@ -26,6 +26,8 @@ module Users
 
     def create
       authorize @lodging, :stay?
+      return create_range if params.dig(:calendar, :arrival).present?
+
       @calendar = current_account.user.calendars.new(calendar_params.merge(lodging: @lodging))
       finish_change(@lodging.with_lock { @calendar.save })
     end
@@ -43,6 +45,17 @@ module Users
     end
 
     private
+
+    def create_range
+      dates = params.expect(calendar: [:arrival, :checkout]).to_h.symbolize_keys
+      result = StayRange.new(@lodging, current_account.user).call(**dates,
+**calendar_params.except(:date).to_h.symbolize_keys)
+      flash[:warning] = result.warnings.join(' ') if result.warnings.any?
+      redirect_to my_calendar_users_lodging_calendars_path(@lodging, start_date: result.arrival),
+        notice: "Added #{result.created} nights; #{result.unchanged} existing days kept unchanged."
+    rescue ArgumentError, ActiveRecord::RecordInvalid => e
+      redirect_to my_calendar_users_lodging_calendars_path(@lodging, start_date: calendar_start), alert: e.message
+    end
 
     def load_lodging
       @lodging = current_account.user.lodgings.find(params[:lodging_id])

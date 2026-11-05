@@ -64,3 +64,10 @@ The main Google OAuth client must permit the exact callback
 https://TAILNET_HOST:8443/accounts/auth/google/callback, including its port.
 This is a Google client setting, not a reason to change the existing password or
 client secret. Local development email opens on the Mac through letter_opener.
+
+## Role review accounts
+
+The isolated demo now provides accountant `pal2@powpals.test`, rent collector
+`pal3@powpals.test`, and member `pal1@powpals.test`. They share the password shown
+on its sign-in page. The manager `demo@powpals.test` cannot open the full books.
+See READINESS_REVIEW.md for live verification and remaining season decisions.

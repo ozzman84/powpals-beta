@@ -1,10 +1,13 @@
 # Seasons, guest fees, expenses and sheet references
 
-Stories #143–145 add a house navigation item: Seasons & guest fees. Ordinary
-house members can read their house's seasonal history. Guest memberships cannot
-read financial operations. Only house admins and lease holders can edit policies,
-add entries or record receipts. Every nested season, entry and receipt is scoped
-to its house. No users, invitations, manager roles or payment recipients were set up.
+Stories #151–153 add advisory capacity, private finance roles and expiring passes.
+House managers edit room inventory and public season policies. Only the designated
+accountant can access the full ledger, private source notes and budget. A separate
+rent collector can manage rent and deposits. Members see only entries explicitly
+assigned to them through My payments. Manager status grants no accounting access.
+Legacy entries remain unassigned until reviewed; names are not guessed into accounts.
+Every nested season, entry and receipt is scoped to its house. Real users and finance
+roles remain pending; fictional demo accounts exercise the separate roles.
 
 ## Separate seasons and policies
 
@@ -60,7 +63,7 @@ without DATABASE_URL. It does not change the original historical database.
 ## Ledger and receipts
 
 Money is stored in integer cents. Entries have a season, accounting month,
-description, guest-fee/expense category and positive amount. Entries and receipts
+description, guest-fee/expense/rent/deposit/shared-charge category and positive amount. Entries and receipts
 are append-only through the UI. Exact financial corrections/refunds are not
 inferred or generated from source notes; reconcile them explicitly before posting.
 

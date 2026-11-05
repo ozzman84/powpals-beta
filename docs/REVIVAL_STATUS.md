@@ -3,6 +3,9 @@
 Branch: revival/local-restoration. Changes are committed in story-sized blocks.
 Production deployment and public Funnel are outside this scope.
 
+See [READINESS_REVIEW.md](READINESS_REVIEW.md) for the latest role, capacity, pass
+and live weather findings. WeatherAPI currently rejects the configured key (#157).
+
 ## Implemented
 
 - Ruby 3.4.12 / Rails 8.1.4.1 with audited security patches to existing dependencies.
@@ -10,7 +13,7 @@ Production deployment and public Funnel are outside this scope.
   profiles without overwriting chosen avatars, transactional profiles, account lock
   handling and safe rejection of existing-email collisions.
 - Scoped house permissions and manager-only membership/room controls.
-- Season bounds, occupancy and parking validation, guest/car editing and guarded
+- Season bounds, advisory occupancy and parking warnings, guest/car editing and guarded
   stay writes. Weather refresh is cached, asynchronous and safe when unavailable.
 - The original branded layout, detailed profile/resort views, house/room cards,
   rental forms and colored calendar grids are restored. New season and manual

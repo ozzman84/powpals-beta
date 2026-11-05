@@ -21,6 +21,7 @@ class Account < ApplicationRecord
     transaction do
       account = find_by(provider: auth.provider, uid: auth.uid) || create_google_account!(auth)
       account.create_user!(google_profile(auth)) unless account.user
+      account.populate_google_avatar!(auth.info.image)
       account
     end
   end
@@ -48,6 +49,13 @@ class Account < ApplicationRecord
       full_name: auth.info.name,
       avatar_url: auth.info.image, ride_type: :ski, level: :beginner
     }
+  end
+
+  def populate_google_avatar!(image)
+    return unless active_for_authentication? && image.present? && user.avatar_url.blank?
+
+    # Provider metadata must not make login fail on unrelated legacy profile validations.
+    user.update_columns(avatar_url: image, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def any_season_passes?

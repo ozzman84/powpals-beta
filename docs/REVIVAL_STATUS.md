@@ -6,7 +6,8 @@ Production deployment and public Funnel are outside this scope.
 ## Implemented
 
 - Ruby 3.4.12 / Rails 8.1.4.1 with audited security patches to existing dependencies.
-- Verified-provider Google identity handling, transactional profiles, account lock
+- Verified-provider Google identity handling, missing-photo enrichment on existing
+  profiles without overwriting chosen avatars, transactional profiles, account lock
   handling and safe rejection of existing-email collisions.
 - Scoped house permissions and manager-only membership/room controls.
 - Season bounds, occupancy and parking validation, guest/car editing and guarded
@@ -35,7 +36,7 @@ boundaries and reconciliation. Demo names are not current-season roster changes.
 
 ## Verification
 
-Final run: 148 RSpec examples, zero failures; 150 Ruby files and 43 ERB templates
+Final run: 153 RSpec examples, zero failures; 150 Ruby files and 43 ERB templates
 clean; Brakeman zero warnings; refreshed dependency audit clean; eager loading passed.
 The suite covers phone and desktop screens, colored stay controls and historical
 read-only dates, nested authorization, rates, accounting, source imports and

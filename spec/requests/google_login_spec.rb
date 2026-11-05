@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Google login' do
   let(:auth) do
     OmniAuth::AuthHash.new(provider: 'google', uid: 'verified-google-123',
-      info: { email: 'google-login@example.com', first_name: 'Alex', last_name: 'Jones', name: 'Alex Jones' },
+      info: { email: 'google-login@example.com', first_name: 'Alex', last_name: 'Jones', name: 'Alex Jones',
+              image: 'https://lh3.googleusercontent.com/callback-photo' },
       extra: { raw_info: { email_verified: true } })
   end
 
@@ -41,5 +42,15 @@ RSpec.describe 'Google login' do
     get account_google_omniauth_callback_path
     expect(response).to redirect_to(new_account_session_path)
     expect(Account.where(uid: auth.uid)).not_to exist
+  end
+
+  it 'saves the Google photo when an existing profile without an avatar signs in' do
+    account = Account.from_omniauth(auth)
+    account.user.update!(avatar_url: nil)
+    get account_google_omniauth_callback_path
+    expect(response).to redirect_to(user_path)
+    expect(account.user.reload.avatar_url).to eq(auth.info.image)
+    follow_redirect!
+    expect(response.body).to include(auth.info.image)
   end
 end

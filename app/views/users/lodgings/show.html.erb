@@ -43,7 +43,7 @@
             <dd class="inline text-gray-700"><time datetime="<%= @lodging.season_end %>"><%= @lodging.season_end&.strftime('%B %d, %Y') || 'Not set' %></time></dd>
           </div>
         </dl>
-        <p class="mt-6 text-sm text-gray-500">Capacity: <%= @lodging.max_guests %> people. Parking: <%= @lodging.max_cars || 'not set' %>.</p>
+        <p class="mt-6 text-sm text-gray-500">Capacity: <%= @lodging.advisory_capacity || 'not set' %> people (<%= @lodging.capacity_source %>; advisory only). Parking: <%= @lodging.max_cars || 'not set' %>.</p>
         <p class="mt-2 text-sm"><%= @lodging.description %></p>
         <div class="overflow-x-auto"><table class="mt-8 w-full whitespace-nowrap text-left text-sm leading-6">
           <colgroup>
@@ -65,6 +65,7 @@
             <% @lodging.calendars.this_week.each do |date, counts| %>
               <tr class="border-b border-gray-100">
                 <td class="max-w-0 px-0 py-5 align-top">
+                  <% @lodging.capacity_warnings(occupants: counts[:staying] + counts[:guests], cars: counts[:cars]).each do |warning| %><p class="text-xs text-yellow-800"><%= warning %></p><% end %>
                   <div class="truncate font-medium text-gray-900"><%= date.strftime('%A') %> - <%= date.day.ordinalize %></div>
                 </td>
                 <td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">

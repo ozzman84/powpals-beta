@@ -8,7 +8,7 @@ class Lodging < ApplicationRecord
   has_many :calendars, dependent: :destroy
 
   validates :title, presence: true
-  validates :max_guests, numericality: { only_integer: true, greater_than: 0 }
+  validates :max_guests, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :max_cars, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validate :valid_season
 
@@ -17,7 +17,30 @@ class Lodging < ApplicationRecord
     errors.add(:season_start, 'and end date must both be supplied') if season_start.present? != season_end.present?
   end
 
-  #   validates :max_capacity, numericality: { greater_than: 0, less_than: 101 }, if: { status: :published}
+  def bed_spaces
+    spaces = Bed.where(room_id: rooms.select(:id)).pluck(:size, :capacity).sum do |size, capacity|
+      capacity || Bed::CAPACITY.fetch(size.to_sym, 0)
+    end
+    spaces if spaces.positive?
+  end
+
+  def advisory_capacity
+    max_guests || bed_spaces
+  end
+
+  def capacity_source
+    max_guests ? 'configured guidance' : 'bed spaces from inventory'
+  end
+
+  def capacity_warnings(occupants:, cars:)
+    warnings = []
+    if advisory_capacity && occupants > advisory_capacity
+      warnings << "Sleeping guidance exceeded: #{occupants} people for #{advisory_capacity} #{capacity_source}."
+    end
+
+    warnings << "Parking guidance exceeded: #{cars} cars for #{max_cars} spaces." if max_cars && cars > max_cars
+    warnings
+  end
 
   enum :status, {
     draft: 'draft',

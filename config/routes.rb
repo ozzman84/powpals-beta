@@ -15,7 +15,9 @@ Rails.application.routes.draw do
         end
       end
       resources :roommates, only: :create
-      resources :rooms, only: %i[index create destroy]
+      resources :rooms, only: %i[index create destroy] do
+        resources :beds, only: :update
+      end
       resource :calendars, only: %i[show create destroy update] do
         get 'my_calendar', on: :member
       end

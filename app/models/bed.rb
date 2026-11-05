@@ -20,17 +20,19 @@ class Bed < ApplicationRecord
     bunk: 'bunk'
   }, default: 'mattress', validate: true
 
+  validates :capacity, numericality: { only_integer: true, greater_than: 0 }
+
   CAPACITY = {
     twin: 1,
-    full: 1,
+    full: 2,
     queen: 2,
-    king: 3,
-    california_king: 3
+    king: 2,
+    california_king: 2
   }.freeze
 
   private
 
   def set_capacity
-    self.capacity = CAPACITY[size&.to_sym]
+    self.capacity ||= CAPACITY[size&.to_sym]
   end
 end

@@ -15,11 +15,11 @@ RSpec.describe Calendar do
     expect(entry.errors[:date]).not_to be_empty
   end
 
-  it 'counts guests when enforcing house capacity' do
+  it 'counts guests for a capacity warning without rejecting the stay' do
     described_class.create!(user: user, lodging: lodging, date: Date.current, status: :staying, guest_count: 2)
     entry = described_class.new(user: create(:user), lodging: lodging, date: Date.current, status: :staying)
-    expect(entry).not_to be_valid
-    expect(entry.errors[:base]).to include('House capacity would be exceeded')
+    expect(entry.save).to be(true)
+    expect(entry.capacity_warnings.join).to include('Sleeping guidance exceeded')
   end
 
   it 'allows updating an existing stay without double counting it' do
@@ -32,10 +32,10 @@ RSpec.describe Calendar do
     expect(entry).not_to be_valid
   end
 
-  it 'enforces available parking' do
+  it 'warns about parking without rejecting the stay' do
     entry = described_class.new(user: user, lodging: lodging, date: Date.current, status: :staying, cars: 2)
-    expect(entry).not_to be_valid
-    expect(entry.errors[:cars]).to include('exceed available parking')
+    expect(entry.save).to be(true)
+    expect(entry.capacity_warnings.join).to include('Parking guidance exceeded')
   end
 
   it 'uses users rather than calendar IDs for occupancy avatars' do

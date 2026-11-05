@@ -30,7 +30,7 @@ module Users
     private
 
     def room_params
-      params.expect(room: [:room_type, :name, { beds_attributes: [%i[size style]] }])
+      params.expect(room: [:room_type, :name, { beds_attributes: [%i[size style capacity]] }])
     end
   end
 end

@@ -49,6 +49,11 @@ module Users
     end
 
     def finish_change(success)
+      if success && !@calendar.destroyed? && @calendar.capacity_warnings.any?
+        flash[:warning] =
+          @calendar.capacity_warnings.join(' ')
+      end
+
       redirect_to my_calendar_users_lodging_calendars_path(@lodging, start_date: calendar_start),
         alert: (success ? nil : @calendar.errors.full_messages.to_sentence)
     end

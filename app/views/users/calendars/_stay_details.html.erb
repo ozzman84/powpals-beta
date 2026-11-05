@@ -11,6 +11,7 @@
 <ul class="space-y-3">
   <% @calendars.where(date: Calendar.build_dates(@current_date)).order(:date).each do |entry| %>
     <li class="rounded border bg-white p-4">
+      <% entry.capacity_warnings.each do |warning| %><p class="text-sm text-yellow-800"><%= warning %></p><% end %>
       <h3 class="font-semibold"><%= entry.date.strftime('%a %b %d') %></h3>
       <% if policy(@lodging).stay? && !@lodging.archived? %>
         <%= form_with model: entry, url: users_lodging_calendars_path(@lodging, id: entry.id), class: 'flex flex-wrap items-end gap-3' do |form| %>

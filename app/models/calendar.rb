@@ -17,7 +17,6 @@ class Calendar < ApplicationRecord
   validates :guest_count, :cars, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   before_validation :default_counts
   validate :within_season
-  validate :within_capacity
 
   Day = Struct.new(:date, :status, keyword_init: true)
   CALENDAR_LENGTH = 42
@@ -66,6 +65,14 @@ class Calendar < ApplicationRecord
     (Date.current..6.days.from_now).to_a
   end
 
+  def capacity_warnings
+    return [] unless staying? && lodging && date
+
+    others = lodging.calendars.staying.where(date: date).where.not(id: id)
+    lodging.capacity_warnings(occupants: others.count + others.sum(:guest_count) + 1 + guest_count.to_i,
+      cars: others.sum(:cars) + cars.to_i)
+  end
+
   private
 
   def default_counts
@@ -78,16 +85,5 @@ class Calendar < ApplicationRecord
 
     errors.add(:date, 'is before the rental season') if lodging.season_start && date < lodging.season_start
     errors.add(:date, 'is after the rental season') if lodging.season_end && date > lodging.season_end
-  end
-
-  def within_capacity
-    return unless staying? && lodging && date && guest_count.to_i >= 0 && cars.to_i >= 0
-
-    others = lodging.calendars.staying.where(date: date).where.not(id: id)
-    occupants = others.count + others.sum(:guest_count) + 1 + guest_count.to_i
-    errors.add(:base, 'House capacity would be exceeded') if lodging.max_guests && occupants > lodging.max_guests
-    return unless lodging.max_cars && others.sum(:cars) + cars.to_i > lodging.max_cars
-
-    errors.add(:cars, 'exceed available parking')
   end
 end

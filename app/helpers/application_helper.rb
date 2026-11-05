@@ -4,9 +4,28 @@ module ApplicationHelper
   def navigation_items
     [
       { body: 'Dashboard', href: user_path },
-      { body: 'Lodgings', href: users_lodgings_path },
-      { body: 'PowPals', href: users_path }
+      { body: 'My houses', href: users_lodgings_path },
+      { body: 'PowPals', href: users_path },
+      { body: 'Mountains', href: root_path },
+      { body: 'Passes', href: edit_profile_path }
     ]
+  end
+
+  def demo_database?
+    Rails.env.development? && ApplicationRecord.connection_db_config.database == 'powpals_beta_demo_development'
+  end
+
+  def house_navigation(lodging)
+    links = [['House overview', users_lodging_path(lodging)], ['Rooms', users_lodging_rooms_path(lodging)],
+      ['Shared calendar', users_lodging_calendars_path(lodging)],
+      ['My stays', my_calendar_users_lodging_calendars_path(lodging)]]
+    links << ['Seasons & guest fees', users_lodging_house_seasons_path(lodging)] if policy(lodging).view_operations?
+    links
+  end
+
+  def can_plan_stay?(lodging, date)
+    policy(lodging).stay? && (!lodging.season_start || date >= lodging.season_start) &&
+      (!lodging.season_end || date <= lodging.season_end)
   end
 
   def navigation_class(path)

@@ -1,0 +1,29 @@
+<% if policy(@lodging).stay? && !@lodging.archived? %>
+  <%= form_with url: users_lodging_calendars_path(@lodging), scope: :calendar, class: 'flex flex-wrap items-end gap-3 rounded border bg-white p-4' do |form| %>
+    <div><%= form.label :date %><%= form.date_field :date, value: @current_date, min: @lodging.season_start, max: @lodging.season_end, required: true %></div>
+    <div><%= form.label :status %><%= form.select :status, Calendar.statuses.keys, selected: 'staying' %></div>
+    <div><%= form.label :guest_count, 'Guests' %><%= form.number_field :guest_count, min: 0, value: 0, class: 'w-20' %></div>
+    <div><%= form.label :cars %><%= form.number_field :cars, min: 0, value: 0, class: 'w-20' %></div>
+    <%= hidden_field_tag :start_date, @current_date %>
+    <%= form.submit 'Add stay', class: 'rounded bg-indigo-700 p-2 text-white' %>
+  <% end %>
+<% end %>
+<ul class="space-y-3">
+  <% @calendars.where(date: Calendar.build_dates(@current_date)).order(:date).each do |entry| %>
+    <li class="rounded border bg-white p-4">
+      <h3 class="font-semibold"><%= entry.date.strftime('%a %b %d') %></h3>
+      <% if policy(@lodging).stay? && !@lodging.archived? %>
+        <%= form_with model: entry, url: users_lodging_calendars_path(@lodging, id: entry.id), class: 'flex flex-wrap items-end gap-3' do |form| %>
+          <div><%= form.label :status, for: "status_#{entry.id}" %><%= form.select :status, Calendar.statuses.keys, {}, id: "status_#{entry.id}" %></div>
+          <div><%= form.label :guest_count, 'Guests', for: "guests_#{entry.id}" %><%= form.number_field :guest_count, id: "guests_#{entry.id}", min: 0, class: 'w-20' %></div>
+          <div><%= form.label :cars, for: "cars_#{entry.id}" %><%= form.number_field :cars, id: "cars_#{entry.id}", min: 0, class: 'w-20' %></div>
+          <%= hidden_field_tag :start_date, @current_date %>
+          <%= form.submit 'Save stay', class: 'rounded border p-2' %>
+        <% end %>
+        <%= button_to 'Remove stay', users_lodging_calendars_path(@lodging, id: entry.id, start_date: @current_date), method: :delete, class: 'mt-2 text-red-700' %>
+      <% else %>
+        <p><%= entry.status %> · <%= entry.guest_count %> guests · <%= entry.cars %> cars</p>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

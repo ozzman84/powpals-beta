@@ -1,36 +1,111 @@
 <%= render 'shared/header' %>
-<h2 class="text-xl font-semibold">My stays — <%= @current_date.strftime('%B %Y') %></h2>
-<nav class="flex gap-4" aria-label="Calendar months">
-  <%= link_to 'Previous month', my_calendar_users_lodging_calendars_path(@lodging, start_date: @current_date - 1.month) %>
-  <%= link_to 'This month', my_calendar_users_lodging_calendars_path(@lodging) %>
-  <%= link_to 'Next month', my_calendar_users_lodging_calendars_path(@lodging, start_date: @current_date + 1.month) %>
-</nav>
-<% if policy(@lodging).stay? && !@lodging.archived? %>
-  <%= form_with url: users_lodging_calendars_path(@lodging), scope: :calendar, class: 'flex flex-wrap items-end gap-3 rounded border bg-white p-4' do |form| %>
-    <div><%= form.label :date %><%= form.date_field :date, value: @current_date, min: @lodging.season_start, max: @lodging.season_end, required: true %></div>
-    <div><%= form.label :status %><%= form.select :status, Calendar.statuses.keys, selected: 'staying' %></div>
-    <div><%= form.label :guest_count, 'Guests' %><%= form.number_field :guest_count, min: 0, value: 0, class: 'w-20' %></div>
-    <div><%= form.label :cars %><%= form.number_field :cars, min: 0, value: 0, class: 'w-20' %></div>
-    <%= hidden_field_tag :start_date, @current_date %>
-    <%= form.submit 'Add stay', class: 'rounded bg-indigo-700 p-2 text-white' %>
-  <% end %>
-<% end %>
-<ul class="space-y-3">
-  <% @calendars.where(date: Calendar.build_dates(@current_date)).order(:date).each do |entry| %>
-    <li class="rounded border bg-white p-4">
-      <h3 class="font-semibold"><%= entry.date.strftime('%a %b %d') %></h3>
-      <% if policy(@lodging).stay? && !@lodging.archived? %>
-        <%= form_with model: entry, url: users_lodging_calendars_path(@lodging, id: entry.id), class: 'flex flex-wrap items-end gap-3' do |form| %>
-          <div><%= form.label :status, for: "status_#{entry.id}" %><%= form.select :status, Calendar.statuses.keys, {}, id: "status_#{entry.id}" %></div>
-          <div><%= form.label :guest_count, 'Guests', for: "guests_#{entry.id}" %><%= form.number_field :guest_count, id: "guests_#{entry.id}", min: 0, class: 'w-20' %></div>
-          <div><%= form.label :cars, for: "cars_#{entry.id}" %><%= form.number_field :cars, id: "cars_#{entry.id}", min: 0, class: 'w-20' %></div>
-          <%= hidden_field_tag :start_date, @current_date %>
-          <%= form.submit 'Save stay', class: 'rounded border p-2' %>
-        <% end %>
-        <%= button_to 'Remove stay', users_lodging_calendars_path(@lodging, id: entry.id, start_date: @current_date), method: :delete, class: 'mt-2 text-red-700' %>
-      <% else %>
-        <p><%= entry.status %> · <%= entry.guest_count %> guests · <%= entry.cars %> cars</p>
+
+<div data-controller="my-calendar" class="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
+  <div class="md:pr-14">
+    <div class="flex items-center">
+      <div data-my-calendar-target="currentDate">
+        <%= render partial: 'shared/errors' %>
+
+        <% @current_month = @current_date.month %>
+      </div>
+      <h2 class="flex-auto text-sm font-semibold text-gray-900"><%= Date::MONTHNAMES[@current_month] %></h2>
+
+      <%= link_to url_for(my_calendar_users_lodging_calendars_path(@lodging, start_date: @current_date - 1.month)),
+        params: { start_date: (@current_date - 1.month) },
+        class: "-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500",
+        id: "previousMonthButton", aria: { label: "Previous month" } do %>
+
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+        </svg>
+
       <% end %>
-    </li>
-  <% end %>
-</ul>
+
+      <%= link_to url_for(my_calendar_users_lodging_calendars_path(@lodging, start_date: @current_date + 1.month)),
+        params: { start_date: (@current_date - 1.month) },
+        class: "-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500",
+        id: "nextMonthButton", aria: { label: "Next month" } do %>
+
+        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+        </svg>
+
+      <% end %>
+    </div>
+    <p class="mt-4 text-sm text-gray-500">Choose a day: green is staying, red is away. Use the stay details to set guests and cars.</p>
+    <div class="mt-10 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
+      <div>M</div>
+      <div>T</div>
+      <div>W</div>
+      <div>T</div>
+      <div>F</div>
+      <div>S</div>
+      <div>S</div>
+    </div>
+    <div class="mt-2 grid grid-cols-7 text-sm" data-testid="personal-month-grid">
+      <% @calendars.fetch_records_and_dates(@current_date).each do |calendar| %>
+
+        <% if !can_plan_stay?(@lodging, calendar.date) %>
+          <div class="py-2 text-center"><span class="mx-auto flex h-8 w-8 items-center justify-center rounded-full <%= calendar.status == 'staying' ? 'bg-green-900 text-white' : (calendar.status == 'away' ? 'bg-red-700 text-white' : 'text-gray-400') %>" title="<%= calendar.status&.humanize || 'Unknown' %>"><%= calendar.date.day %></span></div>
+        <% elsif calendar.status == "staying" %>
+
+          <div class="py-2" data-calendar-date="<%= calendar.date.iso8601 %>">
+            <%= button_to calendar.date.day,
+              users_lodging_calendars_path(@lodging, id: calendar.id),
+              method: :patch,
+              class: "mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-green-900 font-semibold text-white",
+              params: {
+                calendar: {
+                  status: "away",
+                  start_date: @current_date.iso8601
+                }
+              } %>
+          </div>
+
+        <% elsif calendar.status == "away" %>
+
+          <div class="py-2" data-calendar-date="<%= calendar.date.iso8601 %>">
+            <%= button_to calendar.date.day,
+              users_lodging_calendars_path(lodging_id: params[:lodging_id], id: calendar.id, start_date: @current_date.iso8601),
+              class: "mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-red-700 font-semibold text-white",
+              method: :delete %>
+          </div>
+
+        <% elsif calendar.date.month == @current_month %>
+
+          <div class="py-2" data-calendar-date="<%= calendar.date.iso8601 %>">
+            <%= button_to calendar.date.day,
+              users_lodging_calendars_path(@lodging),
+              class: "mx-auto flex h-8 w-8 items-center justify-center rounded-full text-gray-900 hover:bg-gray-200",
+              params: {
+                calendar: {
+                  date: calendar.date,
+                  status: "staying",
+                  lodging_id: params[:lodging_id],
+                  start_date: @current_date.iso8601
+                }
+              } %>
+          </div>
+
+        <% else %>
+
+          <div class="py-2" data-calendar-date="<%= calendar.date.iso8601 %>">
+            <%= button_to calendar.date.day,
+              users_lodging_calendars_path(@lodging),
+              class: "mx-auto flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-200",
+              params: {
+                calendar: {
+                  date: calendar.date,
+                  status: "staying",
+                  lodging_id: params[:lodging_id]
+                }
+              } %>
+          </div>
+
+        <% end %>
+      <% end %>
+
+    </div>
+  </div>
+  <section class="mt-8 md:mt-0 md:pl-14"><h2 class="mb-4 text-xl font-semibold">Schedule for <%= @current_date.strftime('%B %Y') %></h2><%= render 'stay_details' %></section>
+</div>

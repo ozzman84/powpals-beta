@@ -1,16 +1,11 @@
-<header class="space-y-3 border-b pb-4">
-  <h1 class="text-2xl font-bold"><%= @lodging.title %></h1>
-  <p><%= @lodging.full_address %></p>
-  <nav aria-label="House navigation" class="flex flex-wrap gap-4">
-    <%= link_to 'House overview', users_lodging_path(@lodging) %>
-    <%= link_to 'Rooms', users_lodging_rooms_path(@lodging) %>
-    <%= link_to 'Shared calendar', users_lodging_calendars_path(@lodging) %>
-    <% if policy(@lodging).view_operations? %>
-      <%= link_to 'Seasons & guest fees', users_lodging_house_seasons_path(@lodging) %>
-    <% end %>
-    <%= link_to 'My stays', my_calendar_users_lodging_calendars_path(@lodging) %>
-    <% if policy(@lodging).update? %>
-      <%= link_to 'Edit house', edit_users_lodging_path(@lodging) %>
+<header class="relative mb-6 border-b border-gray-200 pb-5">
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div><h1 class="text-xl font-semibold leading-6 text-gray-900"><%= @lodging.title %></h1><p class="mt-1 text-sm text-gray-500"><%= @lodging.full_address %></p></div>
+    <% if policy(@lodging).update? %><%= link_to 'Edit house', edit_users_lodging_path(@lodging), class: 'rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300' %><% end %>
+  </div>
+  <nav aria-label="House navigation" class="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+    <% house_navigation(@lodging).each do |label, path| %>
+      <%= link_to label, path, class: "border-b-2 px-1 pb-2 text-sm font-medium #{current_page?(path) ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'}", aria: { current: ('page' if current_page?(path)) } %>
     <% end %>
   </nav>
 </header>

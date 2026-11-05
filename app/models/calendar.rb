@@ -19,6 +19,7 @@ class Calendar < ApplicationRecord
   validate :within_season
   validate :within_capacity
 
+  Day = Struct.new(:date, :status, keyword_init: true)
   CALENDAR_LENGTH = 42
 
   def self.grouped_by_date_with_avatars(start_date)
@@ -46,9 +47,8 @@ class Calendar < ApplicationRecord
     month = build_dates(start_date)
     records_within_range = where(date: month)
     existing_records = records_within_range.to_a.index_by(&:date)
-    Struct.new('Date', :date, :status)
 
-    month.map { |date| existing_records[date] || Struct::Date.new(date) }
+    month.map { |date| existing_records[date] || Day.new(date: date) }
   end
 
   def self.this_week

@@ -59,7 +59,7 @@ class Account < ApplicationRecord
   end
 
   def pass_or_all_resorts
-    any_season_passes? ? resorts.includes(:account_ski_days) : Resort.all
+    any_season_passes? ? Resort.where(id: resorts.select(:id)) : Resort.all
   end
 
   def ski_days_within_range(start_date, end_date)
@@ -67,14 +67,16 @@ class Account < ApplicationRecord
   end
 
   def order_resorts_by_ski_day_counts(account_ski_days)
-    pass_or_all_resorts.joins(:account_ski_days)
-                       .merge(account_ski_days)
-                       .group('resorts.id')
-                       .order('COUNT(account_ski_days.id) DESC')
+    days = AccountSkiDay.arel_table
+    counts = account_ski_days.reselect(:resort_id, days[:id].count.as('skier_count'))
+      .group(:resort_id).arel.as('planned_days')
+    mountains = Resort.arel_table
+    joins = mountains.join(counts, Arel::Nodes::OuterJoin).on(counts[:resort_id].eq(mountains[:id])).join_sources
+    pass_or_all_resorts.joins(joins).order(counts[:skier_count].desc.nulls_last, mountains[:name].asc)
   end
 
   def resort_data_for_multiple_days(number_of_days = 10)
-    account_ski_days = ski_days_within_range(Date.current, number_of_days.days.from_now)
+    account_ski_days = ski_days_within_range(Date.current, Date.current + number_of_days - 1)
     ordered_resorts = account_ski_days.empty? ? pass_or_all_resorts : order_resorts_by_ski_day_counts(account_ski_days)
 
     aggregate_resort_data(ordered_resorts.limit(20))

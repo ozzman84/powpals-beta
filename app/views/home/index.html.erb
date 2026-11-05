@@ -1,39 +1,10 @@
-<main class="mx-auto max-w-6xl space-y-6 p-4">
-  <h1 class="text-3xl font-bold">PowPals</h1>
-  <% if account_signed_in? %>
-    <nav class="flex flex-wrap gap-4">
-      <%= link_to 'My profile', user_path %>
-      <%= link_to 'My houses', users_lodgings_path %>
-      <%= link_to 'People', users_path %>
-      <%= link_to 'My passes', edit_profile_path %>
-      <%= button_to 'Sign out', destroy_account_session_path, method: :delete %>
-    </nav>
-    <h2 class="text-xl font-semibold">Mountains over the next 10 days</h2>
-    <p>Skier counts reflect recorded plans. A dash means the forecast is unavailable. Forecasts may take a moment to appear; refresh to see updates.</p>
-    <% if @resorts.empty? %>
-      <p>No resorts have been imported yet.</p>
-    <% else %>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left">
-          <thead><tr><th class="p-2">Resort</th><% 10.times do |index| %><th class="p-2"><%= (Date.current + index).strftime('%a %d') %></th><% end %></tr></thead>
-          <tbody>
-            <% @resorts.each do |name, data| %>
-              <tr class="border-t">
-                <th class="p-2"><%= name %></th>
-                <% data[:next_10_day_skier_count].each_with_index do |count, index| %>
-                  <% forecast = @weather_forecasts[name][(Date.current + index).iso8601] %>
-                  <% snow = forecast&.dig('day', 'totalsnow_cm') %>
-                  <td class="p-2"><%= snow.is_a?(Numeric) ? "#{(snow / 2.54).round(1)} in" : '—' %><br><%= count %> skiers</td>
-                <% end %>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-  <% else %>
-    <p>Plan ski days and manage your shared ski house.</p>
-    <%= link_to 'Sign in', new_account_session_path %>
-    <%= link_to 'Create an account', new_account_registration_path %>
-  <% end %>
-</main>
+<h1 class="text-4xl font-bold tracking-tight text-gray-900">Welcome to PowPals</h1>
+<p class="mt-3 text-gray-600">Plan ski days, find your people and manage your shared ski house.</p>
+<% if account_signed_in? %>
+  <nav class="my-6 flex flex-wrap gap-4"><%= link_to 'My profile', user_path, class: 'font-semibold text-indigo-600' %><%= link_to 'My houses', users_lodgings_path, class: 'font-semibold text-indigo-600' %><%= link_to 'My passes', edit_profile_path, class: 'font-semibold text-indigo-600' %></nav>
+  <h2 class="mt-8 text-xl font-semibold">Mountains over the next 10 days</h2>
+  <p class="mt-2 text-sm text-gray-500">Skier counts reflect recorded plans. A dash means the forecast is unavailable. Forecasts refresh in the background.</p>
+  <% if @resorts.empty? %><p class="mt-4">No resorts have been imported yet.</p><% else %><%= render 'shared/resort_table', resorts: @resorts, forecasts: @weather_forecasts %><% end %>
+<% else %>
+  <div class="mt-8 flex flex-wrap gap-4"><%= link_to 'Sign in', new_account_session_path, class: 'rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white' %><%= link_to 'Create an account', new_account_registration_path, class: 'rounded-md border px-4 py-2 font-semibold' %></div>
+<% end %>

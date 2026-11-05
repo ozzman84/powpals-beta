@@ -1,13 +1,35 @@
 <%= render 'shared/header' %>
-<h2 class="text-xl font-semibold">Rooms and beds</h2>
-<% if @rooms.empty? %><p>No rooms have been added.</p><% end %>
-<ul class="space-y-3">
-  <% @rooms.includes(:beds).each do |room| %>
-    <li class="rounded border bg-white p-4">
-      <h3 class="font-semibold"><%= room.name %></h3>
-      <ul><% room.beds.each do |bed| %><li><%= bed.size&.humanize %> <%= bed.style&.humanize %> · sleeps <%= bed.capacity %></li><% end %></ul>
-      <% if policy(@lodging).manage_rooms? %><%= button_to 'Remove room', users_lodging_room_path(@lodging, room), method: :delete, data: { turbo_confirm: 'Remove this room and its beds?' } %><% end %>
+<%= render partial: 'shared/errors' %>
+<%= render partial: 'shared/notices' %>
+
+<div class="bg-grey shadow overflow-hidden sm:rounded-md">
+  <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <% @rooms.each do |room| %>
+    <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
+      <div class="flex flex-1 flex-col p-8">
+
+        <h3 class="mt-6 text-sm font-medium text-gray-900"><%= "#{room.name.to_s.capitalize} #{room.room_type.to_s.humanize}" %><span class="block text-xs text-gray-500"><%= room.beds.count %> beds</span></h3>
+        <% room.beds.each do |bed| %>
+          <div class="mt-5">
+              <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Inventory</span>
+            <div class="rounded-md bg-gray-50 px-6 py-5 sm:flex sm:items-start sm:justify-between">
+              <div class="sm:flex sm:items-start">
+
+                <div class="mt-3 sm:ml-4 sm:mt-0">
+                  <div class="text-sm font-medium text-gray-900"><%= "#{bed.size.to_s.humanize} #{bed.style.to_s.humanize}" %></div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        <% end %>
+      </div>
+      <% if policy(@lodging).manage_rooms? %><div class="border-t p-4"><%= button_to 'Remove room', users_lodging_room_path(@lodging, room), method: :delete, class: 'font-semibold text-red-700' %></div><% end %>
     </li>
-  <% end %>
-</ul>
-<% if policy(@lodging).manage_rooms? %><h2 class="text-xl font-semibold">Add room</h2><%= render 'form', lodging: @lodging %><% end %>
+    <% end %>
+  </ul>
+</div>
+
+<% if policy(@lodging).manage_rooms? %><section class="mt-8"><h2 class="mb-4 text-xl font-semibold">Add a room</h2><%= render partial: 'form', locals: { lodging: @lodging } %></section><% end %>

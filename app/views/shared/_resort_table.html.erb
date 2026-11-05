@@ -1,0 +1,17 @@
+<div class="mt-6 max-w-full overflow-x-auto rounded-lg shadow-md">
+  <table class="w-full text-left text-sm text-gray-500">
+    <thead class="bg-gray-50 text-xs uppercase text-gray-700"><tr><th scope="col" class="px-6 py-3">Resorts</th><% 10.times do |index| %><th scope="col" class="whitespace-nowrap px-6 py-3 text-center"><%= (Date.current + index).strftime('%a %d') %></th><% end %></tr></thead>
+    <tbody>
+      <% resorts.each do |name, data| %>
+        <tr class="border-b bg-white hover:bg-gray-50">
+          <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900"><%= name %></th>
+          <% data[:next_10_day_skier_count].each_with_index do |count, index| %>
+            <% forecast = local_assigns.fetch(:forecasts, {}).dig(name, (Date.current + index).iso8601) %>
+            <% snow = forecast&.dig('day', 'totalsnow_cm') %>
+            <td class="whitespace-nowrap px-6 py-4 text-center"><div class="font-medium"><%= snow.is_a?(Numeric) ? "#{(snow / 2.54).round(1)} in" : '—' %></div><div class="mt-1 text-xs"><%= count %> skiers</div></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

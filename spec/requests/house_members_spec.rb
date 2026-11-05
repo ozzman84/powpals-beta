@@ -33,7 +33,7 @@ RSpec.describe 'Seasonal house directory' do
     sign_in person.account
     patch users_lodging_house_member_path(house, details, season_id: season.id), params: {
       house_season_membership: { pets: 'Example dog', share_contact: true, responsibilities: 'Accountant',
-        status: 'former' }
+                                 status: 'former' }
     }
     expect(details.reload).to have_attributes(pets: 'Example dog', share_contact: true,
       responsibilities: 'Trash coordinator', status: 'active')

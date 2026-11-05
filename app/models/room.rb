@@ -6,6 +6,7 @@ class Room < ApplicationRecord
   accepts_nested_attributes_for :beds
 
   validates :name, presence: true
+  validates :name, uniqueness: { scope: :lodging_id, case_sensitive: false }, if: :will_save_change_to_name?
 
   enum :room_type, {
     bedroom: 'bedroom',

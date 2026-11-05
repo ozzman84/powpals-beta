@@ -12,6 +12,8 @@ class Lodging < ApplicationRecord
   validates :max_guests, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true
   validates :max_cars, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
   validate :valid_season
+  validates :layout_reference_url, format: { with: %r{\Ahttps://[^\s]+\z}, message: 'must be an HTTPS link' },
+    allow_blank: true
 
   def valid_season
     errors.add(:season_end, 'must follow the start date') if season_start && season_end && season_end < season_start

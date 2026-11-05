@@ -19,6 +19,14 @@ module Users
       redirect_to users_lodging_rooms_path(@lodging)
     end
 
+    def update
+      @lodging = current_account.user.lodgings.find(params[:lodging_id])
+      authorize @lodging, :manage_rooms?
+      room = @lodging.rooms.find(params[:id])
+      success = room.update(params.expect(room: [:name, :room_type, :layout_notes]))
+      redirect_to users_lodging_rooms_path(@lodging), alert: (success ? nil : room.errors.full_messages.to_sentence)
+    end
+
     def destroy
       @lodging = current_account.user.lodgings.find(params[:lodging_id])
       authorize @lodging, :manage_rooms?
@@ -30,7 +38,8 @@ module Users
     private
 
     def room_params
-      params.expect(room: [:room_type, :name, { beds_attributes: [%i[size style capacity]] }])
+      params.expect(room: [:room_type, :name, :layout_notes,
+        { beds_attributes: [%i[size style capacity label temporary notes]] }])
     end
   end
 end

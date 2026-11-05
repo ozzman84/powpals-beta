@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_05_000400) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -78,6 +78,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000400) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "capacity"
+    t.string "label"
+    t.boolean "temporary", default: false, null: false
+    t.text "notes"
     t.index ["room_id"], name: "index_beds_on_room_id"
   end
 
@@ -229,6 +232,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000400) do
     t.date "season_start"
     t.date "season_end"
     t.integer "max_cars"
+    t.string "layout_reference_url"
   end
 
   create_table "resorts", force: :cascade do |t|
@@ -261,6 +265,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000400) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "room_type"
+    t.text "layout_notes"
     t.index ["lodging_id"], name: "index_rooms_on_lodging_id"
   end
 

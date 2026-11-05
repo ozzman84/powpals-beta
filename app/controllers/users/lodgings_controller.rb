@@ -68,11 +68,12 @@ module Users
 
     def create_lodging_params
       params.expect(lodging: [:title, :description, :max_guests, :street, :address2, :city, :state, :zip_code,
-        :country, :status, :season_start, :season_end, :max_cars])
+        :country, :status, :season_start, :season_end, :max_cars, :layout_reference_url])
     end
 
     def update_lodging_params
-      params.expect(lodging: [:title, :description, :max_guests, :status, :season_start, :season_end, :max_cars])
+      params.expect(lodging: [:title, :description, :max_guests, :status, :season_start, :season_end, :max_cars,
+        :layout_reference_url])
     end
   end
 end

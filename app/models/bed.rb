@@ -17,8 +17,12 @@ class Bed < ApplicationRecord
     airmattress: 'airmattress',
     pullout: 'pullout',
     couch: 'couch',
-    bunk: 'bunk'
+    bunk: 'bunk',
+    sleeping_bag: 'sleeping bag',
+    chair: 'chair'
   }, default: 'mattress', validate: true
+
+  validates :label, length: { maximum: 100 }, allow_blank: true
 
   validates :capacity, numericality: { only_integer: true, greater_than: 0 }
 
@@ -29,6 +33,10 @@ class Bed < ApplicationRecord
     king: 2,
     california_king: 2
   }.freeze
+
+  def inventory_name
+    label.presence || [size&.humanize, style&.humanize].compact.join(' ')
+  end
 
   private
 

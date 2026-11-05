@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 
   get '/edit-profile', to: 'accounts#edit', as: 'edit_profile'
   patch '/edit-profile', to: 'accounts#update'
+  delete '/owned_pass/:id', to: 'accounts#season_pass_destroy', as: 'remove_owned_pass'
   delete '/account_season_pass/:season_pass_id', to: 'accounts#season_pass_destroy', as: 'remove_season_pass'
 
   devise_for :accounts, controllers: {

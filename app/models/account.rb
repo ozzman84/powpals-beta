@@ -58,16 +58,24 @@ class Account < ApplicationRecord
     user.update_columns(avatar_url: image, updated_at: Time.current) # rubocop:disable Rails/SkipsModelValidations
   end
 
+  def active_account_season_passes
+    account_season_passes.current
+  end
+
+  def active_season_passes
+    SeasonPass.where(id: active_account_season_passes.select(:season_pass_id))
+  end
+
   def any_season_passes?
-    season_passes.any?
+    active_account_season_passes.exists?
   end
 
   def all_pass_resorts
-    resorts.distinct
+    Resort.where(id: active_season_passes.joins(:resorts).select('resorts.id'))
   end
 
   def pass_or_all_resorts
-    any_season_passes? ? Resort.where(id: resorts.select(:id)) : Resort.all
+    any_season_passes? ? all_pass_resorts : Resort.all
   end
 
   def ski_days_within_range(start_date, end_date)

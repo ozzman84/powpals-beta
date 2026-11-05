@@ -10,7 +10,7 @@ RSpec.describe Account do
   let(:popular) { create(:resort, name: 'Popular Mountain') }
 
   before do
-    [first_pass, second_pass].each { |pass| AccountSeasonPass.create!(account: account, season_pass: pass) }
+    [first_pass, second_pass].each { |pass| create(:account_season_pass, account: account, season_pass: pass) }
     [quiet, popular].each { |resort| SeasonPassResort.create!(season_pass: first_pass, resort: resort) }
     SeasonPassResort.create!(season_pass: second_pass, resort: quiet)
   end

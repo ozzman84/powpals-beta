@@ -21,7 +21,7 @@ RSpec.describe 'Restored PowPals screens' do
   it 'restores branded desktop navigation, profile details, passes, resorts and room cards' do
     pass = create(:season_pass)
     resort = create(:resort, name: 'Winter Park')
-    AccountSeasonPass.create!(account: user.account, season_pass: pass)
+    create(:account_season_pass, account: user.account, season_pass: pass)
     SeasonPassResort.create!(season_pass: pass, resort: resort)
     room = Room.create!(lodging: house, name: 'Master suite', room_type: :bedroom)
     room.beds.create!(size: :queen, style: :mattress)

@@ -40,7 +40,8 @@ RSpec.describe 'Account access' do
     pass = create(:season_pass)
     sign_in user.account
     patch edit_profile_path, params: { account: { account_season_passes_attributes: {
-      '0' => { season_pass_id: pass.id, account_id: create(:account).id }
+      '0' => { season_pass_id: pass.id, account_id: create(:account).id, season_label: '2026–27',
+               starts_on: '2026-09-01', expires_on: '2027-06-30' }
     } } }
     expect(user.account.reload.season_passes).to contain_exactly(pass)
   end

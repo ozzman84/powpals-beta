@@ -49,7 +49,7 @@ class HistoricalCatalogImport
       next unless @accounts[row.fetch('account_id')]
 
       AccountSeasonPass.find_or_create_by!(account: @accounts.fetch(row.fetch('account_id')),
-        season_pass: @passes.fetch(row.fetch('season_pass_id')))
+        season_pass: @passes.fetch(row.fetch('season_pass_id')), season_unknown: true)
     end
     restore_ski_days
   end

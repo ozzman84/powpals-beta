@@ -84,4 +84,22 @@ RSpec.describe 'Seasonal house directory' do
     get users_lodging_path(house)
     expect(response).to have_http_status(:forbidden)
   end
+
+  it 'shows contact actions on portrait cards only with consent for the selected season' do
+    house.update!(season_start: season.starts_on, season_end: season.ends_on)
+    person.update!(preferred_name: 'Snow Pal', phone_number: '+1 (202) 555-0142')
+    [users_lodging_path(house), users_lodging_house_members_path(house, season_id: season.id)].each do |path|
+      get path
+      card = Nokogiri::HTML(response.body).at_css("[data-roommate-card='#{member.id}']")
+      expect(card.text).to include('Snow Pal', 'Contact details not shared')
+      expect(card.css('a[href^="mailto:"], a[href^="tel:"]')).to be_empty
+    end
+    details.update!(share_contact: true)
+    [users_lodging_path(house), users_lodging_house_members_path(house, season_id: season.id)].each do |path|
+      get path
+      card = Nokogiri::HTML(response.body).at_css("[data-roommate-card='#{member.id}']")
+      expect(card.at_css('a[href^="mailto:"]')['href']).to eq("mailto:#{person.account.email}")
+      expect(card.at_css('a[href^="tel:"]')['href']).to eq('tel:+12025550142')
+    end
+  end
 end

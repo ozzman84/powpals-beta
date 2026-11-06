@@ -146,3 +146,17 @@ people area scrolls vertically within the screen height while the heading, Close
 button and total remain visible. Long lists can be scrolled by touch, wheel or
 keyboard. A crowded-list browser regression covers 18 attendees at phone and
 desktop widths and checks that the final person can be reached.
+
+## Story #184 — roommate portrait-card directory
+
+Roommates on the overview and seasonal Members page use the supplied portrait-card
+layout: large circular profile photo or initials, preferred name, skiing details,
+actual role badge and a divided contact footer. The responsive grid has one column
+on phones and up to four on desktops. Seasonal information remains visible;
+authorized editing is available under Edit member details.
+
+Email and Call links render only when the member opted into sharing contacts for
+that season. The overview uses the configured current season's consent. No new
+members, roles or contact-sharing preferences are assigned by this design change.
+Regression checks cover contact-link consent in both views, 128px portrait sizing,
+responsive columns, overflow and saving member preferences from the card.

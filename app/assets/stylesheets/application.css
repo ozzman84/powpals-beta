@@ -80,3 +80,11 @@
   .attendee-stack-compact .attendee-stack-person { margin-right: -9px; }
   .attendee-stack-compact .attendee-stack-count { position: relative; margin-left: 0; }
 }
+
+/* Roommate cards follow the portrait directory template on all house views. */
+.roommate-card { overflow-wrap: anywhere; border: 1px solid #c5cfdd; border-radius: 11px; background: white; box-shadow: 0 3px 9px #263b5110; }
+.roommate-portrait [data-avatar] { width: 128px; height: 128px; box-shadow: 0 0 0 1px #1724390d; }
+.roommate-portrait [data-avatar] > div { font-size: 32px; }
+.roommate-contact { min-height: 52px; }
+.roommate-contact:hover { background: #f4f7fa; }
+.roommate-card input, .roommate-card select, .roommate-card textarea { max-width: 100%; }

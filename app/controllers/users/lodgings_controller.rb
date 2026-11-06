@@ -10,6 +10,8 @@ module Users
 
     def show
       @lodging = current_account.user.lodgings.find(params[:id])
+      season = @lodging.house_seasons.find_by(starts_on: @lodging.season_start, ends_on: @lodging.season_end)
+      @roommate_season_details = season ? season.house_season_memberships.index_by(&:roommate_id) : {}
       @availability_date = Date.current
       @rooms = @lodging.rooms.includes(:beds).order(:name)
       beds = @rooms.flat_map(&:beds)

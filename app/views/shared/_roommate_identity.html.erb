@@ -1,0 +1,7 @@
+<% person = roommate.user %>
+<div class="roommate-identity flex flex-1 flex-col items-center px-6 pb-6 pt-8 text-center">
+  <div class="roommate-portrait"><%= render 'shared/avatar', user: person, height: '16', width: '16' %></div>
+  <h3 class="mt-6 w-full break-words text-sm font-semibold text-gray-900"><%= person.attendance_name %></h3>
+  <p class="mt-1 text-sm text-gray-500"><%= [person.ride_type&.humanize, person.level&.humanize].compact_blank.join(' · ') %></p>
+  <span class="mt-3 inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"><%= roommate.role.humanize %></span>
+</div>

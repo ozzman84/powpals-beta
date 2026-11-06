@@ -28,7 +28,11 @@ module Users
                  [:pets, :preferences, :share_contact]
                end
 
-      fields << :share_contact if membership.roommate.user_id == current_account.user.id
+      if membership.roommate.user_id == current_account.user.id
+        fields << :share_contact
+        fields << { social_links: [[:label, :url, :shared]] }
+      end
+
       values = params.expect(house_season_membership: fields)
       protect_manager!(membership) if values[:status] == 'former'
       membership.update!(values)

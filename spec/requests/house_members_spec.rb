@@ -102,4 +102,31 @@ RSpec.describe 'Seasonal house directory' do
       expect(card.at_css('a[href^="tel:"]')['href']).to eq('tel:+12025550142')
     end
   end
+
+  it 'allows members to share their own social links without exposing private ones or granting roles' do
+    sign_in person.account
+    patch users_lodging_house_member_path(house, details, season_id: season.id), params: {
+      house_season_membership: { social_links: [
+        { label: 'Instagram', url: 'https://www.instagram.com/', shared: 'true' },
+        { label: 'Website', url: 'https://example.com/private', shared: 'false' }
+      ], role: 'admin' }
+    }
+    expect(details.reload.shared_social_links.map { |link| link['label'] }).to eq(['Instagram'])
+    expect(member.reload).to be_roommate
+    sign_in manager.account
+    get users_lodging_house_members_path(house, season_id: season.id)
+    card = Nokogiri::HTML(response.body).at_css("[data-roommate-card='#{member.id}']")
+    expect(card.at_css('a[href="https://www.instagram.com/"]')).to be_present
+    expect(card.to_html).not_to include('https://example.com/private')
+    patch users_lodging_house_member_path(house, details, season_id: season.id), params: {
+      house_season_membership: { pets: 'Example dog',
+                                 social_links: [{ label: 'Website', url: 'https://example.com/changed', shared: true }] }
+    }
+    expect(details.reload.social_links.size).to eq(2)
+    sign_in person.account
+    patch users_lodging_house_member_path(house, details, season_id: season.id), params: {
+      house_season_membership: { social_links: [{ label: 'Bad link', url: 'javascript:alert(1)', shared: true }] }
+    }
+    expect(details.reload.social_links.size).to eq(2)
+  end
 end

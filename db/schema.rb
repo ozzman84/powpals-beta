@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_05_000800) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000900) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -219,6 +219,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_05_000800) do
     t.boolean "share_contact", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "social_links", default: [], null: false
     t.index ["house_season_id", "roommate_id"], name: "unique_season_member", unique: true
     t.index ["house_season_id"], name: "index_house_season_memberships_on_house_season_id"
     t.index ["roommate_id"], name: "index_house_season_memberships_on_roommate_id"

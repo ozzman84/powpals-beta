@@ -1,0 +1,22 @@
+<% person = roommate.user %>
+<footer class="mt-auto border-t border-slate-200">
+  <% if season_membership&.share_contact? %>
+    <div class="flex divide-x divide-slate-200">
+      <%= mail_to person.account.email, class: 'roommate-contact flex min-w-0 flex-1 items-center justify-center gap-2 py-4 text-sm font-semibold text-gray-900', aria: { label: "Email #{person.attendance_name}" } do %>
+        <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-5 w-5 flex-none text-gray-400"><path d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z" /><path d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z" /></svg>Email
+      <% end %>
+      <% if person.phone_number.present? %>
+        <%= link_to "tel:#{person.phone_number.gsub(/[^0-9+]/, '')}", class: 'roommate-contact flex min-w-0 flex-1 items-center justify-center gap-2 py-4 text-sm font-semibold text-gray-900', aria: { label: "Call #{person.attendance_name} at #{person.phone_number}" } do %>
+          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="h-5 w-5 flex-none text-gray-400"><path d="M2 3.5A1.5 1.5 0 0 1 3.5 2h1.148a1.5 1.5 0 0 1 1.465 1.175l.716 3.223a1.5 1.5 0 0 1-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 0 0 6.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 0 1 1.767-1.052l3.223.716A1.5 1.5 0 0 1 18 15.352V16.5a1.5 1.5 0 0 1-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 0 1 2.43 8.326 13.019 13.019 0 0 1 2 5V3.5Z" /></svg>Call
+        <% end %>
+      <% else %><span class="flex flex-1 items-center justify-center px-2 text-xs text-gray-500">Phone not shared</span><% end %>
+    </div>
+  <% else %><p class="px-4 py-4 text-center text-xs text-gray-500">Contact details not shared</p><% end %>
+  <% if season_membership&.shared_social_links&.any? %>
+    <div class="flex flex-wrap justify-center gap-1 border-t border-slate-200 p-2" aria-label="Shared social links">
+      <% season_membership.shared_social_links.each do |social| %>
+        <%= link_to social['url'], target: '_blank', rel: 'noopener noreferrer', class: 'inline-flex h-11 w-11 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100', aria: { label: "#{social['label']} for #{person.roommate_name}" }, title: social['label'] do %><%= render 'shared/social_icon', label: social['label'] %><% end %>
+      <% end %>
+    </div>
+  <% end %>
+</footer>

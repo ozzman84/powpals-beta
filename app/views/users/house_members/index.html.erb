@@ -1,0 +1,24 @@
+<%= render 'shared/header' %>
+<%= render 'shared/errors' %>
+<%= render 'shared/notices' %>
+<h2 class="text-xl font-semibold">Seasonal member directory</h2>
+<%= form_with url: users_lodging_house_members_path(@lodging), method: :get, class: 'my-4 flex flex-wrap gap-3' do |form| %>
+  <%= form.label :season_id, 'Season' %><%= form.collection_select :season_id, @seasons, :id, :name, selected: @season&.id %><%= form.submit 'View season' %>
+<% end %>
+<p class="my-4 text-sm">Profiles and passes carry across seasons. House details stay private. Members choose whether to share contact details.</p>
+<% if @season %>
+  <ul role="list" class="roommate-grid grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <% @members.each do |membership| %>
+      <% person = membership.user %>
+      <li class="roommate-card relative col-span-1 flex min-w-0 flex-col rounded-lg bg-white shadow" data-roommate-card="<%= membership.roommate_id %>">
+        <%= render 'shared/roommate_identity', roommate: membership.roommate %>
+        <%= render 'shared/roommate_modal', roommate: membership.roommate, season_membership: membership %>
+        <%= render 'shared/roommate_contacts', roommate: membership.roommate, season_membership: membership %>
+      </li>
+    <% end %>
+  </ul>
+  <% if policy(@lodging).manage_roommates? %>
+    <h3 class="mt-6 font-semibold">Include an already accepted house member in this season</h3>
+    <%= form_with url: users_lodging_house_members_path(@lodging, season_id: @season.id), class: 'mt-3 flex flex-wrap gap-3' do |form| %><%= form.collection_select :roommate_id, @lodging.roommates.where(access_state: 'active').where.not(role: 'guest').includes(:user), :id, :directory_name, {}, class: 'w-full max-w-full rounded border' %><%= form.submit 'Add to season' %><% end %>
+  <% end %>
+<% else %><p>Create a house season before preparing its roster.</p><% end %>

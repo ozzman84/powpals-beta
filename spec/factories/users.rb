@@ -5,8 +5,8 @@ FactoryBot.define do
     full_name = Faker::Fantasy::Tolkien.character
 
     full_name { full_name }
-    first_name { full_name.split(' ').first }
-    last_name { full_name.split(' ').last }
+    first_name { full_name.split.first }
+    last_name { full_name.split.last }
     preferred_name { Faker::Superhero.descriptor }
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.secondary_address }
@@ -31,6 +31,6 @@ FactoryBot.define do
     phone_number { Faker::PhoneNumber.phone_number }
     allergies { %w[nuts fruit shellfish eggs milk].sample }
 
-    association :account
+    account
   end
 end

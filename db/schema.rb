@@ -10,17 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_05_000900) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "account_season_passes", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.bigint "season_pass_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "starts_on"
+    t.date "expires_on"
+    t.string "season_label"
+    t.boolean "season_unknown", default: false, null: false
+    t.index ["account_id", "season_pass_id", "starts_on"], name: "unique_owned_pass_season", unique: true, where: "(starts_on IS NOT NULL)"
+    t.index ["account_id", "season_pass_id"], name: "unique_undated_owned_pass", unique: true, where: "(season_unknown = true)"
     t.index ["account_id"], name: "index_account_season_passes_on_account_id"
     t.index ["season_pass_id"], name: "index_account_season_passes_on_season_pass_id"
+    t.check_constraint "season_unknown AND starts_on IS NULL AND expires_on IS NULL OR NOT season_unknown AND starts_on IS NOT NULL AND expires_on IS NOT NULL AND expires_on >= starts_on", name: "owned_pass_valid_dates"
   end
 
   create_table "account_ski_days", force: :cascade do |t|
@@ -30,6 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.bigint "resort_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["account_id", "resort_id", "start_date"], name: "unique_account_ski_days_identity", unique: true
     t.index ["account_id"], name: "index_account_ski_days_on_account_id"
     t.index ["resort_id"], name: "index_account_ski_days_on_resort_id"
   end
@@ -58,8 +66,26 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.string "uid"
     t.index ["confirmation_token"], name: "index_accounts_on_confirmation_token", unique: true
     t.index ["email"], name: "index_accounts_on_email", unique: true
+    t.index ["provider", "uid"], name: "unique_accounts_identity", unique: true
     t.index ["reset_password_token"], name: "index_accounts_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_accounts_on_unlock_token", unique: true
+  end
+
+  create_table "bed_requests", force: :cascade do |t|
+    t.bigint "bed_id", null: false
+    t.bigint "user_id", null: false
+    t.date "arrival", null: false
+    t.date "departure", null: false
+    t.integer "spaces", default: 1, null: false
+    t.string "status", default: "requested", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "guest_stay_id"
+    t.index ["bed_id", "arrival", "departure"], name: "index_bed_requests_on_bed_id_and_arrival_and_departure"
+    t.index ["bed_id"], name: "index_bed_requests_on_bed_id"
+    t.index ["guest_stay_id"], name: "index_bed_requests_on_guest_stay_id"
+    t.index ["user_id"], name: "index_bed_requests_on_user_id"
+    t.check_constraint "departure > arrival AND spaces > 0", name: "valid_bed_request"
   end
 
   create_table "beds", force: :cascade do |t|
@@ -69,6 +95,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "capacity"
+    t.string "label"
+    t.boolean "temporary", default: false, null: false
+    t.text "notes"
     t.index ["room_id"], name: "index_beds_on_room_id"
   end
 
@@ -90,10 +119,147 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.bigint "lodging_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "guest_count"
-    t.integer "cars"
+    t.integer "guest_count", default: 0, null: false
+    t.integer "cars", default: 0, null: false
+    t.index ["lodging_id", "user_id", "date"], name: "unique_calendars_identity", unique: true
     t.index ["lodging_id"], name: "index_calendars_on_lodging_id"
     t.index ["user_id"], name: "index_calendars_on_user_id"
+  end
+
+  create_table "guest_stays", force: :cascade do |t|
+    t.bigint "house_season_id", null: false
+    t.bigint "host_id", null: false
+    t.bigint "guest_id"
+    t.string "guest_name", null: false
+    t.string "email", null: false
+    t.date "arrival", null: false
+    t.date "departure", null: false
+    t.integer "cars", default: 0, null: false
+    t.string "status", default: "requested", null: false
+    t.string "token_digest", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "accepted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "billed_at"
+    t.integer "dogs", default: 0, null: false
+    t.index ["guest_id"], name: "index_guest_stays_on_guest_id"
+    t.index ["host_id"], name: "index_guest_stays_on_host_id"
+    t.index ["house_season_id"], name: "index_guest_stays_on_house_season_id"
+    t.index ["token_digest"], name: "index_guest_stays_on_token_digest", unique: true
+    t.check_constraint "departure > arrival AND cars >= 0", name: "valid_guest_stay"
+  end
+
+  create_table "house_invitations", force: :cascade do |t|
+    t.bigint "lodging_id", null: false
+    t.bigint "invited_by_id", null: false
+    t.string "email", null: false
+    t.string "role", default: "roommate", null: false
+    t.string "token_digest", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "accepted_at"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "house_season_id"
+    t.index ["house_season_id"], name: "index_house_invitations_on_house_season_id"
+    t.index ["invited_by_id"], name: "index_house_invitations_on_invited_by_id"
+    t.index ["lodging_id"], name: "index_house_invitations_on_lodging_id"
+    t.index ["token_digest"], name: "index_house_invitations_on_token_digest", unique: true
+  end
+
+  create_table "house_ledger_entries", force: :cascade do |t|
+    t.bigint "house_season_id", null: false
+    t.bigint "recorded_by_id"
+    t.string "kind", null: false
+    t.string "description", null: false
+    t.date "month_on", null: false
+    t.bigint "amount_cents", null: false
+    t.string "source_key"
+    t.jsonb "source_data", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
+    t.date "due_on"
+    t.bigint "guest_stay_id"
+    t.datetime "voided_at"
+    t.index ["guest_stay_id", "month_on"], name: "unique_guest_stay_month_charge", unique: true, where: "(guest_stay_id IS NOT NULL)"
+    t.index ["guest_stay_id"], name: "index_house_ledger_entries_on_guest_stay_id"
+    t.index ["house_season_id", "source_key"], name: "index_house_ledger_entries_on_house_season_id_and_source_key", unique: true
+    t.index ["house_season_id"], name: "index_house_ledger_entries_on_house_season_id"
+    t.index ["recorded_by_id"], name: "index_house_ledger_entries_on_recorded_by_id"
+    t.index ["user_id"], name: "index_house_ledger_entries_on_user_id"
+    t.check_constraint "amount_cents > 0", name: "house_ledger_positive_amount"
+  end
+
+  create_table "house_payments", force: :cascade do |t|
+    t.bigint "house_ledger_entry_id", null: false
+    t.bigint "recorded_by_id"
+    t.bigint "amount_cents", null: false
+    t.date "paid_on"
+    t.boolean "source_reported", default: false, null: false
+    t.string "reference"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "paid_by_id"
+    t.index ["house_ledger_entry_id"], name: "index_house_payments_on_house_ledger_entry_id"
+    t.index ["paid_by_id"], name: "index_house_payments_on_paid_by_id"
+    t.index ["recorded_by_id"], name: "index_house_payments_on_recorded_by_id"
+    t.check_constraint "amount_cents > 0", name: "house_payment_positive_amount"
+  end
+
+  create_table "house_season_memberships", force: :cascade do |t|
+    t.bigint "house_season_id", null: false
+    t.bigint "roommate_id", null: false
+    t.string "status", default: "active", null: false
+    t.text "responsibilities"
+    t.text "pets"
+    t.text "pet_rules"
+    t.text "preferences"
+    t.boolean "share_contact", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.jsonb "social_links", default: [], null: false
+    t.index ["house_season_id", "roommate_id"], name: "unique_season_member", unique: true
+    t.index ["house_season_id"], name: "index_house_season_memberships_on_house_season_id"
+    t.index ["roommate_id"], name: "index_house_season_memberships_on_roommate_id"
+  end
+
+  create_table "house_seasons", force: :cascade do |t|
+    t.bigint "lodging_id", null: false
+    t.string "name", null: false
+    t.date "starts_on", null: false
+    t.date "ends_on", null: false
+    t.string "policy_status", default: "draft", null: false
+    t.bigint "monthly_rent_cents"
+    t.integer "participant_count"
+    t.jsonb "guest_rates", default: {}, null: false
+    t.bigint "dog_fee_cents"
+    t.string "dog_fee_basis", default: "unconfirmed", null: false
+    t.integer "free_nights", default: 0, null: false
+    t.text "rules"
+    t.text "source_notes"
+    t.jsonb "source_summary", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lodging_id", "starts_on", "ends_on"], name: "unique_house_season_dates", unique: true
+    t.index ["lodging_id"], name: "index_house_seasons_on_lodging_id"
+    t.check_constraint "ends_on >= starts_on", name: "house_season_date_order"
+  end
+
+  create_table "house_sheet_cells", force: :cascade do |t|
+    t.bigint "house_season_id", null: false
+    t.string "kind", null: false
+    t.date "observed_on", null: false
+    t.string "person_label"
+    t.string "room_label"
+    t.string "bed_label"
+    t.string "value", null: false
+    t.string "source_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["house_season_id", "source_key"], name: "index_house_sheet_cells_on_house_season_id_and_source_key", unique: true
+    t.index ["house_season_id"], name: "index_house_sheet_cells_on_house_season_id"
   end
 
   create_table "lodgings", force: :cascade do |t|
@@ -111,6 +277,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "address2"
+    t.date "season_start"
+    t.date "season_end"
+    t.integer "max_cars"
+    t.string "layout_reference_url"
   end
 
   create_table "resorts", force: :cascade do |t|
@@ -121,6 +291,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.datetime "updated_at", null: false
     t.decimal "lat", precision: 10, scale: 6
     t.decimal "long", precision: 10, scale: 6
+    t.index "lower((name)::text)", name: "unique_resorts_name", unique: true
   end
 
   create_table "roommates", force: :cascade do |t|
@@ -129,7 +300,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.bigint "lodging_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "access_state", default: "active", null: false
+    t.index ["lodging_id", "user_id"], name: "unique_roommates_identity", unique: true
     t.index ["lodging_id"], name: "index_roommates_on_lodging_id"
+    t.index ["lodging_id"], name: "one_accountant_per_house", unique: true, where: "((role)::text = 'accountant'::text)"
     t.index ["user_id"], name: "index_roommates_on_user_id"
   end
 
@@ -139,6 +313,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "room_type"
+    t.text "layout_notes"
     t.index ["lodging_id"], name: "index_rooms_on_lodging_id"
   end
 
@@ -148,6 +323,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["resort_id"], name: "index_season_pass_resorts_on_resort_id"
+    t.index ["season_pass_id", "resort_id"], name: "unique_season_pass_resorts_identity", unique: true
     t.index ["season_pass_id"], name: "index_season_pass_resorts_on_season_pass_id"
   end
 
@@ -155,6 +331,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "lower((name)::text)", name: "unique_season_passes_name", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -182,17 +359,38 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_09_043023) do
     t.string "instagram_url"
     t.string "facebook_url"
     t.index ["account_id"], name: "index_users_on_account_id"
+    t.index ["account_id"], name: "unique_users_identity", unique: true
   end
 
   add_foreign_key "account_season_passes", "accounts"
   add_foreign_key "account_season_passes", "season_passes"
   add_foreign_key "account_ski_days", "accounts"
   add_foreign_key "account_ski_days", "resorts"
+  add_foreign_key "bed_requests", "beds"
+  add_foreign_key "bed_requests", "guest_stays"
+  add_foreign_key "bed_requests", "users"
   add_foreign_key "beds", "rooms"
   add_foreign_key "blackout_days", "resorts"
   add_foreign_key "blackout_days", "season_passes"
   add_foreign_key "calendars", "lodgings"
   add_foreign_key "calendars", "users"
+  add_foreign_key "guest_stays", "house_seasons"
+  add_foreign_key "guest_stays", "users", column: "guest_id"
+  add_foreign_key "guest_stays", "users", column: "host_id"
+  add_foreign_key "house_invitations", "accounts", column: "invited_by_id"
+  add_foreign_key "house_invitations", "house_seasons"
+  add_foreign_key "house_invitations", "lodgings"
+  add_foreign_key "house_ledger_entries", "accounts", column: "recorded_by_id"
+  add_foreign_key "house_ledger_entries", "guest_stays"
+  add_foreign_key "house_ledger_entries", "house_seasons"
+  add_foreign_key "house_ledger_entries", "users"
+  add_foreign_key "house_payments", "accounts", column: "recorded_by_id"
+  add_foreign_key "house_payments", "house_ledger_entries"
+  add_foreign_key "house_payments", "users", column: "paid_by_id"
+  add_foreign_key "house_season_memberships", "house_seasons"
+  add_foreign_key "house_season_memberships", "roommates"
+  add_foreign_key "house_seasons", "lodgings"
+  add_foreign_key "house_sheet_cells", "house_seasons"
   add_foreign_key "roommates", "lodgings"
   add_foreign_key "roommates", "users"
   add_foreign_key "rooms", "lodgings"

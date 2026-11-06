@@ -1,56 +1,63 @@
 <%= render 'shared/header' %>
 <%= render partial: 'shared/errors' %>
 <%= render partial: 'shared/notices' %>
+<nav aria-label="Rooms sections" class="mb-4 flex flex-wrap gap-4 text-sm font-semibold text-indigo-700"><a href="#room-inventory">Rooms &amp; beds</a><a href="#bed-requests">Requests &amp; assignments</a></nav>
+<p class="mb-4 text-sm">Sleeping inventory is guidance. Temporary spaces count toward the displayed guidance. Request beds and review assignments below.</p>
+<% if @lodging.layout_reference_url.present? %><p class="mb-4"><%= link_to 'Room diagram / layout reference', @lodging.layout_reference_url, rel: 'noreferrer noopener', target: '_blank', class: 'text-indigo-600' %></p><% end %>
 
-<div class="bg-grey shadow overflow-hidden sm:rounded-md">
+<div id="room-inventory">
   <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     <% @rooms.each do |room| %>
     <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
       <div class="flex flex-1 flex-col p-8">
-        <%# <img class="mx-auto h-32 w-32 flex-shrink-0 rounded-full" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60" alt=""> %>
-        <h3 class="mt-6 text-sm font-medium text-gray-900"><%= "#{room.name.capitalize} #{room.room_type.capitalize}" %><% "#{room.beds.count}" %></h3>
+
+        <h3 class="mt-6 text-sm font-medium text-gray-900"><%= "#{room.name.to_s.capitalize} #{room.room_type.to_s.humanize}" %><span class="block text-xs text-gray-500"><%= room.beds.count %> beds</span></h3>
+        <p class="mt-3 whitespace-pre-line text-sm"><%= room.layout_notes %></p>
+        <% if policy(@lodging).manage_rooms? %>
+          <%= form_with model: room, url: users_lodging_room_path(@lodging, room), class: 'mt-3 space-y-2' do |form| %>
+            <%= form.label :name, 'Room name' %><%= form.text_field :name, class: 'w-full rounded border' %>
+            <%= form.label :layout_notes, 'Layout and sleeping instructions' %><%= form.text_area :layout_notes, class: 'w-full rounded border' %><%= form.submit 'Save room', class: 'rounded border p-2' %>
+          <% end %>
+        <% end %>
         <% room.beds.each do |bed| %>
           <div class="mt-5">
-              <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Available</span>
+              <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Inventory</span>
             <div class="rounded-md bg-gray-50 px-6 py-5 sm:flex sm:items-start sm:justify-between">
               <div class="sm:flex sm:items-start">
 
                 <div class="mt-3 sm:ml-4 sm:mt-0">
-                  <div class="text-sm font-medium text-gray-900"><%= "#{bed.size.capitalize} #{bed.style.capitalize}" %></div>
-                  <%# <div class="mt-1 text-sm text-gray-600 sm:flex sm:items-center">
-                    <div>Expires 12/20</div>
-                    <span class="hidden sm:mx-2 sm:inline" aria-hidden="true">&middot;</span>
-                    <div class="mt-1 sm:mt-0">Last updated on 22 Aug 2017</div>
-                  </div> %>
+                  <div class="text-sm font-medium text-gray-900"><%= bed.inventory_name %> <%= "(temporary)" if bed.temporary? %><p class="text-xs"><%= bed.capacity || Bed::CAPACITY[bed.size.to_sym] %> sleeping spaces</p><p class="whitespace-pre-line"><%= bed.notes %></p>
+                    <% if policy(@lodging).manage_rooms? %><%= form_with model: bed, url: users_lodging_room_bed_path(@lodging, room, bed), class: 'mt-2 space-y-2' do |form| %>
+                      <div><%= form.label :label, 'Bed label' %><%= form.text_field :label, class: 'w-full rounded border' %></div>
+                      <div><%= form.label :size %><%= form.select :size, Bed.sizes.keys %></div>
+                      <div><%= form.label :style %><%= form.select :style, Bed.styles.keys %></div>
+                      <div><%= form.check_box :temporary %><%= form.label :temporary, 'Temporary sleeping space' %></div>
+                      <div><%= form.label :notes %><%= form.text_area :notes, class: 'w-full rounded border' %></div><%= form.label :capacity, 'Sleeping spaces', for: "bed-capacity-#{bed.id}" %><%= form.number_field :capacity, id: "bed-capacity-#{bed.id}", value: bed.capacity || Bed::CAPACITY[bed.size.to_sym], min: 1, class: 'w-20' %><%= form.submit 'Save bed spaces', class: 'rounded border p-1 text-xs' %><% end %><% end %></div>
+
                 </div>
               </div>
-              <%# <div class="mt-4 sm:ml-6 sm:mt-0 sm:flex-shrink-0">
-                <button type="button" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Edit</button>
-              </div> %>
+
             </div>
           </div>
 
         <% end %>
+        <% if policy(@lodging).manage_rooms? %>
+          <%= form_with url: users_lodging_room_beds_path(@lodging, room), scope: :bed, class: 'mt-5 space-y-3 rounded border p-3' do |form| %>
+            <h4 class="font-semibold">Add a sleeping space</h4>
+            <div><%= form.label :label, for: "new-bed-#{room.id}-label" %><%= form.text_field :label, id: "new-bed-#{room.id}-label", class: 'w-full rounded border' %></div>
+            <div><%= form.label :size, for: "new-bed-#{room.id}-size" %><%= form.select :size, Bed.sizes.keys, {}, id: "new-bed-#{room.id}-size" %></div>
+            <div><%= form.label :style, for: "new-bed-#{room.id}-style" %><%= form.select :style, Bed.styles.keys, {}, id: "new-bed-#{room.id}-style" %></div>
+            <div><%= form.check_box :temporary, id: "new-bed-#{room.id}-temporary" %><%= form.label :temporary, 'Temporary space', for: "new-bed-#{room.id}-temporary" %></div>
+            <%= form.submit 'Add sleeping space', class: 'rounded border p-2' %>
+          <% end %>
+        <% end %>
       </div>
-      <div>
-        <div class="-mt-px flex divide-x divide-gray-200">
-          <div class="flex w-0 flex-1">
-            <a href="mailto:janecooper@example.com" class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-gray-900">
-              <%# <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"> %>
-                <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
-                <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
-              </svg>
-              Edit
-            </a>
-          </div>
-          <div class="-ml-px flex w-0 flex-1">
-            <%= link_to "Delete", users_lodging_room_path(@lodging, room), method: :delete, class: "relative inline-flex w-0 flex-1 items-center justify-center gap-x-3 rounded-br-lg border border-transparent py-4 text-sm font-semibold text-gray-900" %>
-          </div>
-        </div>
-      </div>
+      <% if policy(@lodging).manage_rooms? %><div class="border-t p-4"><%= button_to 'Remove room', users_lodging_room_path(@lodging, room), method: :delete, class: 'font-semibold text-red-700' %></div><% end %>
     </li>
     <% end %>
   </ul>
 </div>
 
-<%= render partial: 'form', locals: { lodging: @lodging } %>
+<% if policy(@lodging).manage_rooms? %><section class="house-panel mt-8 p-4"><h2 class="mb-4 text-xl font-semibold">Add a room</h2><%= render partial: 'form', locals: { lodging: @lodging } %></section><% end %>
+
+<%= render 'bed_requests' %>

@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :roommate do
-    role { 'MyString' }
-    user { nil }
-    Lodging { nil }
+    role { 'roommate' }
+    user
+    lodging
   end
 end

@@ -6,11 +6,16 @@ module Users
 
     def index
       @lodging = current_account.user.lodgings.find(params[:lodging_id])
-      @rooms = @lodging.rooms.all
+      authorize @lodging, :view_operations?
+      @rooms = @lodging.rooms.includes(:beds).order(:name)
+      @beds = Bed.where(room_id: @lodging.rooms.select(:id)).includes(:room)
+      @requests = BedRequest.where(bed_id: @beds.select(:id))
+        .includes(:user, :guest_stay, bed: :room).order(:arrival)
     end
 
     def create
       @lodging = current_account.user.lodgings.find(params[:lodging_id])
+      authorize @lodging, :manage_rooms?
       @room = @lodging.rooms.new(room_params)
 
       flash[:errors] = @room.errors.full_messages unless @room.save
@@ -18,17 +23,31 @@ module Users
       redirect_to users_lodging_rooms_path(@lodging)
     end
 
+    def update
+      @lodging = current_account.user.lodgings.find(params[:lodging_id])
+      authorize @lodging, :manage_rooms?
+      room = @lodging.rooms.find(params[:id])
+      success = room.update(params.expect(room: [:name, :room_type, :layout_notes]))
+      redirect_to users_lodging_rooms_path(@lodging), alert: (success ? nil : room.errors.full_messages.to_sentence)
+    end
+
     def destroy
       @lodging = current_account.user.lodgings.find(params[:lodging_id])
+      authorize @lodging, :manage_rooms?
       @room = @lodging.rooms.find(params[:id])
-      @room.destroy
-      redirect_to users_lodging_rooms_path(@lodging)
+      unless @room.destroy
+        flash[:alert] = @room.errors.full_messages.to_sentence.presence ||
+          'This room has bed requests. Preserve or reconcile its assignments before removing it.'
+      end
+
+      redirect_to users_lodging_rooms_path(@lodging), status: :see_other
     end
 
     private
 
     def room_params
-      params.require(:room).permit(:room_type, :name, beds_attributes: %i[size style])
+      params.expect(room: [:room_type, :name, :layout_notes,
+        { beds_attributes: [%i[size style capacity label temporary notes]] }])
     end
   end
 end

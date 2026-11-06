@@ -1,0 +1,20 @@
+<% @entries.each do |entry| %>
+  <article class="space-y-2 rounded border bg-white p-3">
+    <h3 class="font-semibold"><%= entry.month_on.strftime('%b %Y') %> · <%= entry.kind.humanize %> · <%= entry.description %></h3>
+    <p><%= entry.user&.display_name || 'Unassigned historical entry / house expense' %><% if entry.due_on %> · Due <%= entry.due_on %><% end %></p>
+    <% if entry.voided_at %><p class="font-semibold text-red-700">Voided after cancellation; retained for audit.</p><% end %>
+    <% if entry.guest_stay %><p>Guest: <%= entry.guest_stay.guest_name %> · Host: <%= entry.user.display_name %>. One shared balance; payment from either reduces it.</p><% end %>
+    <p>Amount: <%= number_to_currency(entry.amount_cents / 100.0) %>. <%= entry.expense? ? 'Reimbursed' : 'Received' %>: <%= number_to_currency(entry.paid_cents / 100.0) %>. Outstanding: <%= number_to_currency(entry.outstanding_cents / 100.0) %>.</p>
+    <% if entry.expense? %><p class="text-sm text-gray-500">This is a house expense/reimbursement, not a personal charge owed by its named member.</p><% end %>
+    <ul><% entry.house_payments.each do |payment| %><li><%= number_to_currency(payment.amount_cents / 100.0) %> — <%= payment.paid_on || 'Exact date not supplied' %> · <%= payment.source_reported? ? 'Reported received by source sheet' : 'Manually recorded' %> <%= payment.reference %><% if payment.paid_by %> · Paid by <%= payment.paid_by.display_name %><% end %></li><% end %></ul>
+    <% if @can_record_payments && entry.outstanding_cents.positive? %>
+      <%= form_with url: users_lodging_house_season_house_ledger_entry_house_payments_path(@lodging, @season, entry), scope: :house_payment, class: 'flex flex-wrap items-end gap-3' do |form| %>
+        <div><%= form.label :amount, 'Receipt amount (USD)', for: "payment-#{entry.id}-amount" %><%= form.number_field :amount, id: "payment-#{entry.id}-amount", min: '0.01', step: '0.01', required: true %></div>
+        <div><%= form.label :paid_on, 'Payment date', for: "payment-#{entry.id}-date" %><%= form.date_field :paid_on, id: "payment-#{entry.id}-date", required: true %></div>
+        <div><%= form.label :paid_by_id, 'Paid by', for: "payment-#{entry.id}-payer" %><%= form.select :paid_by_id, [entry.user, entry.guest_stay&.guest].compact.uniq.map { |person| [person.display_name, person.id] }, { include_blank: 'Not identified' }, id: "payment-#{entry.id}-payer", class: 'block w-full max-w-full' %></div>
+        <div><%= form.label :reference, 'Reference', for: "payment-#{entry.id}-reference" %><%= form.text_field :reference, id: "payment-#{entry.id}-reference", autocomplete: 'off' %></div>
+        <%= form.submit 'Record payment', class: 'rounded border p-2' %>
+      <% end %>
+    <% end %>
+  </article>
+<% end %>

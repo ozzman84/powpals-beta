@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :calendar do
     status { 'staying' }
-    date { Date.today }
+    date { Date.current }
   end
 end

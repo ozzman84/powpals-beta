@@ -1,12 +1,9 @@
 # frozen_string_literal: true
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-require "factory_bot_rails"
 
-user = FactoryBot.create(:account, email: 'test@example.com').user = FactoryBot.create(:user)
-lodging = FactoryBot.create(:lodging)
-Roommate.create(user_id: user.id, lodging_id: lodging.id)
-
-10.times do
-  FactoryBot.create(:account).user = FactoryBot.create(:user)
+# Explicit demo seeding preserves the original factory-driven development workflow,
+# but refuses the real revival, historical and production databases.
+if ENV['POWPALS_DEMO'] == 'true'
+  Rails.logger.info JSON.pretty_generate(DemoSeedData.new.call)
+else
+  Rails.logger.info 'No demo records added. Set POWPALS_DEMO=true on the separate demo database to seed samples.'
 end

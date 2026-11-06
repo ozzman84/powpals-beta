@@ -1,1 +1,63 @@
-inherit_from: .rubocop_todo.yml
+inherit_gem:
+  gitlab-styles:
+    - rubocop-default.yml
+
+require:
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-factory_bot
+  - rubocop-performance
+  - rubocop-capybara
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.4
+  TargetRailsVersion: 8.1
+  Exclude:
+    - 'db/schema.rb'
+    - 'db/migrate/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+    - 'bin/**/*'
+    - 'config/environments/**/*'
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - 'config/initializers/devise.rb'
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+Metrics/MethodLength:
+  Max: 20
+  Exclude:
+    - 'spec/**/*'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 8
+
+Cop/ActiveRecordDependent:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+# These GitLab-internal cops don't apply to a client Rails app.
+CodeReuse/ActiveRecord:
+  Enabled: false
+
+GitlabSecurity/PublicSend:
+  Enabled: false

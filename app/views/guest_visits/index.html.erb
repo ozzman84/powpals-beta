@@ -1,0 +1,2 @@
+<h1 class="text-xl font-semibold">My guest stays</h1>
+<ul class="mt-4 space-y-3"><% @stays.each do |stay| %><li><%= link_to "#{stay.house_season.lodging.title}: #{stay.arrival} — #{stay.status}", guest_visit_path(stay), class: 'text-indigo-600' %></li><% end %></ul>

@@ -2,44 +2,14 @@
 
 module Accounts
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
-    # You should configure your model like this:
-    # devise :omniauthable, omniauth_providers: [:twitter]
-
-    # You should also create an action method in this controller like this:
-    # def twitter
-    # end
-
-    # More info at:
-    # https://github.com/heartcombo/devise#omniauth
-
-    # GET|POST /resource/auth/twitter
-    # def passthru
-    #   super
-    # end
-
-    # GET|POST /users/auth/twitter/callback
-    # def failure
-    #   super
-    # end
-
-    # protected
-
-    # The path used when OmniAuth fails
-    # def after_omniauth_failure_path_for(scope)
-    #   super(scope)
-    # end
     def google
-      account = Account.from_omniauth(auth)
+      account = Account.from_omniauth(request.env['omniauth.auth'])
+      raise ArgumentError, 'Account is inactive' unless account.active_for_authentication?
 
-      if account.present?
-        sign_out_all_scopes
-        flash[:success] = t 'devise.omniauth_callbacks.success', kind: 'Google'
-        sign_in_and_redirect account, event: :authentication
-      else
-        flash[:alert] =
-          t 'devise.omniauth_callbacks.failure', kind: 'Google', reason: "#{auth.info.email} is not authorized."
-        redirect_to new_account_session_path
-      end
+      sign_in_and_redirect account, event: :authentication
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique, ArgumentError
+      redirect_to new_account_session_path,
+        alert: 'Google sign-in could not be completed. Please use your existing sign-in method if you have an account.'
     end
 
     protected
@@ -48,14 +18,8 @@ module Accounts
       new_account_session_path
     end
 
-    def after_sign_in_path_for(resource_or_scope)
-      stored_location_for(resource_or_scope) || root_path
-    end
-
-    private
-
-    def auth
-      @auth ||= request.env['omniauth.auth']
+    def after_sign_in_path_for(_resource_or_scope)
+      user_path
     end
   end
 end

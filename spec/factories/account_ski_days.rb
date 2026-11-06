@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :account_ski_day do
     status { 'MyString' }
-    start_date { Date.today }
+    start_date { Date.current }
   end
 end

@@ -1,38 +1,20 @@
-<div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Edit your profile</h2>
-    <div class="mb-4">
-      <span class="font-medium text-sm text-slate-500 mb-3 dark:text-slate-400">Your passes</span>
-      <ul class="list-disc list-inside text-slate-900 dark:text-red-500">
-        <% if current_account.any_season_passes? %>
-          <% current_account.season_passes.each do |pass| %>
-            <li class="flex">
-              <%= button_to remove_season_pass_path(pass.id), method: :delete do %>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-3">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-                </svg>
-              <% end %>
-              <span class="text-black"><%= pass.name %></span>
-            </li>
-          <% end %>
-        <% else %>
-          <li>You don't have any passes, add one below</li>
-        <% end %>
-      </ul>
-    </div>
-    <hr />
-    <div class="mt-4">
-      <%= form_with model: current_account, url: edit_profile_path do |f| %>
-        <%= f.fields_for :account_season_passes, current_account.account_season_passes.new do |ff| %>
-          <%= ff.label :season_pass_id, class: "block tracking-wide text-gray-900 leading-6 text-sm font-medium mb-2" %>
-          <div class="relative mb-4">
-            <%= ff.select :season_pass_id, SeasonPass.except_account_passes(current_account), { prompt: "Please select a pass."}, class: "block appearance-none w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" %>
-          </div>
-        <% end %>
-        <div>
-          <%= f.submit "Submit", class: "flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div>
+<h1 class="text-2xl font-semibold">Your seasonal ski passes</h1>
+<p>Each owned pass has its own season and expiry. Expired and undated historical passes are retained but do not count as current.</p>
+<ul class="my-6 space-y-3">
+  <% current_account.account_season_passes.includes(:season_pass).order(starts_on: :desc).each do |owned| %>
+    <li class="rounded border p-3"><strong><%= owned.season_pass.name %></strong> · <%= owned.season_label.presence || 'Historical season unknown' %> · <%= owned.status_label %>
+      <% unless owned.season_unknown? %><p><%= owned.starts_on %> through <%= owned.expires_on %></p><% end %>
+      <%= button_to 'Remove this pass record', remove_owned_pass_path(owned.id), method: :delete, class: 'mt-2 text-sm text-red-700' %>
+    </li>
+  <% end %>
+</ul>
+<h2 class="text-xl font-semibold">Add or renew a pass</h2>
+<%= form_with model: current_account, url: edit_profile_path, class: 'mt-4 space-y-4' do |form| %>
+  <%= form.fields_for :account_season_passes, current_account.account_season_passes.new do |pass| %>
+    <div><%= pass.label :season_pass_id, 'Pass type' %><%= pass.collection_select :season_pass_id, SeasonPass.order(:name), :id, :name, { prompt: 'Choose a pass' }, required: true %></div>
+    <div><%= pass.label :season_label, 'Season label' %><%= pass.text_field :season_label, placeholder: '2026–27', required: true, autocomplete: 'off' %></div>
+    <div><%= pass.label :starts_on, 'Valid from' %><%= pass.date_field :starts_on, required: true %></div>
+    <div><%= pass.label :expires_on, 'Expires on' %><%= pass.date_field :expires_on, required: true %></div>
+  <% end %>
+  <%= form.submit 'Save seasonal pass', class: 'rounded bg-indigo-600 px-4 py-2 text-white' %>
+<% end %>

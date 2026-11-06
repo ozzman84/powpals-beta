@@ -1,0 +1,6 @@
+<div class="social-link-fields grid gap-2 rounded border border-slate-200 p-3">
+  <label class="text-sm">Link name<input autocomplete="off" name="house_season_membership[social_links][][label]" value="<%= social['label'] %>" maxlength="40" placeholder="Instagram, X, Facebook, website…" class="block w-full rounded border"></label>
+  <label class="text-sm">HTTPS URL<input autocomplete="off" type="url" name="house_season_membership[social_links][][url]" value="<%= social['url'] %>" placeholder="https://" class="block w-full rounded border"></label>
+  <label class="text-sm">Visibility<select name="house_season_membership[social_links][][shared]" class="block w-full rounded border"><%= options_for_select([['Only me', 'false'], ['Share with this house', 'true']], social['shared'] ? 'true' : 'false') %></select></label>
+  <p class="text-xs text-gray-500">Clear the name and URL to remove this link.</p>
+</div>

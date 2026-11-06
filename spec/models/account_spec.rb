@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe Account, type: :model do
+RSpec.describe Account do
   describe 'references' do
-    it { should have_one(:user) }
-    it { should have_many :account_season_passes }
-    it { should have_many(:season_passes).through(:account_season_passes) }
-    it { should have_many :account_ski_days }
-    it { should have_many(:ski_day_resorts).through(:account_ski_days) }
+    it { is_expected.to have_one(:user) }
+    it { is_expected.to have_many :account_season_passes }
+    it { is_expected.to have_many(:season_passes).through(:account_season_passes) }
+    it { is_expected.to have_many :account_ski_days }
+    it { is_expected.to have_many(:ski_day_resorts).through(:account_ski_days) }
   end
 
   describe '#order_resorts_by_ski_days' do
@@ -18,16 +18,16 @@ RSpec.describe Account, type: :model do
       resort2 = create(:resort, name: 'Breck')
       create(:season_pass, resorts: [resort1])
       create(:season_pass, name: 'Epic Pass', resorts: [resort2])
-      create(:account_ski_day, account:, resort: resort1, start_date: Date.today)
-      create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 1)
-      create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 2)
-      create(:account_ski_day, account:, resort: resort2, start_date: Date.today)
-      create(:account_ski_day, account:, resort: resort2, start_date: Date.today + 1)
+      create(:account_ski_day, account: account, resort: resort1, start_date: Date.current)
+      create(:account_ski_day, account: account, resort: resort1, start_date: Date.current + 1)
+      create(:account_ski_day, account: account, resort: resort1, start_date: Date.current + 2)
+      create(:account_ski_day, account: account, resort: resort2, start_date: Date.current)
+      create(:account_ski_day, account: account, resort: resort2, start_date: Date.current + 1)
 
       ordered_resorts = account.resort_data_for_multiple_days(2)
 
-      expect(ordered_resorts).to eq({ resort2.name => { next_10_day_skier_count: [1, 1, 0, 0, 0, 0, 0, 0, 0] },
-                                      resort1.name => { next_10_day_skier_count: [1, 1, 1, 0, 0, 0, 0, 0, 0] } })
+      expect(ordered_resorts).to eq({ resort2.name => { next_10_day_skier_count: [1, 1, 0, 0, 0, 0, 0, 0, 0, 0] },
+                                      resort1.name => { next_10_day_skier_count: [1, 1, 1, 0, 0, 0, 0, 0, 0, 0] } })
     end
   end
 
@@ -38,17 +38,17 @@ RSpec.describe Account, type: :model do
       resort2 = create(:resort, name: 'Resort B')
       create(:season_pass, resorts: [resort1])
       create(:season_pass, name: 'Epic Pass', resorts: [resort2])
-      create(:account_ski_day, account:, resort: resort1, start_date: Date.today)
-      create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 1)
-      create(:account_ski_day, account:, resort: resort1, start_date: Date.today + 2)
-      create(:account_ski_day, account:, resort: resort2, start_date: Date.today)
-      create(:account_ski_day, account:, resort: resort2, start_date: Date.today + 1)
+      create(:account_ski_day, account: account, resort: resort1, start_date: Date.current)
+      create(:account_ski_day, account: account, resort: resort1, start_date: Date.current + 1)
+      create(:account_ski_day, account: account, resort: resort1, start_date: Date.current + 2)
+      create(:account_ski_day, account: account, resort: resort2, start_date: Date.current)
+      create(:account_ski_day, account: account, resort: resort2, start_date: Date.current + 1)
 
       resort_data = account.resort_data_for_multiple_days
 
       expect(resort_data.keys).to match_array(['Resort A', 'Resort B'])
-      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(9)
-      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(9)
+      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(10)
+      expect(resort_data['Resort A'][:next_10_day_skier_count].size).to eq(10)
     end
   end
 end

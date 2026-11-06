@@ -2,6 +2,9 @@
 
 require 'active_support/core_ext/integer/time'
 Rails.application.configure do
+  # Use freshly built local assets instead of historical public/assets manifests.
+  config.active_job.queue_adapter = :async
+  config.assets.manifest = Rails.root.join('tmp/development-assets-manifest.json').to_s
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
@@ -31,7 +34,7 @@ Rails.application.configure do
   else
     config.action_controller.perform_caching = false
 
-    config.cache_store = :null_store
+    config.cache_store = :memory_store
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).

@@ -1,1 +1,2 @@
-css: bin/rails tailwindcss:watch
+web: rbenv exec bundle exec rails server
+css: rbenv exec bundle exec rails tailwindcss:watch[always]

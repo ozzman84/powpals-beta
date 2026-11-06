@@ -1,65 +1,10 @@
-<h1 class="font-bold text-4xl">Welcome to PowPals</h1>
-<div>
-  <% if account_signed_in? %> 
-  <%= button_to "Sign out", destroy_account_session_path, method: :delete %> 
-<% else %>
-  <%= button_to "Sign in", new_account_session_path %> 
-<% end %>
-</div>
-
+<h1 class="text-4xl font-bold tracking-tight text-gray-900">Welcome to PowPals</h1>
+<p class="mt-3 text-gray-600">Plan ski days, find your people and manage your shared ski house.</p>
 <% if account_signed_in? %>
-
-    <!-- Resorts Table -->
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Resorts
-                    </th>
-                    <% (0..8).each do |i| %>
-                        <th scope="col" class="px-6 py-3 text-center">
-                            <%= (Date.today + i).strftime('%a %d') %>
-                        </th>
-                    <% end %>
-                </tr>
-            </thead>
-            <tbody>
-                <% @resorts.each do |r| %>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <div class="flex items-center justify-between">
-                                <div class="mr-2">
-                                    <%= r[0].sub(/(?:\bSki|\bMountain|\bResort)+\b\s*$/, "").strip %>
-                                </div>
-                            </div>
-                        </th>
-                        <% r[1][:next_10_day_skier_count].each_with_index do |count, index| %>
-                                <td class="px-6 py-4 text-center">
-                                    <div class="flex items-center">
-                                        <div>
-                                            <% if @weather_forecasts[r.first][index][:snow].zero? %>
-                                            <%= image_tag @weather_forecasts[r.first][index][:icon], alt: ' ', loading: "lazy", class: 'w-6 h-6' %>
-                                            <% else %>
-                                            <%= "#{@weather_forecasts[r.first][index][:snow].round()}\"" %>
-                                            <% end %>
-                                        </div>
-                                        <div class="ml-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4">
-                                                <path d="M8.5 4.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 13c.552 0 1.01-.452.9-.994a5.002 5.002 0 0 0-9.802 0c-.109.542.35.994.902.994h8ZM12.5 3.5a.75.75 0 0 1 .75.75v1h1a.75.75 0 0 1 0 1.5h-1v1a.75.75 0 0 1-1.5 0v-1h-1a.75.75 0 0 1 0-1.5h1v-1a.75.75 0 0 1 .75-.75Z" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-2">
-                                            <%= count %>
-                                        </div>
-                                    </div>
-                                </td>
-                        <% end %>
-                    </tr>
-                <% end %>
-            </tbody>
-        </table>
-    </div>
+  <nav class="my-6 flex flex-wrap gap-4"><%= link_to 'My profile', user_path, class: 'font-semibold text-indigo-600' %><% if current_account.user&.house_access? %><%= link_to 'My houses', users_lodgings_path, class: 'font-semibold text-indigo-600' %><% end %><%= link_to 'My passes', edit_profile_path, class: 'font-semibold text-indigo-600' %></nav>
+  <h2 class="mt-8 text-xl font-semibold">Mountains over the next 10 days</h2>
+  <p class="mt-2 text-sm text-gray-500">Skier counts reflect recorded plans. A dash means the forecast is unavailable. Forecasts refresh in the background.</p>
+  <% if @resorts.empty? %><p class="mt-4">No resorts have been imported yet.</p><% else %><%= render 'shared/resort_table', resorts: @resorts, forecasts: @weather_forecasts %><% end %>
+<% else %>
+  <div class="mt-8 flex flex-wrap gap-4"><%= link_to 'Sign in', new_account_session_path, class: 'rounded-md bg-indigo-600 px-4 py-2 font-semibold text-white' %><%= link_to 'Create an account', new_account_registration_path, class: 'rounded-md border px-4 py-2 font-semibold' %></div>
 <% end %>
-
-

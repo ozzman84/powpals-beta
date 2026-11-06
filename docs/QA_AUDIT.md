@@ -138,3 +138,11 @@ permissions. Hosts retain cancellation of their own guest stays.
 Role coverage exercises invitation creation, forged approval requests, approval
 controls and host cancellation for every non-guest role. Responsive calendar
 checks verify that empty days have neither a count badge nor an opener.
+
+## Story #183 — scrollable attendee dialog
+
+The attendee dialog keeps three columns and renders every named attendee. Its
+people area scrolls vertically within the screen height while the heading, Close
+button and total remain visible. Long lists can be scrolled by touch, wheel or
+keyboard. A crowded-list browser regression covers 18 attendees at phone and
+desktop widths and checks that the final person can be reached.

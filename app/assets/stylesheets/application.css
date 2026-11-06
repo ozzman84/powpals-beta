@@ -55,10 +55,13 @@
 .attendee-stack-person:hover .attendee-stack-tooltip { display: block; }
 .shared-calendar-day { min-height: 104px; padding: 8px; }
 .attendee-stack-compact .attendee-stack-person [data-avatar], .attendee-stack-compact .attendee-stack-initials, .attendee-stack-compact .attendee-stack-count { width: 24px; height: 24px; font-size: 10px; }
-.attendee-dialog { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); padding: 0; border: 1px solid #c5cfdd; border-radius: 14px; background: white; color: #172439; box-shadow: 0 20px 60px #17243944; }
+.attendee-dialog { width: min(520px, calc(100vw - 32px)); max-height: min(600px, calc(100dvh - 48px)); overflow: hidden; padding: 0; border: 1px solid #c5cfdd; border-radius: 14px; background: white; color: #172439; box-shadow: 0 20px 60px #17243944; }
+.attendee-dialog[open] { display: flex; flex-direction: column; }
+.attendee-dialog-scroll { min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+.attendee-dialog > header, .attendee-dialog > footer { flex-shrink: 0; }
 .attendee-dialog::backdrop { background: #17243988; }
 .attendee-dialog-heading { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #c5cfdd; background: #e5ebf2; }
-.attendee-dialog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 20px 12px; padding: 24px 20px; }
+.attendee-dialog-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 12px; padding: 24px 16px; }
 .attendee-dialog-person { display: flex; min-width: 0; flex-direction: column; align-items: center; gap: 8px; text-align: center; overflow-wrap: anywhere; }
 .attendee-dialog-initials { display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; background: #e5ebf2; font-size: 20px; }
 @media (max-width: 640px) {

@@ -41,4 +41,41 @@ RSpec.describe 'Shared attendee stacks' do
       page.save_screenshot(Rails.root.join("tmp/attendee-calendar-#{width}.png"), full: true) # rubocop:disable Lint/Debugger
     end
   end
+
+  it 'scrolls a crowded three-column dialog to the last person without losing the close control' do
+    host = create(:user, preferred_name: 'Host')
+    house = create(:lodging, season_start: Date.current, season_end: Date.current + 30)
+    create(:roommate, user: host, lodging: house)
+    create(:calendar, user: host, lodging: house, date: Date.current, status: :staying)
+    17.times do |index|
+      person = create(:user, preferred_name: "Skier #{index + 1}", avatar_url: nil)
+      create(:calendar, user: person, lodging: house, date: Date.current, status: :staying)
+    end
+    login_as host.account, scope: :account
+    [320, 390, 1366].each do |width|
+      page.current_window.resize_to(width, 500)
+      visit users_lodging_calendars_path(house)
+      within("[data-calendar-date='#{Date.current}']") { find('.attendee-stack-trigger').click }
+      within('dialog[open]') do
+        expect(page).to have_css('.attendee-dialog-person', count: 18)
+        expect(page.evaluate_script(<<~JS)).to be(true)
+          (() => { const list = document.querySelector('dialog[open] .attendee-dialog-scroll');
+            const grid = list.querySelector('ul');
+            return list.scrollHeight > list.clientHeight &&
+              getComputedStyle(grid).gridTemplateColumns.split(' ').length === 3; })()
+        JS
+        find('.attendee-dialog-scroll').scroll_to(:bottom)
+        expect(page.evaluate_script(<<~JS)).to be(true)
+          (() => { const list = document.querySelector('dialog[open] .attendee-dialog-scroll');
+            const last = list.querySelector('li:last-child').getBoundingClientRect();
+            const bounds = list.getBoundingClientRect();
+            return last.top >= bounds.top && last.bottom <= bounds.bottom + 1; })()
+        JS
+        expect(page).to have_content('Skier 17')
+        expect(page.evaluate_script('document.documentElement.scrollWidth <= innerWidth')).to be(true)
+        click_on 'Close'
+      end
+      expect(page).to have_no_css('dialog[open]')
+    end
+  end
 end

@@ -36,7 +36,8 @@ RSpec.describe 'Private house workflows on a phone' do
     select 'approved', from: 'Status'
     click_on 'Update guest stay'
     expect(house.guest_stays.last).to be_approved
-    click_on 'Bed requests'
+    click_on 'Rooms'
+    click_on 'Requests & assignments'
     select 'Main bedroom: Main queen', from: 'Sleeping space'
     fill_in 'Arrival', with: Date.current.iso8601
     fill_in 'Departure (checkout)', with: (Date.current + 2).iso8601

@@ -6,7 +6,11 @@ module Users
 
     def index
       @lodging = current_account.user.lodgings.find(params[:lodging_id])
-      @rooms = @lodging.rooms.all
+      authorize @lodging, :view_operations?
+      @rooms = @lodging.rooms.includes(:beds).order(:name)
+      @beds = Bed.where(room_id: @lodging.rooms.select(:id)).includes(:room)
+      @requests = BedRequest.where(bed_id: @beds.select(:id))
+        .includes(:user, :guest_stay, bed: :room).order(:arrival)
     end
 
     def create

@@ -1,7 +1,5 @@
-<%= render 'shared/header' %>
-<%= render 'shared/errors' %>
-<%= render 'shared/notices' %>
-<h2 class="text-xl font-semibold">Room and bed requests</h2>
+<section id="bed-requests" class="mt-8 scroll-mt-6" aria-labelledby="bed-requests-heading">
+<h2 id="bed-requests-heading" class="text-xl font-semibold">Room and bed requests</h2>
 <p class="my-4">Requests do not guarantee a bed. Roommates have priority over guests. Managers confirm assignments after reviewing available spaces.</p>
 <%= form_with url: users_lodging_bed_requests_path(@lodging), scope: :bed_request, class: 'house-panel my-6 grid gap-3 p-4 sm:grid-cols-2' do |form| %>
   <div><%= form.label :bed_id, 'Sleeping space' %><%= form.select :bed_id, @beds.map { |bed| ["#{bed.room.name}: #{bed.inventory_name}", bed.id] }, {}, class: 'w-full rounded border' %></div>
@@ -20,3 +18,5 @@
     </article>
   <% end %>
 </div>
+
+</section>

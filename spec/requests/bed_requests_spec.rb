@@ -49,4 +49,15 @@ RSpec.describe 'Dated bed requests' do
     patch users_lodging_bed_request_path(house, request), params: { bed_request: { status: 'cancelled' } }
     expect(response).to have_http_status(:forbidden)
   end
+
+  it 'integrates requests into Rooms and redirects old bookmarks to the requests section' do
+    request
+    get users_lodging_rooms_path(house)
+    expect(response).to have_http_status(:ok)
+    page = Nokogiri::HTML(response.body)
+    expect(page.at_css('#bed-requests').text).to include('Room and bed requests', user.display_name)
+    expect(page.at_css('nav[aria-label="House navigation"]').text).not_to include('Bed requests')
+    get users_lodging_bed_requests_path(house)
+    expect(response).to redirect_to(users_lodging_rooms_path(house, anchor: 'bed-requests'))
+  end
 end

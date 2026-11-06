@@ -33,7 +33,6 @@ module ApplicationHelper
       ['My stays', my_calendar_users_lodging_calendars_path(lodging)]]
     links << ['Seasons & guest fees', users_lodging_house_seasons_path(lodging)] if policy(lodging).view_operations?
     links << ['Guest stays', users_lodging_guest_stays_path(lodging)] if policy(lodging).view_operations?
-    links << ['Bed requests', users_lodging_bed_requests_path(lodging)] if policy(lodging).view_operations?
     links << ['Members', users_lodging_house_members_path(lodging)] if policy(lodging).view_operations?
     links << ['My payments', users_lodging_my_payments_path(lodging)]
     links

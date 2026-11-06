@@ -6,8 +6,7 @@ module Users
     before_action :load_house
 
     def index
-      @beds = Bed.where(room_id: @lodging.rooms.select(:id)).includes(:room)
-      @requests = BedRequest.where(bed_id: @beds.select(:id)).includes(:user, bed: :room).order(:arrival)
+      redirect_to users_lodging_rooms_path(@lodging, anchor: 'bed-requests')
     end
 
     def create
@@ -17,10 +16,11 @@ module Users
       guest_id = values.delete('guest_stay_id')
       guest = @lodging.guest_stays.where(host: current_account.user).find(guest_id) if guest_id.present?
       bed.bed_requests.create!(values.merge(user: current_account.user, guest_stay: guest))
-      redirect_to users_lodging_bed_requests_path(@lodging),
+      redirect_to users_lodging_rooms_path(@lodging, anchor: 'bed-requests'),
         notice: 'Bed requested. This is not a confirmed assignment.'
     rescue ActiveRecord::RecordInvalid => e
-      redirect_to users_lodging_bed_requests_path(@lodging), alert: e.record.errors.full_messages.to_sentence
+      redirect_to users_lodging_rooms_path(@lodging, anchor: 'bed-requests'),
+        alert: e.record.errors.full_messages.to_sentence
     end
 
     def update
@@ -31,9 +31,10 @@ module Users
       raise Pundit::NotAuthorizedError unless allowed
 
       request.transition!(status)
-      redirect_to users_lodging_bed_requests_path(@lodging), notice: 'Bed request updated.'
+      redirect_to users_lodging_rooms_path(@lodging, anchor: 'bed-requests'), notice: 'Bed request updated.'
     rescue ActiveRecord::RecordInvalid => e
-      redirect_to users_lodging_bed_requests_path(@lodging), alert: e.record.errors.full_messages.to_sentence
+      redirect_to users_lodging_rooms_path(@lodging, anchor: 'bed-requests'),
+        alert: e.record.errors.full_messages.to_sentence
     end
 
     private

@@ -1,10 +1,11 @@
 <%= render 'shared/header' %>
 <%= render partial: 'shared/errors' %>
 <%= render partial: 'shared/notices' %>
-<p class="mb-4 text-sm">Sleeping inventory is guidance. Temporary spaces count toward the displayed guidance. Bed requests are managed separately.</p>
+<nav aria-label="Rooms sections" class="mb-4 flex flex-wrap gap-4 text-sm font-semibold text-indigo-700"><a href="#room-inventory">Rooms &amp; beds</a><a href="#bed-requests">Requests &amp; assignments</a></nav>
+<p class="mb-4 text-sm">Sleeping inventory is guidance. Temporary spaces count toward the displayed guidance. Request beds and review assignments below.</p>
 <% if @lodging.layout_reference_url.present? %><p class="mb-4"><%= link_to 'Room diagram / layout reference', @lodging.layout_reference_url, rel: 'noreferrer noopener', target: '_blank', class: 'text-indigo-600' %></p><% end %>
 
-<div class="">
+<div id="room-inventory">
   <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
     <% @rooms.each do |room| %>
     <li class="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow">
@@ -58,3 +59,5 @@
 </div>
 
 <% if policy(@lodging).manage_rooms? %><section class="house-panel mt-8 p-4"><h2 class="mb-4 text-xl font-semibold">Add a room</h2><%= render partial: 'form', locals: { lodging: @lodging } %></section><% end %>
+
+<%= render 'bed_requests' %>

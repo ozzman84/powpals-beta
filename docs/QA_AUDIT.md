@@ -180,3 +180,12 @@ The additive social_links JSONB migration was applied to the local, demo and tes
 databases. Three fictional Bear Lodge demo contacts show Email/Call and sample
 social icons. The example social URLs lead to platform landing pages, not invented
 personal profiles. No real member sharing settings or role assignments changed.
+
+## Story #186 — bed requests within Rooms
+
+Rooms now contains the sleeping inventory and a Requests & assignments section,
+including the existing request form, assignment list and authorized status controls.
+The top-level Bed requests navigation item is removed. Existing request-page URLs
+redirect to Rooms#bed-requests, and create/update/error redirects return there.
+The overview's Requests & assignments link points to the same section. Host
+cancellation, guest selection, house scoping and manager confirmation remain intact.

@@ -60,4 +60,31 @@ RSpec.describe 'Dated bed requests' do
     get users_lodging_bed_requests_path(house)
     expect(response).to redirect_to(users_lodging_rooms_path(house, anchor: 'bed-requests'))
   end
+
+  it 'returns invalid requests and capacity conflicts to the Rooms section without changing assignments' do
+    post users_lodging_bed_requests_path(house), params: {
+      bed_request: { bed_id: bed.id, arrival: Date.current, departure: Date.current, spaces: 1 }
+    }
+    expect(response).to redirect_to(users_lodging_rooms_path(house, anchor: 'bed-requests'))
+    expect(bed.bed_requests.count).to eq(0)
+    request.transition!('confirmed')
+    overlap = bed.bed_requests.create!(user: other, arrival: Date.current, departure: Date.current + 1)
+    sign_in other.account
+    patch users_lodging_bed_request_path(house, overlap), params: { bed_request: { status: 'confirmed' } }
+    expect(response).to redirect_to(users_lodging_rooms_path(house, anchor: 'bed-requests'))
+    expect(flash[:alert]).to include('overlap')
+    expect(overlap.reload).to be_requested
+    expect(request.reload).to be_confirmed
+  end
+
+  it 'lets managers confirm and hosts cancel their own requests while retaining records' do
+    request
+    sign_in other.account
+    patch users_lodging_bed_request_path(house, request), params: { bed_request: { status: 'confirmed' } }
+    expect(request.reload).to be_confirmed
+    sign_in user.account
+    patch users_lodging_bed_request_path(house, request), params: { bed_request: { status: 'cancelled' } }
+    expect(request.reload).to be_cancelled
+    expect(response).to redirect_to(users_lodging_rooms_path(house, anchor: 'bed-requests'))
+  end
 end

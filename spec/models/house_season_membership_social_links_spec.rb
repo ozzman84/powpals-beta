@@ -8,10 +8,13 @@ RSpec.describe HouseSeasonMembership do
     member = create(:roommate, lodging: house)
     season = house.house_seasons.create!(name: 'Winter', starts_on: Date.current, ends_on: Date.current + 30)
     record = season.house_season_memberships.new(roommate: member)
-    ['javascript:alert(1)', 'http://example.com/', 'https://name:password@example.com/', 'https://'].each do |url|
+    ['javascript:alert(1)', 'http://example.com/', 'https://name:password@example.com/', 'https://',
+      'https://bad host.example/'].each do |url|
       record.social_links = [{ label: 'Website', url: url, shared: true }]
       expect(record).not_to be_valid
     end
+    record.social_links = Array.new(10) { { label: 'Website', url: 'https://example.com/', shared: true } }
+    expect(record).to be_valid
     record.social_links = Array.new(11) { { label: 'Website', url: 'https://example.com/', shared: true } }
     expect(record).not_to be_valid
     record.social_links = [{ label: 'Bluesky', url: 'https://bsky.app/', shared: 'false' }]

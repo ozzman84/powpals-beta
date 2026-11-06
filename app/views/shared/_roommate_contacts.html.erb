@@ -12,4 +12,11 @@
       <% else %><span class="flex flex-1 items-center justify-center px-2 text-xs text-gray-500">Phone not shared</span><% end %>
     </div>
   <% else %><p class="px-4 py-4 text-center text-xs text-gray-500">Contact details not shared</p><% end %>
+  <% if season_membership&.shared_social_links&.any? %>
+    <div class="flex flex-wrap justify-center gap-1 border-t border-slate-200 p-2" aria-label="Shared social links">
+      <% season_membership.shared_social_links.each do |social| %>
+        <%= link_to social['url'], target: '_blank', rel: 'noopener noreferrer', class: 'inline-flex h-11 w-11 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100', aria: { label: "#{social['label']} for #{person.roommate_name}" }, title: social['label'] do %><%= render 'shared/social_icon', label: social['label'] %><% end %>
+      <% end %>
+    </div>
+  <% end %>
 </footer>

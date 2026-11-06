@@ -88,3 +88,7 @@
 .roommate-contact { min-height: 52px; }
 .roommate-contact:hover { background: #f4f7fa; }
 .roommate-card input, .roommate-card select, .roommate-card textarea { max-width: 100%; }
+.roommate-edit { position: absolute; top: 8px; right: 8px; }
+.roommate-modal .attendee-dialog-scroll { overflow-wrap: anywhere; }
+.roommate-modal input:not([type=checkbox]), .roommate-modal textarea, .roommate-modal select { width: 100%; max-width: 100%; }
+.roommate-modal label { color: #334155; }

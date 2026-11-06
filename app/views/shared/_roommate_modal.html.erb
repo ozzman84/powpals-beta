@@ -1,0 +1,47 @@
+<% person = roommate.user %>
+<% manager = policy(@lodging).manage_roommates? %>
+<% owner = person == current_account.user %>
+<div data-controller="attendee-stack" class="roommate-modal-control">
+  <button type="button" data-action="attendee-stack#open" class="roommate-edit rounded-full p-3 text-slate-600 hover:bg-slate-100" aria-label="<%= manager || owner ? 'Edit' : 'View' %> details for <%= person.roommate_name %>" aria-haspopup="dialog">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-5 w-5" aria-hidden="true"><% if manager || owner %><path stroke-linecap="round" stroke-linejoin="round" d="m16.9 3.9 3.2 3.2M4 20l4.5-1 12-12a2.3 2.3 0 0 0-3.2-3.2l-12 12L4 20Z" /><% else %><circle cx="12" cy="12" r="9" /><path d="M12 11v6m0-10v1" /><% end %></svg>
+  </button>
+  <dialog class="attendee-dialog roommate-modal" data-attendee-stack-target="dialog" data-action="click->attendee-stack#backdropClose close->attendee-stack#restoreFocus" aria-label="Details for <%= person.roommate_name %>">
+    <header class="attendee-dialog-heading"><h2 class="text-base font-semibold"><%= person.roommate_name %></h2><button type="button" data-action="attendee-stack#close" class="rounded border px-3 py-2 text-sm">Close</button></header>
+    <div class="attendee-dialog-scroll space-y-5 p-5 text-sm">
+      <p><%= person.full_name %> · <%= person.ride_type.humanize %> · <%= person.level&.humanize %></p>
+      <% if season_membership %>
+        <p><%= season_membership.house_season.name %> · <%= season_membership.status.humanize %></p>
+        <dl class="space-y-2"><dt class="font-semibold">Responsibilities</dt><dd><%= season_membership.responsibilities.presence || 'Not assigned' %></dd><dt class="font-semibold">Pets</dt><dd><%= season_membership.pets.presence || 'Not provided' %></dd><dt class="font-semibold">Pet rules</dt><dd><%= season_membership.pet_rules.presence || 'Not confirmed' %></dd><dt class="font-semibold">Preferences</dt><dd><%= season_membership.preferences.presence || 'Not provided' %></dd></dl>
+        <ul><% person.account.account_season_passes.where('starts_on <= ? AND expires_on >= ?', season_membership.house_season.ends_on, season_membership.house_season.starts_on).includes(:season_pass).each do |owned| %><li><%= owned.season_pass.name %> · <%= owned.season_label %></li><% end %></ul>
+        <% if manager || owner %>
+          <%= form_with model: season_membership, url: users_lodging_house_member_path(@lodging, season_membership, season_id: season_membership.house_season_id), class: 'space-y-4', data: { controller: 'social-links' } do |form| %>
+            <% if manager %>
+              <label class="block">Status<%= form.select :status, HouseSeasonMembership.statuses.keys, {}, class: 'block w-full' %></label>
+              <label class="block">Responsibilities<%= form.text_area :responsibilities, class: 'block w-full rounded border' %></label>
+              <label class="block">Pet rules<%= form.text_area :pet_rules, class: 'block w-full rounded border' %></label>
+            <% end %>
+            <label class="block">Pets<%= form.text_area :pets, class: 'block w-full rounded border' %></label>
+            <label class="block">Optional preferences: games, drinks, colors or other details<%= form.text_area :preferences, class: 'block w-full rounded border' %></label>
+            <% if owner %>
+              <label class="flex items-start gap-2"><%= form.check_box :share_contact %>Share my email and phone with this house for this season</label>
+              <h3 class="font-semibold">My social links</h3><p>Choose sharing separately for each link. Up to 10 links.</p>
+              <div class="space-y-3" data-social-links-target="list"><% (season_membership.social_links.presence || [{ 'label' => '', 'url' => '', 'shared' => false }]).each do |social| %><%= render 'shared/social_link_fields', social: social %><% end %></div>
+              <template data-social-links-target="template"><%= render 'shared/social_link_fields', social: { 'label' => '', 'url' => '', 'shared' => false } %></template>
+              <button type="button" data-action="social-links#add" class="rounded border p-2">Add link</button>
+              <%= link_to 'Edit my profile and phone number', edit_profile_path, class: 'block text-indigo-700' %>
+            <% end %>
+            <%= form.submit 'Save member details', class: 'rounded bg-indigo-600 p-2 text-white' %>
+          <% end %>
+        <% end %>
+      <% else %><p>No seasonal details configured.</p><% end %>
+      <% if manager %>
+        <%= form_with model: roommate, url: users_lodging_roommate_path(@lodging, roommate), class: 'space-y-3 border-t pt-4' do |form| %>
+          <h3 class="font-semibold">House role and access</h3>
+          <label class="block">Role<%= form.select :role, (Roommate.roles.keys - ['guest']).map { |role| [role.humanize, role] }, {}, class: 'block w-full' %></label>
+          <label class="block">House access<%= form.select :access_state, Roommate.access_states.keys, {}, class: 'block w-full' %></label>
+          <%= form.submit 'Save role and access', class: 'rounded border p-2' %>
+        <% end %>
+      <% end %>
+    </div>
+  </dialog>
+</div>

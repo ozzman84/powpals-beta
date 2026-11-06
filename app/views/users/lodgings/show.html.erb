@@ -24,8 +24,9 @@
 </main>
 <section id="house-members" class="mx-auto mt-6 max-w-7xl"><h2 class="text-xl font-semibold">Roommates</h2><ul role="list" class="roommate-grid mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
   <% @lodging.roommates.includes(user: :account).each do |membership| %>
-    <li class="roommate-card col-span-1 flex min-w-0 flex-col rounded-lg bg-white shadow" data-roommate-card="<%= membership.id %>">
+    <li class="roommate-card relative col-span-1 flex min-w-0 flex-col rounded-lg bg-white shadow" data-roommate-card="<%= membership.id %>">
       <%= render 'shared/roommate_identity', roommate: membership %>
+      <%= render 'shared/roommate_modal', roommate: membership, season_membership: @roommate_season_details[membership.id] %>
       <%= render 'shared/roommate_contacts', roommate: membership, season_membership: @roommate_season_details[membership.id] %>
     </li>
   <% end %>

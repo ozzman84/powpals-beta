@@ -33,6 +33,10 @@ class User < ApplicationRecord
     full_name.presence || [first_name, last_name].compact_blank.join(' ')
   end
 
+  def roommate_name
+    [preferred_name.presence || first_name, last_name].compact_blank.join(' ')
+  end
+
   def attendance_name
     preferred_name.presence || display_name
   end

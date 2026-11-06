@@ -108,6 +108,23 @@ class DemoSeedData
         details.responsibilities = member.lease_holder? ? 'Coordinate house setup' : nil
         details.preferences = 'Fictional demo preferences'
       end
+      create_contact_examples(member)
+    end
+  end
+
+  def create_contact_examples(member)
+    require_demo_database!
+    emails = %w[demo@powpals.test pal1@powpals.test pal2@powpals.test]
+    index = emails.index(member.user.account.email)
+    return unless index
+
+    member.user.update!(phone_number: "+1 202-555-01#{40 + index}")
+    member.house_season_memberships.each do |details|
+      details.update!(share_contact: true, social_links: [
+        { label: 'Instagram', url: 'https://www.instagram.com/', shared: true },
+        { label: 'X', url: 'https://x.com/', shared: true },
+        { label: 'Website', url: 'https://example.com/', shared: true }
+      ])
     end
   end
 

@@ -160,3 +160,23 @@ that season. The overview uses the configured current season's consent. No new
 members, roles or contact-sharing preferences are assigned by this design change.
 Regression checks cover contact-link consent in both views, 128px portrait sizing,
 responsive columns, overflow and saving member preferences from the card.
+
+## Story #185 — compact cards, full-detail modals and social sharing
+
+Card faces show preferred/first name plus last name, portrait, riding summary,
+actual role and permitted contact/social actions. Season labels, placeholder pet
+information and preferences moved into the detail dialog. The pencil opens a
+scrollable modal with complete seasonal details and authorized editing. Managers
+assign existing roles and access using the existing protected roommate endpoint;
+others receive read-only details for other members.
+
+Members manage up to ten named HTTPS social links with per-link house-sharing
+consent. Instagram, X and Facebook use platform marks; other links use a link icon.
+Private URLs are omitted from other members' rendered cards and dialogs. Managers
+cannot change another member's social-link consent. Unsafe URLs and embedded login
+credentials are rejected. Sharing settings are scoped to the house season.
+
+The additive social_links JSONB migration was applied to the local, demo and test
+databases. Three fictional Bear Lodge demo contacts show Email/Call and sample
+social icons. The example social URLs lead to platform landing pages, not invented
+personal profiles. No real member sharing settings or role assignments changed.

@@ -189,3 +189,18 @@ The top-level Bed requests navigation item is removed. Existing request-page URL
 redirect to Rooms#bed-requests, and create/update/error redirects return there.
 The overview's Requests & assignments link points to the same section. Host
 cancellation, guest selection, house scoping and manager confirmation remain intact.
+
+## Story #187 — main merge verification and coverage
+
+Added request-level tests for invalid bed dates, over-capacity confirmation,
+manager confirmation, host cancellation, successful room edits, blank/duplicate
+names, ordinary-member denial and foreign-house room IDs. Social-link tests cover
+malformed URLs and both sides of the ten-link limit. Test season-pass names now
+use a deterministic sequence to prevent random uniqueness collisions.
+
+SimpleCov tracks every application Ruby file, enforces at least 85% line coverage
+and reports branch coverage. Full preflight on the merge candidate: 238 examples,
+zero failures; line coverage 85.80% (1402/1634); branch coverage 70.38% (354/503).
+Ruby/ERB lint, CSS build, Brakeman and refreshed dependency audit pass. Coverage
+is a regression floor, not a claim that every path is tested. Production deployment
+remains excluded. Existing local README edits are kept outside the merge.

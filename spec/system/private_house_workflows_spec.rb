@@ -16,7 +16,7 @@ RSpec.describe 'Private house workflows on a phone' do
   end
 
   before do
-    member = create(:roommate, user: manager, lodging: house, role: :lease_holder)
+    member = create(:roommate, user: manager, lodging: house, role: :admin)
     create(:roommate, user: accountant, lodging: house, role: :accountant)
     season.house_season_memberships.create!(roommate: member)
     house.rooms.create!(name: 'Main bedroom').beds.create!(size: :queen, label: 'Main queen')

@@ -125,3 +125,16 @@ only approved named guests. Existing house permissions remain enforced.
 Full preflight: 227 RSpec examples passed; Ruby/ERB lint, CSS build, Brakeman and
 refreshed dependency audit clean. Dialog and overflow checks cover 320, 390 and
 1366px. The final mobile stack spacing was checked again after visual review.
+
+## Story #182 — empty calendar days and guest approval
+
+Shared calendar days with no occupants no longer render a zero badge. Weekly
+summary rows retain their zero counts. Every active non-guest house role can
+request a guest stay, with the current member recorded as host. Submitted approval
+status is ignored during creation. Only the admin role can approve or manage guest
+statuses; lease holders no longer inherit guest approval from house editing
+permissions. Hosts retain cancellation of their own guest stays.
+
+Role coverage exercises invitation creation, forged approval requests, approval
+controls and host cancellation for every non-guest role. Responsive calendar
+checks verify that empty days have neither a count badge nor an opener.

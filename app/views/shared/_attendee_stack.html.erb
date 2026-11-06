@@ -26,7 +26,7 @@
       <% if anonymous.positive? %><p class="px-5 pb-4 text-sm text-gray-600"><%= pluralize(anonymous, 'additional guest') %> · names not provided</p><% end %>
       <footer class="border-t px-5 py-3 text-sm text-gray-600"><%= pluralize(total, 'person') %> total</footer>
     </dialog>
-  <% else %>
+  <% elsif !compact %>
     <span class="attendee-stack-count" aria-label="0 people total">0</span>
   <% end %>
 </div>

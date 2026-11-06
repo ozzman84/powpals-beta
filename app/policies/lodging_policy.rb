@@ -14,6 +14,10 @@ class LodgingPolicy
     show? && !@membership.guest?
   end
 
+  def approve_guests?
+    @membership&.admin? || false
+  end
+
   def manage_finances?
     @membership&.accountant? || false
   end

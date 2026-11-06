@@ -74,4 +74,25 @@ RSpec.describe 'Named guest stays' do
     expect(guest_request.reload).to be_cancelled
     expect(member_request.reload).to be_confirmed
   end
+
+  it 'allows every member role to invite, but only admins to approve even when they own the house lease' do
+    membership = house.roommates.find_by!(user: host)
+    (Roommate.roles.keys - ['guest']).each do |role|
+      membership.update!(role: role)
+      post users_lodging_guest_stays_path(house), params: { guest_stay: {
+        house_season_id: season.id, guest_name: "Invited by #{role}", email: "#{role}@example.com",
+        arrival: Date.current, departure: Date.current + 1, status: 'approved'
+      } }
+      expect(response).to have_http_status(:redirect)
+      invited = season.guest_stays.find_by!(email: "#{role}@example.com")
+      expect(invited.status).to eq('requested')
+      get users_lodging_guest_stays_path(house)
+      expect(response.body.include?('Update guest stay')).to eq(role == 'admin')
+      patch users_lodging_guest_stay_path(house, invited), params: { guest_stay: { status: 'approved' } }
+      expect(response).to have_http_status(role == 'admin' ? :redirect : :forbidden)
+      expect(invited.reload.status).to eq(role == 'admin' ? 'approved' : 'requested')
+      patch users_lodging_guest_stay_path(house, invited), params: { guest_stay: { status: 'cancelled' } }
+      expect(invited.reload.status).to eq('cancelled')
+    end
+  end
 end

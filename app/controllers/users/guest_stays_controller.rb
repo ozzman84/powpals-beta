@@ -35,7 +35,7 @@ module Users
     def update
       stay = @lodging.guest_stays.find(params[:id])
       status = params.expect(guest_stay: [:status])[:status]
-      manager = policy(@lodging).manage_roommates?
+      manager = policy(@lodging).approve_guests?
       allowed = manager || (stay.host_id == current_account.user.id && status == 'cancelled')
       raise Pundit::NotAuthorizedError unless allowed
 

@@ -15,6 +15,10 @@ RSpec.describe 'Shared attendee stacks' do
     [320, 390, 1366].each do |width|
       page.current_window.resize_to(width, 1000)
       visit users_lodging_calendars_path(house)
+      within("[data-calendar-date='#{Date.current + 1}']") do
+        expect(page).to have_no_css('.attendee-stack-count')
+        expect(page).to have_no_css('.attendee-stack-trigger')
+      end
       within("[data-calendar-date='#{Date.current}']") do
         expect(page).to have_css('.attendee-stack-count', text: '4')
         find('.attendee-stack-trigger').click
